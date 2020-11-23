@@ -1,0 +1,128 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+
+{% block navbar %}
+<div class="left"><a href="{% url 'user_profile' user.username %}" class="link"><i
+            class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">Edit Profile</div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<!-- profile -->
+<div class="profile">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 align-self-center">
+                <div class="header-profile">
+                    <div class="container">
+                        <img src="{{user.userProfile.userPhoto.url}}" alt="image-demo">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-title text-center">
+            <h4>{{user.first_name}} {{user.first_name}}</h4>
+            <span class="text-small">role : <strong>{{ user.groups.all.0 }}</strong></span>
+        </div>
+    </div>
+</div>
+<!-- end profile -->
+<!-- separator -->
+<div class="separator-medium"></div>
+<!-- end separator -->
+<!-- form elements -->
+<div class="form-elements">
+    <div class="container">
+        <form method="POST" class="form-outline form-horizontal" enctype="multipart/form-data">
+            <!-- section title -->{% csrf_token %}
+            {{p_form.non_field_errors}}
+            <div class=" section-title" style="margin-left: 0;">
+                <p>Firstname</p>
+            </div>
+            <!-- end section title -->
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {{p_form.first_name}}
+                    {{p_form.first_name.errors}}
+                </div>
+            </div>
+            <!-- separator -->
+            <div class="separator-small"></div>
+            <!-- end separator -->
+            <div class="section-title" style="margin-left: 0;">
+                <p>Lastname</p>
+            </div>
+            <!-- end section title -->
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {{p_form.last_name}}
+                    {{p_form.last_name.errors}}
+                </div>
+            </div>
+            <!-- separator -->
+            <div class="separator-small"></div>
+            <!-- end separator -->
+            <div class="section-title" style="margin-left: 0;">
+                <p>Email</p>
+            </div>
+            <!-- end section title -->
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {{p_form.email}}
+                    {{p_form.email.errors}}
+                </div>
+            </div>
+            <!-- separator -->
+            <div class="separator-small"></div>
+            <!-- end separator -->
+            <div class="section-title" style="margin-left: 0;">
+                <p>Username</p>
+            </div>
+            <!-- end section title -->
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {{p_form.username}}
+                    {{p_form.username.errors}}
+                </div>
+            </div>
+            <!-- separator -->
+            <div class="separator-small"></div>
+            <!-- end separator -->
+            <div class="section-title" style="margin-left: 0;">
+                <p>Profile Pic</p>
+            </div>
+            <!-- end section title -->
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    <!-- {% for field in pp_form %}
+                    {{field.label}}
+                    {{field.id_for_label}}
+                    {{field.label_tags}}
+                    {{field.field}}
+                    {% endfor %} -->
+                    {{pp_form.userPhoto}}
+                    {{pp_form.userPhoto.errors}}
+                    <!-- {{pp_form.as_p}} -->
+                </div>
+            </div>
+            <!-- separator -->
+            <div class="separator-medium"></div>
+            <!-- end separator -->
+            <div class="button-default">
+                <button type="submit" class="button bg-facebook">Save Change</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- end form elements -->
+{% endblock page_wrapper %}
+{% block toolbar_bottom %}{% endblock toolbar_bottom %}
+{% block js %}
+{% endblock js %}

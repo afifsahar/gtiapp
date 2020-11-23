@@ -1,0 +1,154 @@
+{% extends 'base.html' %}{% load static %} {% block css %}
+<style>
+  .navbar .navbar-home::after {
+    display: none;
+  }
+
+  .float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 15px;
+    right: 25px;
+    background-color: #0C9;
+    color: #FFF;
+    border-radius: 50%;
+    text-align: center;
+    box-shadow: 2px 2px 3px #999;
+  }
+
+  .my-float {
+    margin-top: 22px;
+  }
+
+  .ion-ios-add {
+    font-size: 40px !important;
+  }
+
+  .accordion-inset .accordion-content {
+    padding: 10px 0 !important;
+  }
+
+  .list-view .list-item {
+    height: 30px;
+    padding: 0;
+  }
+
+  .list-view .list-item .list-label {
+    min-height: 30px;
+  }
+
+  .button {
+    line-height: 25px;
+    margin-top: 0;
+    min-width: 100%;
+    width: max-content;
+  }
+
+  .button .button-extra-small {
+    line-height: 20px;
+    font-size: 10px;
+    padding: 0 8px;
+  }
+</style>
+{% endblock css %}
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href="{% url 'cln_home' %}" class="link"><i class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<!-- newsletter -->
+<div class="newsletter bg-lightblue">
+  <!-- separator -->
+  <div class="separator-small"></div>
+  <!-- end separator -->
+  <div class="section-title text-center title-large">
+    <h6>SETTINGS</h6>
+  </div>
+  <!-- separator -->
+  <div class="separator-small"></div>
+  <!-- end separator -->
+</div>
+<!-- separator -->
+<div class="separator-medium"></div>
+<!-- end separator -->
+{% if areaCount == 0 %}
+<!-- separator -->
+<div class="separator-large"></div>
+<!-- end separator -->
+<!-- maintenance -->
+<div class="maintenance">
+  <div class="container">
+    <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
+    <h5 class="mb-5" style="color: red;"><strong>Area Not Found</strong></h5>
+  </div>
+</div>
+<!-- end maintenance -->
+{% else %}
+<!-- accordion -->
+<div id="accordionParent" class="accordion accordion-inset">
+  {% for area in areas %}
+  <div class="accordion-item">
+    <div class="accordion-title collapsed" data-toggle="collapse" data-target="#accordionTwo{{area.pk}}">
+      {{area.namaArea}}
+      <div class="accordion-after">
+        <i class="icon ion-ios-arrow-up"></i>
+      </div>
+    </div>
+    <div id="accordionTwo{{area.pk}}" class="accordion-body collapse" data-parent="#accordionParent">
+      <div class="accordion-content">
+        <div class="list-view list-border">
+          <ul>
+            {% for subarea in subareas %} {% if subarea.namaAreaSubarea.id == area.id %}
+            <li>
+              <a class="list-item" style="padding: 0px 15px !important;">
+                <div class="list-label">
+                  <div class="list-title">{{subarea.namaSubarea}}</div>
+                </div>
+              </a>
+            </li>
+            {% endif %} {% endfor %}
+            <li>
+              <div class="list-item" style="padding: 20px 0px;">
+                <div class="list-label">
+                  <div class="list-title row">
+                    <div class="col-4">
+                      <a href="{% url 'cln_area_edit' area.id %}"><button
+                          class="bg-green button button-etxra-small">Edit</button></a>
+                    </div>
+                    <div class="col-4">
+                      <a href="{% url 'cln_area_delete' area.id %}"><button
+                          class="bg-red button button-etxra-small">Delete</button></a>
+                    </div>
+                    <div class="col-4">
+                      <a href="{% url 'cln_default_check_all' area.id %}"><button class="button button-etxra-small">Set
+                          Default
+                          Value</button></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<!-- end accordion -->
+{% endif %}
+<div class="button-default">
+  <a href="{% url 'cln_area_add' %}" class="float"><i class="icon ion-ios-add my-float"></i></a>
+</div>
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+{% block js %}{% endblock js %}

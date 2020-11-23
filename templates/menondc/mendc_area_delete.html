@@ -1,0 +1,65 @@
+{% extends 'base.html' %}{% load static %}
+{% block css %}
+<style>
+    .form-elements .section-title {
+        margin-top: 15px;
+    }
+
+    .form-wrapper .minus-button {
+        margin: 3px auto;
+        font-weight: 900;
+        color: #ffffff;
+        font-size: xx-large;
+    }
+
+    .toolbar-bottom::before {
+        height: 3px;
+    }
+
+    .ion-ios-add {
+        font-size: 33px !important;
+    }
+</style>
+{% endblock css %}
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href='{% url "mendc_settings" %}' class="link"><i
+            class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">Area Delete</div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<!-- pricing table -->
+<div class="pricing-table">
+    <div class="container">
+        <div class="content radius-default bg-blue pd-default">
+            <h4 class="pricing-title text-center color-white" style="font-size: medium;">Apakah anda yakin akan
+                menghapus</h4>
+            <h3 class="pricing-number text-center">{{areas.namaArea}}</h3>
+            <div class="pricing-list color-white">
+                <ul>
+                    {% for subarea in subareas %}
+                    <li><i class="icon ion-ios-close-circle-outline"></i>{{subarea.namaSubarea}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="pricing-button">
+                <a href="{% url 'mendc_area_delete_confirm' areas.id %}">
+                    <button class="button bg-red" style="font-weight: 600; font-size: large;">DELETE</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end pricing table -->
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+
+{% block js %}
+{% endblock js %}

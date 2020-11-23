@@ -1,0 +1,73 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}
+<style>
+    .footer-card .button {
+        margin: 5px 14px 5px auto;
+    }
+</style>
+{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href="{% url 'cln_history' %}" class="link"><i class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+
+{% block page_wrapper %}
+<!-- newsletter -->
+<div class="newsletter bg-lightblue py-2">
+    <div class="section-title text-center title-large">
+        <h6>HISTORY</h6>
+        <p><i class="icon ion-ios-calendar"></i> {{tanggal.history | date:"l, d F Y"}}</p>
+    </div>
+</div>
+<!-- separator -->
+<!-- separator -->
+<div class="separator-small"></div>
+<!-- end separator -->
+<!-- cards -->
+<div class="cards">
+    <!-- section title -->
+    <div class="container">
+        <div class="card card-outline card-list">
+            <form method="POST" class="form-outline form-horizontal">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align: center;">{{harian.dailySubarea.namaSubarea}}
+                        <i class="icon ion-ios-add-circle"></i> {{harian.dailySubarea.namaAreaSubarea.namaArea}}
+                    </h5>
+                    <div class="form-elements">
+                        <div class="container">
+                            {% csrf_token %}
+                            <div class="form-wrapper">
+                                {% for field in form %}
+                                <div class="input-wrap" style="margin: 10px auto;">
+                                    <label for="{{field.id}}">{{field.label}}</label>
+                                    {{field}}
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- end form elements -->
+                </div>
+                <div class="footer-card">
+                    <div class="card-date"><i class="icon ion-ios-calendar"></i>{{tanggal.history | date:"d M Y"}}</div>
+                    <div class="card-comment"><button type="submit" class="button button-small">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end cards -->
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+{% block js %}{% endblock js %}

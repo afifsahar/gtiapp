@@ -1,0 +1,257 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}
+<style>
+    .accordion-inset .accordion-content {
+        padding: 10px 0 !important;
+    }
+
+    .button {
+        line-height: 25px;
+        margin-top: 0;
+        min-width: 100%;
+        width: max-content;
+    }
+
+    .button .button-extra-small {
+        line-height: 20px;
+        font-size: 10px;
+        padding: 0 8px;
+    }
+
+    .table .icoon {
+        box-sizing: border-box;
+        font-size: larger;
+        text-align: center;
+    }
+
+    .table th,
+    .table td {
+        padding: .5rem !important;
+        margin: .5rem !important;
+        white-space: nowrap;
+        width: 1%;
+    }
+
+    .form-elements .section-title {
+        margin-top: 15px;
+    }
+
+    .form-wrapper .minus-button {
+        font-weight: 900;
+        color: #ffffff;
+        height: 42px;
+        /* min-width: fit-content; */
+        display: inline;
+    }
+
+    .toolbar-bottom::before {
+        height: 3px;
+    }
+
+    .ion-ios-add {
+        font-size: 33px !important;
+    }
+    
+</style>
+<link rel="stylesheet" href="{% static 'simplepicker/simplepicker.fixbug.css' %}">
+</head>
+
+
+{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href='{% url "mendc_home" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+
+{% block page_wrapper %}
+<!-- newsletter -->
+<div class="newsletter bg-lightblue py-2">
+    <div class="section-title text-center title-large">
+        <h6>HISTORY</h6>
+        <p><i class="icon ion-ios-calendar"></i> {{tanggal | date:"l, d F Y"}}</p>
+    </div>
+</div>
+<!-- separator -->
+<div class="separator-small"></div>
+<!-- end separator -->
+<div class="form-elements bg-lightblue">
+    <!-- separator -->
+    <div class="separator-small"></div>
+    <!-- end separator -->
+    <div class="container">
+        <form method="POST" class="form-outline form-horizontal">
+            {% csrf_token %}
+            <div class="form-wrapper">
+                <div class="input-wrap row">
+                    <div class="col-9">
+                        <!-- <label for="history-date">{{tanggal | date:"m/d/Y"}}</label> -->
+                        <input type="date" name="date" id="date" class="date" autocomplete="off" value="01-01-2000"
+                            placeholder="Select Date">
+                    </div>
+                    <div class="col-3">
+                        <div class="button-default">
+                            <button class="button minus-button bg-red select-date">SET</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="picker"></div>
+        </form>
+    </div>
+    <!-- separator -->
+    <div class="separator-small"></div>
+    <!-- end separator -->
+</div>
+<!-- end form elements -->
+
+<!-- separator -->
+<div class="separator-medium"></div>
+<!-- end separator -->
+{% if areaCount == 0 %}
+<!-- maintenance -->
+<div class="maintenance">
+    <div class="container">
+        <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
+        <h5 class="mb-5" style="color: red;"><strong>Area Not Found</strong></h5>
+        <div class="button-default">
+            <div class="row">
+                <div class="col-6">
+                    <a href="{% url 'mendc_settings' %}" class="button">Settings</a>
+                </div>
+                <div class="col-6">
+                    <a href="{% url 'mendc_area_add' %}" class="button button-outline">Create Area</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end maintenance -->
+{% else %}
+<!-- accordion -->
+<div id="accordionParent" class="accordion accordion-inset">
+    {% for area in areas %}
+    <div class="accordion-item">
+        <div class="accordion-title collapsed" data-toggle="collapse" data-target="#accordionTwo{{area.pk}}">
+            {{area.namaArea}}
+            <div class="accordion-after">
+                <i class="icon ion-ios-arrow-up"></i>
+            </div>
+        </div>
+        <div id="accordionTwo{{area.pk}}" class="accordion-body collapse" data-parent="#accordionParent">
+            <div class="accordion-content">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Subarea</th>
+                            <th>Kondisi</th>
+                            <th>HasilTemuan</th>
+                            <th>Keterangan</th>
+                            <th>Pukul</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subarea in subareas %}
+                        {% if subarea.namaAreaSubarea.id == area.id %}
+                        <tr>
+                            {% for harian in harians %}
+                            {% if harian.dailySubarea.id == subarea.id %}
+                            <td><strong>{{subarea.namaSubarea}}</strong></td>
+                            {% if harian.kondisi == None or harian.kondisi == '' %}
+                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
+                            {% else %}
+                            <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            </td>
+                            {% endif %}
+                            {% if harian.hasilTemuan == '' %}
+                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
+                            {% else %}
+                            <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            </td>
+                            {% endif %}
+                            {% if harian.keterangan == '' %}
+                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
+                            {% else %}
+                            <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            {% endif %}
+                            {% if harian.kondisi != '' and harian.kondisi != None or harian.keterangan != '' or harian.hasilTemuan != '' %}
+                            <td>{{harian.done | time:"H:i" }}</td>
+                            {% else %}
+                            <td><span class="red-text">Undone</span></td>
+                            {% endif %}
+                            <td><a href="{% url 'mendc_history_check_single' harian.id tanggal %}"
+                                    class="button">Check</a>
+                            </td>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        <tr>
+                            <td colspan="6" class="text-center"><a
+                                    href="{% url 'mendc_history_check_all' area.id tanggal %}"
+                                    class="bg-green button button-small" style="width: 50%;">Check All</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!-- end accordion -->
+{% endif %}
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+<ul class="toolbar-bottom toolbar-wrap">
+    <li class="toolbar-item">
+        <a href="{% url 'mendc_history_send_email' %}" class="toolbar-link">
+            <i class="icon ion-ios-send"></i>
+            <p>Send Email</p>
+        </a>
+    </li>
+    <li class="toolbar-item">
+        <a href="{% url 'mendc_history_download_pdf' %}" class="toolbar-link">
+            <i class="icon ion-ios-download"></i>
+            <p>Download PDF</p>
+        </a>
+    </li>
+</ul>
+{% endblock toolbar_bottom %}
+{% block js %}
+<!-- <script src="{% static 'simplepicker/simplepicker.js' %}"></script> -->
+<!-- <script>
+
+    let simplepicker2 = new SimplePicker(".picker", {
+        zIndex: 100,
+        disableTimeSelection: false,
+        dateFormat: "mm/dd/yyyy",
+    });
+
+    const $button2 = document.querySelector('input#date');
+    $button2.addEventListener('click', (e) => {
+        simplepicker2.open();
+    });
+
+    simplepicker2.on("submit", function (date, readableDate) {
+        // let formatted_date = (readableDate.getMonth() + 1) + "/" + readableDate.getDate() + "/" + readableDate.getFullYear()
+        var input = document.querySelector('input#date');
+        input.value = readableDate;
+        // console.log(formatted_date);
+
+    });
+    simplepicker2.on('close', function (date) {
+        date.preventDefault();
+    })
+</script> -->
+
+{% endblock js %}
