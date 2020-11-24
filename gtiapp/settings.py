@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user.apps.UserConfig',
     'cleaning.apps.CleaningConfig',
-    # 'menondc.apps.MenondcConfig',
+    'menondc.apps.MenondcConfig',
 
     
 ]
