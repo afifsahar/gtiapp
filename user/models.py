@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw
 import qrcode
 from io import BytesIO
 from django.core.files import File
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -87,7 +88,7 @@ class User(AbstractUser):
 
 class user_profile(models.Model):
     userProfile = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="userProfile", verbose_name="User Profile")
+        User, on_delete=models.CASCADE, related_name="userProfile", verbose_name="User Profile",to=settings.AUTH_USER_MODEL)
     userPhoto = models.ImageField(upload_to='images/profile/', null=True, name="userPhoto",
                                   blank=True, default='images/square6.jpg', verbose_name="User Profile Photo")
 
