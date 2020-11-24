@@ -38,7 +38,7 @@
     <div class="separator-small"></div>
     <!-- end separator -->
     <div class="section-title text-center title-large">
-        <h6>Edit Area</h6>
+        <h6>Add Area</h6>
     </div>
     <!-- separator -->
     <div class="separator-small"></div>
@@ -79,8 +79,6 @@
                 {% endfor %}
                 {% for form in formset %}
                 <div class="input-wrap row item ">
-                    <!-- {% for field in form %} -->
-                    <!-- {% if form.namaSubarea.label != "Nama Subarea:" %} -->
                     <div class="col-9">
                         {{form}}
                     </div>
@@ -88,8 +86,6 @@
                         <a id="{{formset.prefix}}" class="button minus-button bg-red cln-remove-form-row"><i
                                 class="icon ion-ios-remove"></i></a>
                     </div>
-                    <!-- {% endif %} -->
-                    <!-- {% endfor %} -->
                 </div>
                 {% endfor %}
                 {{ formset.management_form }}
