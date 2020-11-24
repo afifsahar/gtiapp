@@ -15,23 +15,23 @@ urlpatterns = [
          user_profile_password_change, name="user_profile_password_change"),
 
     path('profile=<username>/edit', user_profile_edit, name="user_profile_edit"),
-    # path('profile=<username>/notification',
-    #      user_profile_notification, name="user_profile_notification"),
+    path('profile=<username>/notification',
+         user_profile_notification, name="user_profile_notification"),
 
-    # path('profile=<username>/notification/check_kebersihan_id=<day_id>_maked',
-    #      user_cln_maker_notification, name="user_cln_maker_notification"),
-    # path('profile=<username>/notification/perangkat_gedung_id=<day_id>_maked',
-    #      user_mendc_maker_notification, name="user_mendc_maker_notification"),
+    path('profile=<username>/notification/check_kebersihan_id=<day_id>_maked',
+         user_cln_maker_notification, name="user_cln_maker_notification"),
+    path('profile=<username>/notification/perangkat_gedung_id=<day_id>_maked',
+         user_mendc_maker_notification, name="user_mendc_maker_notification"),
 
-    # path('profile=<username>/notification/check_kebersihan_id=<day_id>_checked',
-    #      user_cln_checker_notification, name="user_cln_checker_notification"),
-    # path('profile=<username>/notification/perangkat_gedung_id=<day_id>_checked',
-    #      user_mendc_checker_notification, name="user_mendc_checker_notification"),
+    path('profile=<username>/notification/check_kebersihan_id=<day_id>_checked',
+         user_cln_checker_notification, name="user_cln_checker_notification"),
+    path('profile=<username>/notification/perangkat_gedung_id=<day_id>_checked',
+         user_mendc_checker_notification, name="user_mendc_checker_notification"),
 
-    # path('profile=<username>/notification/check_kebersihan_id=<day_id>_signed',
-    #      user_cln_signer_notification, name="user_cln_signer_notification"),
-    # path('profile=<username>/notification/perangkat_gedung_id=<day_id>_signed',
-    #      user_mendc_signer_notification, name="user_mendc_signer_notification"),
+    path('profile=<username>/notification/check_kebersihan_id=<day_id>_signed',
+         user_cln_signer_notification, name="user_cln_signer_notification"),
+    path('profile=<username>/notification/perangkat_gedung_id=<day_id>_signed',
+         user_mendc_signer_notification, name="user_mendc_signer_notification"),
 
     path('password-reset/',
          auth_views.PasswordResetView.as_view(

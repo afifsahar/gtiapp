@@ -276,19 +276,19 @@
                                     </tr>
                                     <tr class="row-tanda-tangan">
                                         {% for day in days %}
-                                        <td><img src="{{day.clnMaker.qr_code.path}}"></td>
-                                        <td><img src="{{day.clnChecker.qr_code.path}}"></td>
-                                        <td><img src="{{day.Signer.qr_code.path}}"></td>
+                                        <td><img src="{{day.mendcMaker.qr_code.path}}"></td>
+                                        <td><img src="{{day.mendcChecker.qr_code.path}}"></td>
+                                        <td><img src="{{day.mendcSigner.qr_code.path}}"></td>
                                         {% endfor %}
                                     </tr>
                                     <tr class="row-penanggung-jawab">
                                         {% for day in days %}
-                                        <td class="table-harian">{{day.clnMaker.first_name}} {{day.clnMaker.last_name}}
-                                        </td>
-                                        <td class="table-harian">{{day.clnChecker.first_name}}
-                                            {{day.clnChecker.last_name}}</td>
-                                        <td class="table-harian">{{day.clnSigner.first_name}}
-                                            {{day.clnSigner.last_name}}</td>
+                                        <td class="table-harian">{{day.mendcMaker.first_name}}
+                                            {{day.mendcMaker.last_name}}</td>
+                                        <td class="table-harian">{{day.mendcChecker.first_name}}
+                                            {{day.mendcChecker.last_name}}</td>
+                                        <td class="table-harian">{{day.mendcSigner.first_name}}
+                                            {{day.mendcSigner.last_name}}</td>
                                         {% endfor %}
                                     </tr>
                                 </tbody>

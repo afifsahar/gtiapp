@@ -91,6 +91,7 @@ def cln_area_edit(request, area_id):
             ar.save()
             for f in formset:
                 subar = f.save(commit=False)
+                # subar.id = 
                 subar.namaAreaSubarea = ar
                 # subar.id = f.id
                 subar.save()

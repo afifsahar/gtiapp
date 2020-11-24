@@ -5,6 +5,7 @@ class MenondcConfig(AppConfig):
     name = 'menondc'
 
     def ready(self):
-        import menondc.harians
-        import menondc.tasks
+        # import menondc.harians
+        # import menondc.tasks
+        import menondc.autos
 

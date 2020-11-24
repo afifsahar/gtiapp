@@ -67,9 +67,9 @@
                 </div>
             </div>
             <!-- section title -->
-            <div class="section-title">
+            <!-- <div class="section-title">
                 <h6>Subarea</h6>
-            </div>
+            </div> -->
             <!-- end section title -->
             <div class="form-wrapper">
                 {% for dict in formset.errors %}
@@ -79,17 +79,17 @@
                 {% endfor %}
                 {% for form in formset %}
                 <div class="input-wrap row item ">
-                    {% for field in form %}
-                    {% if field.label != "Id" %}
+                    <!-- {% for field in form %} -->
+                    <!-- {% if form.namaSubarea.label != "Nama Subarea:" %} -->
                     <div class="col-9">
-                        {{field}}
+                        {{form}}
                     </div>
                     <div class="col-3">
                         <a id="{{formset.prefix}}" class="button minus-button bg-red cln-remove-form-row"><i
                                 class="icon ion-ios-remove"></i></a>
                     </div>
-                    {% endif %}
-                    {% endfor %}
+                    <!-- {% endif %} -->
+                    <!-- {% endfor %} -->
                 </div>
                 {% endfor %}
                 {{ formset.management_form }}

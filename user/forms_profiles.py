@@ -82,4 +82,4 @@ class UserProfilePhotoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["userPhoto"].widget.attrs.update(
-            {'id': 'userPhoto', 'help text': 'Pilih Gambar', 'name': 'userPhoto', 'label': 'select profile picture', 'required': 'False'})
+            {'id': 'userPhoto', 'help text': 'Pilih Gambar', 'name': 'userPhoto', 'label': 'select profile picture', 'required': False,})

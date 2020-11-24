@@ -5,6 +5,7 @@ class CleaningConfig(AppConfig):
     name = 'cleaning'
 
     def ready(self):
-        import cleaning.harians
+        # import cleaning.harians
         # import cleaning.tasks
+        import cleaning.autos
 

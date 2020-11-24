@@ -11,8 +11,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 import datetime
 from datetime import datetime, date
-# from cleaning.models import *
-# from menondc.models import *
+from cleaning.models import *
+from menondc.models import *
 import math
 from django.db.models import Q
 
@@ -164,101 +164,98 @@ def user_profile_edit(request, username):
     return render(request, 'user/user_profile_edit.html', context)
 
 
-# @ login_required(login_url='user_login')
-# def user_profile_notification(request, username):
-#     cln_days = None
-#     mendc_days = None
-#     if request.user.groups.all().first().name == 'maker':
-#         cln_days = cln_day.objects.filter(Q(clnMaker__isnull=True) & Q(
-#             clnChecker__isnull=True) & Q(clnSigner__isnull=True))[:5]
-#         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=True) & Q(
-#             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))[:5]
-#     if request.user.groups.all().first().name == 'checker':
-#         cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
-#             clnChecker__isnull=True) & Q(clnSigner__isnull=True))[:5]
-#         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
-#             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))[:5]
-#     if request.user.groups.all().first().name == 'signer':
-#         cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
-#             clnChecker__isnull=False) & Q(clnSigner__isnull=True))[:5]
-#         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
-#             mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))[:5]
-#     context = {
-#         'cln_days': cln_days,
-#         'mendc_days': mendc_days,
-#     }
-#     return render(request, 'user/user_profile_notification.html', context)
+@ login_required(login_url='user_login')
+def user_profile_notification(request, username):
+    cln_days = None
+    mendc_days = None
+    if request.user.groups.all().first().name == 'maker':
+        cln_days = cln_day.objects.filter(Q(clnMaker__isnull=True) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))[:5]
+        mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=True) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))[:5]
+    if request.user.groups.all().first().name == 'checker':
+        cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))[:5]
+        mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))[:5]
+    if request.user.groups.all().first().name == 'signer':
+        cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=False) & Q(clnSigner__isnull=True))[:5]
+        mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))[:5]
+    context = {
+        'cln_days': cln_days,
+        'mendc_days': mendc_days,
+    }
+    return render(request, 'user/user_profile_notification.html', context)
 
 
-# @ login_required(login_url='user_login')
-# def user_cln_maker_notification(request, username, day_id):
-#     cln_days = None
-#     if request.user.groups.all().first().name == 'maker':
-#         cln_days = cln_day.objects.get(id=day_id)
-#         cln_days.clnMaker = User.objects.get(username=request.user.username)
-#         cln_days.save()
+@ login_required(login_url='user_login')
+def user_cln_maker_notification(request, username, day_id):
+    cln_days = None
+    if request.user.groups.all().first().name == 'maker':
+        cln_days = cln_day.objects.get(id=day_id)
+        cln_days.clnMaker = User.objects.get(username=request.user.username)
+        cln_days.save()
 
-#     return redirect('user_profile_notification', username=request.user.username)
-
-
-# @ login_required(login_url='user_login')
-# def user_mendc_maker_notification(request, username, day_id):
-#     mendc_days = None
-#     if request.user.groups.all().first().name == 'maker':
-#         mendc_days = mendc_day.objects.get(id=day_id)
-#         mendc_days.mendcMaker = User.objects.get(
-#             username=request.user.username)
-#         mendc_days.save()
-#     return redirect('user_profile_notification', username=request.user.username)
+    return redirect('user_profile_notification', username=request.user.username)
 
 
-# @ login_required(login_url='user_login')
-# def user_cln_checker_notification(request, username, day_id):
-#     cln_days = None
-#     if request.user.groups.all().first().name == 'checker':
-#         cln_days = cln_day.objects.get(id=day_id)
-#         cln_days.clnChecker = User.objects.get(username=request.user.username)
-#         cln_days.save()
+@ login_required(login_url='user_login')
+def user_mendc_maker_notification(request, username, day_id):
+    mendc_days = None
+    if request.user.groups.all().first().name == 'maker':
+        mendc_days = mendc_day.objects.get(id=day_id)
+        mendc_days.mendcMaker = User.objects.get(
+            username=request.user.username)
+        mendc_days.save()
+    return redirect('user_profile_notification', username=request.user.username)
 
-#     return redirect('user_profile_notification', username=request.user.username)
 
+@ login_required(login_url='user_login')
+def user_cln_checker_notification(request, username, day_id):
+    cln_days = None
+    if request.user.groups.all().first().name == 'checker':
+        cln_days = cln_day.objects.get(id=day_id)
+        cln_days.clnChecker = User.objects.get(username=request.user.username)
+        cln_days.save()
+
+    return redirect('user_profile_notification', username=request.user.username)
+
+@ login_required(login_url='user_login')
+def user_mendc_checker_notification(request, username, day_id):
+    mendc_days = None
+    if request.user.groups.all().first().name == 'checker':
+        mendc_days = mendc_day.objects.get(id=day_id)
+        mendc_days.mendcChecker = User.objects.get(
+            username=request.user.username)
+        mendc_days.save()
+    return redirect('user_profile_notification', username=request.user.username)
+
+
+@ login_required(login_url='user_login')
+def user_cln_signer_notification(request, username, day_id):
+    cln_days = None
+    if request.user.groups.all().first().name == 'signer':
+        cln_days = cln_day.objects.get(id=day_id)
+        cln_days.clnSigner = User.objects.get(username=request.user.username)
+        cln_days.save()
+    return redirect('user_profile_notification', username=request.user.username)
+
+
+@ login_required(login_url='user_login')
+def user_mendc_signer_notification(request, username, day_id):
+    mendc_days = None
+    if request.user.groups.all().first().name == 'signer':
+        mendc_days = mendc_day.objects.get(id=day_id)
+        mendc_days.mendcSigner = User.objects.get(
+            username=request.user.username)
+        mendc_days.save()
+    return redirect('user_profile_notification', username=request.user.username)
 
 @ login_required(login_url='user_login')
 def user_profile_configuration(request, username):
     return redirect('404_page_not_found')
-
-
-# @ login_required(login_url='user_login')
-# def user_mendc_checker_notification(request, username, day_id):
-#     mendc_days = None
-#     if request.user.groups.all().first().name == 'checker':
-#         mendc_days = mendc_day.objects.get(id=day_id)
-#         mendc_days.mendcChecker = User.objects.get(
-#             username=request.user.username)
-#         mendc_days.save()
-#     return redirect('user_profile_notification', username=request.user.username)
-
-
-# @ login_required(login_url='user_login')
-# def user_cln_signer_notification(request, username, day_id):
-#     cln_days = None
-#     if request.user.groups.all().first().name == 'signer':
-#         cln_days = cln_day.objects.get(id=day_id)
-#         cln_days.clnSigner = User.objects.get(username=request.user.username)
-#         cln_days.save()
-#     return redirect('user_profile_notification', username=request.user.username)
-
-
-# @ login_required(login_url='user_login')
-# def user_mendc_signer_notification(request, username, day_id):
-#     mendc_days = None
-#     if request.user.groups.all().first().name == 'signer':
-#         mendc_days = mendc_day.objects.get(id=day_id)
-#         mendc_days.mendcSigner = User.objects.get(
-#             username=request.user.username)
-#         mendc_days.save()
-#     return redirect('user_profile_notification', username=request.user.username)
-
 
 def user_401_unauthorized_maker(request):
     return render(request, 'user/user_401_unauthorized_maker.html')
