@@ -7,5 +7,5 @@ class CleaningConfig(AppConfig):
     def ready(self):
         # import cleaning.harians
         # import cleaning.tasks
-        import cleaning.autos
+        import cleaning.autosignals
 

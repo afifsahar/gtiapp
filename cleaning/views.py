@@ -19,7 +19,7 @@ from .forms import *
 from django.forms import modelformset_factory, inlineformset_factory, formset_factory
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
-
+from .autos import *
 
 @login_required(login_url='user_login')
 def cln_home(request):
@@ -59,6 +59,7 @@ def cln_area_add(request):
                 subareas = f.save(commit=False)
                 subareas.namaAreaSubarea = areas
                 subareas.save()
+            cln_autos()
             messages.success(
                 request, 'New Area in Checklist Kebersihan Successfully Added')
             return redirect('cln_settings')

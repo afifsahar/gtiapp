@@ -19,6 +19,7 @@ from user.models import user_bri_image
 # Create your views here.
 from django.views.generic import View
 from .utils import render_to_pdf
+from .autos import *
 
 
 @login_required(login_url='user_login')
@@ -57,6 +58,7 @@ def mendc_area_add(request):
                 subareas = f.save(commit=False)
                 subareas.namaAreaSubarea = areas
                 subareas.save()
+            mendc_autos()
             return redirect('mendc_settings')
     else:
         formset = SubareaFormSet(
