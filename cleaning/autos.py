@@ -1,6 +1,6 @@
 import datetime
 from datetime import date, timedelta
-from .models import *
+from cleaning.models import *
 
 if not cln_day.objects.filter(hariIni=date.today()):
     cln_day(hariIni=date.today()).save()
