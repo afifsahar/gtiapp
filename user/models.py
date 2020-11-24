@@ -46,7 +46,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = models.CharField(
         max_length=50, unique=True)
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_('email address'))
     phone = models.IntegerField(
         _('phone number'), unique=True, blank=True, null=True)
     # mother_name = models.CharField(max_length=50,verbose_name="Mother's name", blank=True, null=True)
@@ -88,7 +88,7 @@ class User(AbstractUser):
 
 class user_profile(models.Model):
     userProfile = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="userProfile", verbose_name="User Profile",to=settings.AUTH_USER_MODEL)
+        User, on_delete=models.CASCADE, related_name="userProfile", verbose_name="User Profile", null=True, blank=True)
     userPhoto = models.ImageField(upload_to='images/profile/', null=True, name="userPhoto",
                                   blank=True, default='images/square6.jpg', verbose_name="User Profile Photo")
 
