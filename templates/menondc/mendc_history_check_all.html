@@ -1,0 +1,79 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}
+<style>
+    .footer-card .button {
+        margin: 5px 14px 5px auto;
+    }
+</style>
+{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href='{% url "mendc_history" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+
+{% block page_wrapper %}
+<!-- newsletter -->
+<div class="newsletter bg-lightblue py-2">
+    <div class="section-title text-center title-large">
+        <h6>HISTORY</h6>
+        <p><i class="icon ion-ios-calendar"></i> {{tanggal | date:"l, d F Y"}}</p>
+    </div>
+</div>
+<!-- separator -->
+<!-- separator -->
+<div class="separator-small"></div>
+<!-- end separator -->
+<form method="POST" class="form-outline form-horizontal">
+    {% for subarea, form in formfull.items %}
+    <!-- cards -->
+    <div class="cards" style="margin: 15px auto;">
+        <!-- section title -->
+        <div class="container">
+            <div class="card card-outline card-list">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align: center;"><i class="icon ion-ios-add-circle"></i>
+                        {{subarea}}</h5>
+                    <div class="form-elements">
+                        <div class="container">
+                            {% csrf_token %}
+                            <div class="form-wrapper">
+                                {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                                {% endfor %}
+                                {% for field in form %}
+                                {% if field.label != "Id" %}
+                                <div class="input-wrap" style="margin: 10px auto;">
+                                    <label for="{{field.id}}">{{field.label}}</label>
+                                    {{field}}
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end form elements -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end cards -->
+    {% endfor %}
+    <div class="container">
+        <div class="button-default" style="margin-top: 20px;">
+            <button class="button button-medium">SAVE</button>
+        </div>
+    </div>
+    {{ formset.management_form }}
+</form>
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+{% block js %}{% endblock js %}

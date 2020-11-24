@@ -1,0 +1,37 @@
+{% extends 'base.html' %}{% load static %} {% block css %}
+{% endblock css %}
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href class="link link-back"><i class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<!-- separator -->
+<div class="separator-large"></div>
+<!-- end separator -->
+<!-- maintenance -->
+<div class="maintenance">
+    <div class="container">
+        <img src="{% static 'images/401_Unauthorized.png' %}" height="300" width="300" alt="">
+        <h5 class="mb-2">Checker Page Only</h5>
+        <p class="text-small">You are unauthorized to access the page. Return to the homepage or contact admin</p>
+        <div class="button-default">
+            <div class="row">
+                <div class="col-12">
+                    <a href="{% url 'user_home' %}" class="button">Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end maintenance -->
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+{% block js %}{% endblock js %}

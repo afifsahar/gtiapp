@@ -1,0 +1,99 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"></div>
+<div class="title"></div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<!-- separator -->
+<div class="separator-large"></div>
+<!-- end separator -->
+
+<!-- intro app -->
+<div class="intro-app">
+    <div class="container">
+        <div class="intro-content">
+            <div class="mask"></div>
+            <img src="{% static 'images/intro.jpg' %}" alt="image-demo">
+            <div class="caption">
+                <h4 class="text-white mb-1">LOG IN</h4>
+                <p class="text-white">Welcome to CHECKAPP</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end intro app -->
+
+<!-- separator -->
+<div class="separator-large"></div>
+<!-- end separator -->
+
+<!-- sign in -->
+<div class="sign in">
+    <div class="container">
+        <form method="POST" class="form-fill">
+            <div class="form-wrapper">
+                {% csrf_token %}
+
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+
+                {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% for field in form %}
+                <div class="input-wrap">
+                    {{field}}
+                </div>
+                {% endfor %}
+                <div class="button-default">
+                    <button type="submit" class="button">Log in</button>
+                </div>
+        </form>
+        <!-- separator -->
+        <div class="separator-medium"></div>
+        <!-- end separator -->
+        <div class="link-forgot text-center text-small">
+            <a href="{% url 'password_reset' %}" class="color-theme">Forgot Password?</a>
+        </div>
+
+        <!-- separator -->
+        <div class="separator-small"></div>
+        <!-- end separator -->
+
+        <div class="link-sign-up text-center text-small">
+            <p>Don't have an account?<a href="{% url 'user_register' %}" class="color-theme ml-2">Register</a></p>
+        </div>
+        <!-- separator -->
+        <div class="separator-large"></div>
+        <!-- end separator -->
+    </div>
+</div>
+<!-- end sign in -->
+{% endblock page_wrapper %}
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+{% block js %}
+
+{% endblock js %}

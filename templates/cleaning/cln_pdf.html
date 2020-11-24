@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>GTI PWA</title>
+    <style>
+        @page {
+            size: a4 portrait;
+
+            @frame header_frame {
+                -pdf-frame-content: header_content;
+                left: 1cm;
+                top: 1cm;
+                width: 19cm;
+                height: 100px;
+            }
+
+            @frame content_frame {
+                left: 1cm;
+                top: 3.5cm;
+                width: 19cm;
+                height: 25.2cm;
+
+
+            }
+
+            @frame content_frame {
+                -pdf-frame-content: content_frame;
+                left: 8.6cm;
+                top: 26cm;
+                width: 11.4cm;
+                height: 100px;
+            }
+
+            @frame footer_frame {
+                -pdf-frame-content: footer_pageNumber;
+                left: 2.5cm;
+                top: 28.7cm;
+                width: 11.4cm;
+            }
+
+        }
+
+        table {
+            -pdf-keep-with-next: true;
+        }
+
+        p {
+            margin: 0;
+            -pdf-keep-with-next: true;
+        }
+
+        .table {
+            font-family: 'Times New Roman', serif;
+            font-size: smaller;
+            box-sizing: border-box;
+        }
+
+        .table thead tr th,
+        .table tbody tr td {
+            vertical-align: middle;
+            border: .7px solid black;
+            box-sizing: border-box;
+            padding: 3px auto !important;
+            margin: 0;
+            font-size: 11px;
+            line-height: 50%;
+        }
+
+        .table thead tr th {
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .table .table-inside {
+            margin: 0;
+        }
+
+        .table .table-inside tr th {
+            margin: 0;
+            border: transparent;
+            text-align: left;
+            text-transform: capitalize;
+            box-sizing: border-box;
+            padding-left: 3px;
+        }
+
+        .table .table-area {
+            background-color: lightgrey;
+            font-weight: bold;
+            border: .7px solid black;
+            text-align: left;
+            padding: 3px auto 0 3px !important;
+            box-sizing: border-box;
+            font-size: 13px;
+
+        }
+
+        .table .table-subarea-no {
+            text-align: center;
+            width: 20px;
+        }
+
+        .table .table-subarea {
+            padding-left: 3px;
+            box-sizing: border-box;
+        }
+
+        pages #table-tanda-tangan {
+            box-sizing: border-box;
+            margin-top: .5cm;
+        }
+
+        #table-tanda-tangan .table .row-tanda-tangan td {
+            height: 75px;
+            text-align: center;
+
+        }
+
+        #table-tanda-tangan .table .row-penanggung-jawab td {
+            text-align: center;
+            vertical-align: center;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .table-header .table .header-logo {
+            width: 15%;
+            height: 50px;
+        }
+
+        .table-header .table .header-text {
+            width: 60%;
+            height: 50px;
+            font-size: large;
+        }
+
+        .table-header .table .header-detail-text {
+            width: 25%;
+        }
+
+        .tanggal_petugas p {
+            margin-bottom: 0;
+        }
+
+        .kondisi {
+            width: 10%;
+            box-sizing: border-box;
+            text-align: center;
+            vertical-align: center;
+        }
+
+        pages .header-area table .area-pemeriksaan {
+            width: 20%;
+            box-sizing: border-box;
+        }
+
+        pages .header-area table .keterangan {
+            width: 27%;
+            box-sizing: border-box;
+        }
+
+        .cek {
+            width: 50px;
+            box-sizing: border-box;
+        }
+
+        .table .table-harian {
+            box-sizing: border-box;
+            text-align: center;
+            vertical-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <pages>
+        <div class="table-responsive table-header" id="header_content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th rowspan="3"><img src="{{briImage.briImage.path}}" height="80" weight="80">
+                        </th>
+                        <th rowspan="2" class="header-text">PT. BANK RAKYAT INDONESIA (PERSERO) TBK.</th>
+                        <th>
+                            <table class="table table-inside">
+                                <tr>
+                                    <th class="keterangan">No. Dokumen</th>
+                                    <th>CHL-OSP-003</th>
+                                </tr>
+                            </table>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="header-detail-text">
+                            <table class="table table-inside">
+                                <tr>
+                                    <th class="keterangan">Revisi</th>
+                                    <th>00</th>
+                                </tr>
+                            </table>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>CHECKLIST PENGELOLAAN KEBERSIHAN GTI</th>
+                        <th class="header-detail-text">
+                            <table class="table table-inside">
+                                <tr>
+                                    <th class="keterangan">Tanggal Efektif</th>
+                                    <th>01 Juli 2020</th>
+                                </tr>
+                            </table>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="tanggal_petugas">
+            <p>hari / tanggal <span>:</span> {{tanggal | date:"d-m-Y"}}</p>
+            <p>petugas PEN <span>:</span> {{user}}</p>
+        </div>
+        <div class=" table-responsive header-area">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th rowspan="2" colspan="2" class="area-pemeriksaan">AREA PEMERIKSAAN</th>
+                        <th colspan="2">Parameter Pengukuran</th>
+                        <th rowspan="2" class="keterangan">Hasil Temuan</th>
+                        <th rowspan="2" class="keterangan">Keterangan</th>
+                    </tr>
+                    <tr>
+                        <th class="kondisi">Bersih</th>
+                        <th class="kondisi">Tidak Bersih</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for area in areas %}
+                    <tr>
+                        <th colspan="6" class="table-area">{{ area.namaArea }}</th>
+                    </tr>
+                    {% for subarea in subareas %} {% if subarea.namaAreaSubarea.pk == area.pk %}
+                    {% for daily in dailies %} {% if daily.dailySubarea.id == subarea.id %}
+                    <tr>
+                        <td class="table-subarea-no">{{subarea.pk}}</td>
+                        <td class="table-subarea">{{subarea.namaSubarea}}</td>
+                        {% if daily.kondisi == "Bersih" %}
+                        <td class="table-harian"><strong>v</strong></td>
+                        <td class="table-harian"><strong></strong></td>
+                        {% elif daily.kondisi == "Tidak Bersih" %}
+                        <td class="table-harian"><strong></strong></td>
+                        <td class="table-harian"><strong>v</strong></td>
+                        {% else %}
+                        <td class="table-harian"><strong></strong></td>
+                        <td class="table-harian"><strong></strong></td>
+                        {% endif %}
+                        <td>{{daily.hasilTemuan}}</td>
+                        <td>{{daily.keterangan}}</td>
+                    </tr>
+                    {% endif %} {% endfor %} {% endif %} {% endfor %}{% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive" id="table-tanda-tangan">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td style="border-color: transparent;"></td>
+                        <td style="width: 60%; border-color: transparent;">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr class="row-penanggung-jawab">
+                                        <td>Maker</td>
+                                        <td>Checker</td>
+                                        <td>Signer</td>
+                                    </tr>
+                                    <tr class="row-tanda-tangan">
+                                        {% for day in days %}
+                                        <td><img src="{{day.clnMaker.qr_code.path}}"></td>
+                                        <td><img src="{{day.clnChecker.qr_code.path}}"></td>
+                                        <td><img src="{{day.Signer.qr_code.path}}"></td>
+                                        {% endfor %}
+                                    </tr>
+                                    <tr class="row-penanggung-jawab">
+                                        {% for day in days %}
+                                        <td class="table-harian">{{day.clnMaker.first_name}} {{day.clnMaker.last_name}}
+                                        </td>
+                                        <td class="table-harian">{{day.clnChecker.first_name}}
+                                            {{day.clnChecker.last_name}}</td>
+                                        <td class="table-harian">{{day.clnSigner.first_name}}
+                                            {{day.clnSigner.last_name}}</td>
+                                        {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </pages>
+</body>
+
+</html>

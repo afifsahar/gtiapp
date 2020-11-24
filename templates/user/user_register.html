@@ -1,0 +1,89 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"></div>
+<div class="title"></div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<!-- separator -->
+<div class="separator-small"></div>
+<!-- end separator -->
+<!-- about us -->
+<div class="about-us">
+    <div class="header-about">
+        <div class="container">
+            <img src="{% static 'images/about-logo.png' %}" alt="image-demo">
+            <div class="about-title">
+                <h4>Register</h4>
+                <span class="text-small">Selamat Bekerja di <strong>CHECKAPP<strong></span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- sign in -->
+<div class="sign up bg-lightblue">
+    <!-- separator -->
+    <div class="separator-small"></div>
+    <!-- end separator -->
+    <div class="container">
+        <form method="POST" class="form-outline">
+            <div class="form-wrapper">
+                {% csrf_token %}
+
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+
+                {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% for field in form %}
+                <div class="input-wrap">
+                    {{field}}
+                </div>
+                {% endfor %}
+                {% for field in gform %}
+                <div class="input-wrap">
+                    {{field}}
+                </div>
+                {% endfor %}
+                <div class="button-default">
+                    <button type="submit" class="button">Register</button>
+                </div>
+        </form>
+        <!-- separator -->
+        <div class="separator-medium"></div>
+        <!-- end separator -->
+        <div class="link-sign-up text-center text-small">
+            <p>Have an account?<a href="" class="color-theme ml-2">Log In</a></p>
+        </div>
+        <!-- separator -->
+        <div class="separator-small"></div>
+        <!-- end separator -->
+    </div>
+</div>
+<!-- end sign in -->
+{% endblock page_wrapper %}
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+{% block js %}{% endblock js %}
