@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user.apps.UserConfig',
-    # 'cleaning.apps.CleaningConfig',
+    'cleaning.apps.CleaningConfig',
     # 'menondc.apps.MenondcConfig',
 
     
