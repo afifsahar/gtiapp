@@ -166,22 +166,22 @@
                             {% if harian.kondisi == None or harian.kondisi == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <!-- <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
-                            </td> -->
-                            <td>{{harian.kondisi}}</td>
+                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
+                                    class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            </td>
                             {% endif %}
                             {% if harian.hasilTemuan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <!-- <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
-                            </td> -->
-                            <td>{{harian.hasilTemuan}}</td>
+                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.hasilTemuan}}">
+                                <i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            </td>
                             {% endif %}
                             {% if harian.keterangan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <!-- <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td> -->
-                            <td>{{harian.keterangan}}</td>
+                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.keterangan}}">
+                                <i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             {% endif %}
                             {% if harian.kondisi != '' and harian.kondisi != None or harian.keterangan != '' or harian.hasilTemuan != '' %}
                             <td>{{harian.done | time:"H:i" }}</td>
@@ -230,30 +230,9 @@
 </ul>
 {% endblock toolbar_bottom %}
 {% block js %}
-<!-- <script src="{% static 'simplepicker/simplepicker.js' %}"></script> -->
-<!-- <script>
-
-    let simplepicker2 = new SimplePicker(".picker", {
-        zIndex: 100,
-        disableTimeSelection: false,
-        dateFormat: "mm/dd/yyyy",
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
     });
-
-    const $button2 = document.querySelector('input#date');
-    $button2.addEventListener('click', (e) => {
-        simplepicker2.open();
-    });
-
-    simplepicker2.on("submit", function (date, readableDate) {
-        // let formatted_date = (readableDate.getMonth() + 1) + "/" + readableDate.getDate() + "/" + readableDate.getFullYear()
-        var input = document.querySelector('input#date');
-        input.value = readableDate;
-        // console.log(formatted_date);
-
-    });
-    simplepicker2.on('close', function (date) {
-        date.preventDefault();
-    })
-</script> -->
-
+</script>
 {% endblock js %}

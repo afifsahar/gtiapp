@@ -11,17 +11,17 @@
 
             @frame header_frame {
                 -pdf-frame-content: header_content;
-                left: 1cm;
+                left: 0.5cm;
                 top: 1cm;
-                width: 19cm;
-                height: 100px;
+                width: 20cm;
+                height: 130px;
             }
 
             @frame content_frame {
-                left: 1cm;
-                top: 3.5cm;
-                width: 19cm;
-                height: 25.2cm;
+                left: 0.5cm;
+                top: 4.5cm;
+                width: 20cm;
+                height: 24.2cm;
 
 
             }
@@ -104,7 +104,12 @@
         }
 
         .table .table-subarea {
-            padding-left: 3px;
+            padding-left: 2px;
+            box-sizing: border-box;
+        }
+
+        .table .hasilTemuan {
+            margin-left: 2px;
             box-sizing: border-box;
         }
 
@@ -143,10 +148,11 @@
 
         .tanggal_petugas p {
             margin-bottom: 0;
+            margin-top: 1px;
         }
 
         .kondisi {
-            width: 10%;
+            width: 8%;
             box-sizing: border-box;
             text-align: center;
             vertical-align: center;
@@ -158,7 +164,7 @@
         }
 
         pages .header-area table .keterangan {
-            width: 27%;
+            width: 30%;
             box-sizing: border-box;
         }
 
@@ -216,11 +222,13 @@
                     </tr>
                 </thead>
             </table>
+            <div class="tanggal_petugas">
+                <p>hari / tanggal <span>:</span> {{tanggal | date:"d-m-Y"}}</p>
+                <p>petugas OSP<span>:</span>{% for day in days %}{{day.clnMaker.first_name}}
+                    {{day.clnMaker.last_name}}{% endfor %}</p>
+            </div>
         </div>
-        <div class="tanggal_petugas">
-            <p>hari / tanggal <span>:</span> {{tanggal | date:"d-m-Y"}}</p>
-            <p>petugas PEN <span>:</span> {{user}}</p>
-        </div>
+
         <div class=" table-responsive header-area">
             <table class="table table-bordered">
                 <thead>
@@ -231,11 +239,12 @@
                         <th rowspan="2" class="keterangan">Keterangan</th>
                     </tr>
                     <tr>
-                        <th class="kondisi">Bersih</th>
-                        <th class="kondisi">Tidak Bersih</th>
+                        <th class="kondisi">Ok</th>
+                        <th class="kondisi">Not Ok</th>
                     </tr>
                 </thead>
                 <tbody>
+
                     {% for area in areas %}
                     <tr>
                         <th colspan="6" class="table-area">{{ area.namaArea }}</th>
@@ -243,20 +252,24 @@
                     {% for subarea in subareas %} {% if subarea.namaAreaSubarea.pk == area.pk %}
                     {% for daily in dailies %} {% if daily.dailySubarea.id == subarea.id %}
                     <tr>
-                        <td class="table-subarea-no">{{subarea.pk}}</td>
+                        <td class="table-subarea-no">{{forloop.counter}}</td>
                         <td class="table-subarea">{{subarea.namaSubarea}}</td>
-                        {% if daily.kondisi == "Bersih" %}
+                        {% if daily.kondisi == "Bersih" or daily.kondisi == "Ok" %}
                         <td class="table-harian"><strong>v</strong></td>
                         <td class="table-harian"><strong></strong></td>
-                        {% elif daily.kondisi == "Tidak Bersih" %}
+                        {% elif daily.kondisi == "Tidak Bersih" or daily.kondisi == "Not Ok" %}
                         <td class="table-harian"><strong></strong></td>
                         <td class="table-harian"><strong>v</strong></td>
                         {% else %}
                         <td class="table-harian"><strong></strong></td>
                         <td class="table-harian"><strong></strong></td>
                         {% endif %}
-                        <td>{{daily.hasilTemuan}}</td>
-                        <td>{{daily.keterangan}}</td>
+                        <td>
+                            <p class="hasilTemuan">{{daily.hasilTemuan}}</p>
+                        </td>
+                        <td>
+                            <p class="hasilTemuan">{{daily.keterangan}}</p>
+                        </td>
                     </tr>
                     {% endif %} {% endfor %} {% endif %} {% endfor %}{% endfor %}
                 </tbody>
@@ -271,25 +284,25 @@
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr class="row-penanggung-jawab">
-                                        <td>Maker</td>
-                                        <td>Checker</td>
                                         <td>Signer</td>
+                                        <td>Checker</td>
+                                        <td>Maker</td>
                                     </tr>
                                     <tr class="row-tanda-tangan">
                                         {% for day in days %}
-                                        <td><img src="{{day.clnMaker.qr_code.path}}"></td>
-                                        <td><img src="{{day.clnChecker.qr_code.path}}"></td>
                                         <td><img src="{{day.clnSigner.qr_code.path}}"></td>
+                                        <td><img src="{{day.clnChecker.qr_code.path}}"></td>
+                                        <td><img src="{{day.clnMaker.qr_code.path}}"></td>
                                         {% endfor %}
                                     </tr>
                                     <tr class="row-penanggung-jawab">
                                         {% for day in days %}
-                                        <td class="table-harian">{{day.clnMaker.first_name}} {{day.clnMaker.last_name}}
-                                        </td>
-                                        <td class="table-harian">{{day.clnChecker.first_name}}
-                                            {{day.clnChecker.last_name}}</td>
                                         <td class="table-harian">{{day.clnSigner.first_name}}
                                             {{day.clnSigner.last_name}}</td>
+                                        <td class="table-harian">{{day.clnChecker.first_name}}
+                                            {{day.clnChecker.last_name}}</td>
+                                        <td class="table-harian">{{day.clnMaker.first_name}} {{day.clnMaker.last_name}}
+                                        </td>
                                         {% endfor %}
                                     </tr>
                                 </tbody>

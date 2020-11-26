@@ -1,3 +1,4 @@
 from .autos import *
 
-cln_autos()
+
+cln_when_day_change()

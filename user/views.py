@@ -21,27 +21,37 @@ from django.db.models import Q
 def user_home(request):
     cleaning_daily = cln_daily.objects.filter(hariIni=date.today())
     menondc_daily = mendc_daily.objects.filter(hariIni=date.today())
+    cleaning_area = cln_area.objects.all().count()
+    menondc_area = mendc_area.objects.all().count()
 
     cleaning_works_done = cleaning_daily.exclude(kondisi='').count(
-    )+cleaning_daily.exclude(keterangan='').count()+cleaning_daily.exclude(hasilTemuan='').count()
+    )+cleaning_daily.exclude(keterangan='').count()
 
     menondc_works_done = menondc_daily.exclude(kondisi='').count(
-    )+menondc_daily.exclude(keterangan='').count()+menondc_daily.exclude(hasilTemuan='').count()
+    )+menondc_daily.exclude(keterangan='').count()
 
-    if cleaning_daily.count() != 0:
-        cleaning_works_percent = math.ceil(cleaning_daily.exclude(
-            kondisi='', keterangan='', hasilTemuan='').count()/(cleaning_daily.count())*100)
-    else:
-        cleaning_works_percent = 0
-    if menondc_daily.count() != 0:
-        menondc_works_percent = math.ceil(menondc_daily.exclude(
-            kondisi='', keterangan='', hasilTemuan='').count()/(menondc_daily.count())*100)
-    else:
-        menondc_works_percent = 0
+    cleaning_works_percent = cleaning_daily.exclude(kondisi='', keterangan='').count()
+    menondc_works_percent = menondc_daily.exclude(kondisi='', keterangan='').count()
+
+    # if cleaning_daily.count() != 0:
+    #     # cleaning_works_percent = math.ceil(cleaning_daily.exclude(
+    #     #     kondisi='', keterangan='', hasilTemuan='').count()/(cleaning_daily.count())*100)
+    #     cleaning_works_percent = math.ceil(cleaning_daily.exclude(
+    #         kondisi='', keterangan='', hasilTemuan='').count())
+    # else:
+    #     cleaning_works_percent = 0
+    # if menondc_daily.count() != 0:
+    #     # menondc_works_percent = math.ceil(menondc_daily.exclude(
+    #     #     kondisi='', keterangan='', hasilTemuan='').count()/(menondc_daily.count())*100)
+    #     menondc_works_percent = math.ceil(menondc_daily.exclude(kondisi='', keterangan='', hasilTemuan='').count())
+    # else:
+    #     menondc_works_percent = 0
     context = {
         'tanggal': date.today(),
-        'cleaning_works_total': cleaning_daily.count()*3,
-        'menondc_works_total': menondc_daily.count()*3,
+        'cleaning_daily_count': cleaning_daily.count()*3,
+        'menondc_daily_count': menondc_daily.count()*3,
+        'cleaning_area_count': cleaning_area,
+        'menondc_area_count': menondc_area,
         'cleaning_works_done': cleaning_works_done,
         'menondc_works_done': menondc_works_done,
         'cleaning_works_percent': cleaning_works_percent,

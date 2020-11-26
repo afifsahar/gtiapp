@@ -59,7 +59,7 @@ def cln_area_add(request):
                 subareas = f.save(commit=False)
                 subareas.namaAreaSubarea = areas
                 subareas.save()
-            cln_autos()
+            cln_when_create_subarea()
             messages.success(
                 request, 'New Area in Checklist Kebersihan Successfully Added')
             return redirect('cln_settings')
@@ -92,10 +92,9 @@ def cln_area_edit(request, area_id):
             ar.save()
             for f in formset:
                 subar = f.save(commit=False)
-                # subar.id = 
                 subar.namaAreaSubarea = ar
-                # subar.id = f.id
                 subar.save()
+            cln_when_create_subarea()
             return redirect('cln_settings')
     else:
         formset = SubareaFormSet(queryset=cln_subarea.objects.filter(
@@ -333,7 +332,6 @@ class cln_history_download_pdf(View):
             'tanggal': obj.history,
             'briImage': briImage,
             'title': 'Checklist Kebersihan'
-            # 'user': request.user.first_name+' '+request.user.last_name
         }
         pdf = render_to_pdf('cleaning/cln_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
@@ -388,19 +386,21 @@ def cln_default_check_all(request, area_id):
                     defaultSubarea=subarea, defaultSubarea__namaAreaSubarea=areas.id)
                 harians = cln_daily.objects.filter(
                     dailySubarea=subarea, dailySubarea__namaAreaSubarea=areas.id)
+                ### if harian is blank fill with default, it means previous harian will not change
                 for (harian, default) in zip(harians, defaults):
-                    harian.hariIni = datetime(
-                        date.today().year, date.today().month, date.today().day)  # time 00:00:00
-                    harian.kondisi = default.defaultKondisi
-                    harian.keterangan = default.defaultKeterangan
-                    harian.hasilTemuan = default.defaultHasilTemuan
-                    harian.save()
+                    if harian.hariIni == '' or harian.hariIni == None:
+                        harian.hariIni = datetime(date.today().year, date.today().month, date.today().day)  # time 00:00:00
+                    if harian.kondisi == '' or harian.kondisi == None:
+                        harian.kondisi = default.defaultKondisi
+                    if harian.keterangan == '' or harian.keterangan == None:
+                        harian.keterangan = default.defaultKeterangan
+                    if harian.hasilTemuan == '' or harian.keterangan == None:
+                        harian.hasilTemuan = default.defaultHasilTemuan
             return redirect('cln_settings')
     else:
         formset = defaultFormSet(queryset=cln_default.objects.filter(
             defaultSubarea__namaAreaSubarea=areas.id), prefix='default')
     formfull = dict()
-
     for (subarea, form) in zip(subareas, formset):
         formfull.update({subarea.namaSubarea: form})
     context = {

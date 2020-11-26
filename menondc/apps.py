@@ -1,5 +1,5 @@
 from django.apps import AppConfig
-
+from .times import five_oclock
 
 class MenondcConfig(AppConfig):
     name = 'menondc'
@@ -7,5 +7,6 @@ class MenondcConfig(AppConfig):
     def ready(self):
         # import menondc.harians
         # import menondc.tasks
-        import menondc.autos
+        if five_oclock():
+            import menondc.autosignals
 

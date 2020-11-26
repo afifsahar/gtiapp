@@ -77,8 +77,8 @@ class mendc_subarea(models.Model):
 
 class mendc_default(models.Model):
     pilih_kondisi = {
-        ('Bersih', 'Bersih'),
-        ('Tidak Bersih', 'Tidak Bersih'),
+        ('Ok', 'Ok'),
+        ('Not Ok', 'not Ok'),
     }
 
     defaultSubarea = models.ForeignKey(mendc_subarea, verbose_name="Nama Subarea",
@@ -89,6 +89,8 @@ class mendc_default(models.Model):
                                          verbose_name="Keterangan", blank=True, null=True, default='')
     defaultHasilTemuan = models.TextField(name="defaultHasilTemuan", max_length=500,
                                           verbose_name="Hasil Temuan", blank=True, null=True, default='')
+    # last_update = models.DateField(
+    #     name="lastUpdate", auto_now=True, auto_now_add=False, verbose_name="Last Update", blank=True, null=True)
 
     class Meta:
         verbose_name = _("default")
@@ -105,8 +107,8 @@ class mendc_daily(models.Model):
     hari_ini = models.DateField(
         name="hariIni", auto_now=False, auto_now_add=False, verbose_name="Hari ini")
     pilih_kondisi = {
-        ('Bersih', 'Bersih'),
-        ('Tidak Bersih', 'Tidak Bersih'),
+        ('Ok', 'Ok'),
+        ('Not Ok', 'not Ok'),
     }
     kondisi = models.CharField(name="kondisi", max_length=50,
                                choices=pilih_kondisi, verbose_name="Kondisi", blank=True, null=True, default='')
@@ -119,6 +121,8 @@ class mendc_daily(models.Model):
 
     dailySubarea = models.ForeignKey(mendc_subarea, verbose_name="Nama Subarea",
                                      on_delete=models.CASCADE, related_name="dailySubarea", blank=True, null=True)
+    # last_update = models.DateField(
+    #     name="lastUpdate", auto_now=True, auto_now_add=False, verbose_name="Last Update", blank=True, null=True)
     # sign_maker = models.BooleanField(
     #     blank=True, null=True, verbose_name="Maker's Sign", name='makerSign', default=False)
     # sign_checker = models.BooleanField(

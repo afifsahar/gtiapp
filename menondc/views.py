@@ -58,7 +58,7 @@ def mendc_area_add(request):
                 subareas = f.save(commit=False)
                 subareas.namaAreaSubarea = areas
                 subareas.save()
-            mendc_autos()
+            mendc_when_create_subarea()
             return redirect('mendc_settings')
     else:
         formset = SubareaFormSet(
@@ -326,7 +326,6 @@ class mendc_history_download_pdf(View):
             'tanggal': obj.history,
             'briImage': briImage,
             'title': 'Monitoring Gedung'
-            # 'user': request.user.first_name+' '+request.user.last_name
         }
         pdf = render_to_pdf('menondc/mendc_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
@@ -381,12 +380,14 @@ def mendc_default_check_all(request, area_id):
                 harians = mendc_daily.objects.filter(
                     dailySubarea=subarea, dailySubarea__namaAreaSubarea=areas.id)
                 for (harian, default) in zip(harians, defaults):
-                    harian.hariIni = datetime(
-                        date.today().year, date.today().month, date.today().day)  # time 00:00:00
-                    harian.kondisi = default.defaultKondisi
-                    harian.keterangan = default.defaultKeterangan
-                    harian.hasilTemuan = default.defaultHasilTemuan
-                    harian.save()
+                    if harian.hariIni == '' or harian.hariIni == None:
+                        harian.hariIni = datetime(date.today().year, date.today().month, date.today().day)  # time 00:00:00
+                    if harian.kondisi == '' or harian.kondisi == None:
+                        harian.kondisi = default.defaultKondisi
+                    if harian.keterangan == '' or harian.keterangan == None:
+                        harian.keterangan = default.defaultKeterangan
+                    if harian.hasilTemuan == '' or harian.keterangan == None:
+                        harian.hasilTemuan = default.defaultHasilTemuan
             return redirect('mendc_settings')
     else:
         formset = defaultFormSet(queryset=mendc_default.objects.filter(

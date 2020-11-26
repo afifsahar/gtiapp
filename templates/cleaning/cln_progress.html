@@ -53,6 +53,7 @@
     <!-- end separator -->
     <div class="section-title text-center title-large">
         <h6>PROGRESS</h6>
+
     </div>
     <!-- separator -->
     <div class="separator-small"></div>
@@ -135,19 +136,22 @@
                             {% if harian.kondisi == None or harian.kondisi == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
+                                    class="icon ion-ios-checkmark-circle-outline"></i></td>
                             </td>
                             {% endif %}
                             {% if harian.hasilTemuan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.hasilTemuan}}">
+                                <i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             </td>
                             {% endif %}
                             {% if harian.keterangan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <td class="icoon"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.keterangan}}">
+                                <i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             {% endif %}
                             {% if harian.kondisi != '' and harian.kondisi != None or harian.keterangan != '' or harian.hasilTemuan != '' %}
                             <td>{{harian.done | time:"H:i" }}</td>
@@ -179,4 +183,10 @@
 
 {% block toolbar_bottom %}
 {% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+{% block js %}
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% endblock js %}

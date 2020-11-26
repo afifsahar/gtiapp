@@ -40,8 +40,6 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'cleaning.apps.CleaningConfig',
     'menondc.apps.MenondcConfig',
-
-    
 ]
 
 MIDDLEWARE = [

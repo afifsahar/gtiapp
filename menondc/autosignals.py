@@ -1,3 +1,3 @@
 from .autos import *
 
-mendc_autos()
+mendc_when_day_change()

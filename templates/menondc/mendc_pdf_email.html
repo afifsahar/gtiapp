@@ -69,6 +69,10 @@
             padding-left: 3px;
             box-sizing: border-box;
         }
+        .table .hasilTemuan {
+            margin-left: 2px;
+            box-sizing: border-box;
+        }
 
         pages #table-tanda-tangan {
             box-sizing: border-box;
@@ -215,8 +219,12 @@
                         <td class="table-harian"><strong></strong></td>
                         <td class="table-harian"><strong></strong></td>
                         {% endif %}
-                        <td>{{daily.hasilTemuan}}</td>
-                        <td>{{daily.keterangan}}</td>
+                        <td>
+                            <p class="hasilTemuan">{{daily.hasilTemuan}}</p>
+                        </td>
+                        <td>
+                            <p class="hasilTemuan">{{daily.keterangan}}</p>
+                        </td>
                     </tr>
                     {% endif %} {% endfor %} {% endif %} {% endfor %}{% endfor %}
                 </tbody>
@@ -231,25 +239,26 @@
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr class="row-penanggung-jawab">
-                                        <td>Signer</td>
-                                        <td>Checker</td>
                                         <td>Maker</td>
+                                        <td>Checker</td>
+                                        <td>Signer</td>
                                     </tr>
                                     <tr class="row-tanda-tangan">
                                         {% for day in days %}
-                                        <td><img src="{{day.clnMaker.qr_code.path}}"></td>
-                                        <td><img src="{{day.clnChecker.qr_code.path}}"></td>
-                                        <td><img src="{{day.Signer.qr_code.path}}"></td>
+                                        <td><img src="{{day.mendcSigner.qr_code.path}}"></td>
+                                        <td><img src="{{day.mendcChecker.qr_code.path}}"></td>
+                                        <td><img src="{{day.mendcMaker.qr_code.path}}"></td>
                                         {% endfor %}
                                     </tr>
                                     <tr class="row-penanggung-jawab">
                                         {% for day in days %}
-                                        <td class="table-harian">{{day.clnMaker.first_name}} {{day.clnMaker.last_name}}
+                                        <td class="table-harian">{{day.mendcSigner.first_name}}
+                                            {{day.mendcSigner.last_name}}</td>
+                                        <td class="table-harian">{{day.mendcChecker.first_name}}
+                                            {{day.mendcChecker.last_name}}</td>
+                                        <td class="table-harian">{{day.mendcMaker.first_name}}
+                                            {{day.mendcMaker.last_name}}
                                         </td>
-                                        <td class="table-harian">{{day.clnChecker.first_name}}
-                                            {{day.clnChecker.last_name}}</td>
-                                        <td class="table-harian">{{day.clnSigner.first_name}}
-                                            {{day.clnSigner.last_name}}</td>
                                         {% endfor %}
                                     </tr>
                                 </tbody>
