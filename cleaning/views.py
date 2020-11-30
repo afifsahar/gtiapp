@@ -409,3 +409,4 @@ def cln_default_check_all(request, area_id):
         'title': 'Checklist Kebersihan'
     }
     return render(request, 'cleaning/cln_default_check_all.html', context)
+    

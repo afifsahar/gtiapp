@@ -28,6 +28,7 @@ def cln_when_day_change():
                     harian.keterangan = default.defaultKeterangan
                 if harian.hasilTemuan == '' or harian.keterangan == None:
                     harian.hasilTemuan = default.defaultHasilTemuan
+                    
 
 ## when area and subarea are created
 # 1. create today daily
