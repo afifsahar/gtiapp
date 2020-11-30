@@ -375,10 +375,8 @@ def mendc_default_check_all(request, area_id):
                 default = form.save(commit=False)
                 default.save()
             for subarea in subareas:
-                defaults = mendc_default.objects.filter(
-                    defaultSubarea=subarea, defaultSubarea__namaAreaSubarea=areas.id)
-                harians = mendc_daily.objects.filter(
-                    dailySubarea=subarea, hariIni=date.today())
+                defaults = mendc_default.objects.filter(defaultSubarea=subarea)
+                harians = mendc_daily.objects.filter(dailySubarea=subarea, hariIni=date.today())
                 for harian in harians:
                     for default in defaults:
                         if harian.kondisi == '' or harian.kondisi == None:
