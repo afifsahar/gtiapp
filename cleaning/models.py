@@ -79,7 +79,6 @@ class cln_subarea(models.Model):
 
 # class cln_dailyManager(models.Manager):
 
-
 class cln_default(models.Model):
     pilih_kondisi = {
         ('Ok', 'Ok'),

@@ -129,7 +129,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
@@ -148,3 +150,19 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = "rxzdwtofyttujinf"
 DEFAULT_FROM_EMAIL = "gtiapp2020@gmail.com"
+
+### Secure Deployment Checklist
+# DEBUG = False
+## Secure Session and Cookie
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+## HTTPS
+#SECURE_HSTS_SECOND = 31536000(=1year)
+#SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+#SECURE_HSTS_INCLUDE_PRELOAD =True
+##
+# SECURE_SSL_REDIRECT = True
+# SECURE_REFERRER_POLICY = "strict-origin"
+# SECURE_BROWSER_XSS_FILTER = True
+# Settings.SECRET_KEY>5> 50 diff chars
+# SECRET_KEY = os.environ['SECRET_KEY']

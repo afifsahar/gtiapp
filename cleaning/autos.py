@@ -20,15 +20,14 @@ def cln_when_day_change():
         defaults = cln_default.objects.filter(defaultSubarea=subareas)
         harians = cln_daily.objects.filter(
             dailySubarea=subareas, hariIni=date.today())
-        for (harian,default) in zip(harians,defaults):
-            if harian.hariIni == '' or harian.hariIni == None:
-                harian.hariIni = datetime(date.today().year, date.today().month, date.today().day)  # time 00:00:00
-            if harian.kondisi == '' or harian.kondisi == None:
-                harian.kondisi = default.defaultKondisi
-            if harian.keterangan == '' or harian.keterangan == None:
-                harian.keterangan = default.defaultKeterangan
-            if harian.hasilTemuan == '' or harian.keterangan == None:
-                harian.hasilTemuan = default.defaultHasilTemuan
+        for harian in harians:
+            for default in defaults:
+                if harian.kondisi == '' or harian.kondisi == None:
+                    harian.kondisi = default.defaultKondisi
+                if harian.keterangan == '' or harian.keterangan == None:
+                    harian.keterangan = default.defaultKeterangan
+                if harian.hasilTemuan == '' or harian.keterangan == None:
+                    harian.hasilTemuan = default.defaultHasilTemuan
 
 ## when area and subarea are created
 # 1. create today daily
@@ -51,19 +50,11 @@ def cln_when_set_default():
         defaults = cln_default.objects.filter(defaultSubarea=subareas)
         harians = cln_daily.objects.filter(
             dailySubarea=subareas, hariIni=date.today())
-        for (harian, default) in zip(harians, defaults):
-            if harian.hariIni == '' or harian.hariIni == None:
-                harian.hariIni = datetime(date.today().year, date.today().month, date.today().day)  # time 00:00:00
-            if harian.kondisi == '' or harian.kondisi == None:
-                harian.kondisi = default.defaultKondisi
-            if harian.keterangan == '' or harian.keterangan == None:
-                harian.keterangan = default.defaultKeterangan
-            if harian.hasilTemuan == '' or harian.keterangan == None:
-                harian.hasilTemuan = default.defaultHasilTemuan
-
-# def area_subarea_dict():
-#     areadict = dict()
-#     for areas in cln_area.objects.all():
-#         for (subareas,i) in zip(cln_subarea.objects.filter(namaAreaSubarea=areas), range(1, (cln_subarea.objects.filter(namaAreaSubarea=areas).count()+1))):
-#             areadict.update({areas:{subareas:i}})
-#     return areadict
+        for harian in harians:
+            for default in defaults:
+                if harian.kondisi == '' or harian.kondisi == None:
+                    harian.kondisi = default.defaultKondisi
+                if harian.keterangan == '' or harian.keterangan == None:
+                    harian.keterangan = default.defaultKeterangan
+                if harian.hasilTemuan == '' or harian.keterangan == None:
+                    harian.hasilTemuan = default.defaultHasilTemuan

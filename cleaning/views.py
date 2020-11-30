@@ -382,20 +382,17 @@ def cln_default_check_all(request, area_id):
                 default = form.save(commit=False)
                 default.save()
             for subarea in subareas:
-                defaults = cln_default.objects.filter(
-                    defaultSubarea=subarea, defaultSubarea__namaAreaSubarea=areas.id)
-                harians = cln_daily.objects.filter(
-                    dailySubarea=subarea, dailySubarea__namaAreaSubarea=areas.id)
-                ### if harian is blank fill with default, it means previous harian will not change
-                for (harian, default) in zip(harians, defaults):
-                    if harian.hariIni == '' or harian.hariIni == None:
-                        harian.hariIni = datetime(date.today().year, date.today().month, date.today().day)  # time 00:00:00
-                    if harian.kondisi == '' or harian.kondisi == None:
-                        harian.kondisi = default.defaultKondisi
-                    if harian.keterangan == '' or harian.keterangan == None:
-                        harian.keterangan = default.defaultKeterangan
-                    if harian.hasilTemuan == '' or harian.keterangan == None:
-                        harian.hasilTemuan = default.defaultHasilTemuan
+                defaults = cln_default.objects.filter(defaultSubarea=subarea)
+                harians = cln_daily.objects.filter(dailySubarea=subarea, hariIni=date.today())
+                for harian in harians:
+                    for default in defaults:
+                        if harian.kondisi == '' or harian.kondisi == None:
+                            harian.kondisi = default.defaultKondisi
+                        if harian.keterangan == '' or harian.keterangan == None:
+                            harian.keterangan = default.defaultKeterangan
+                        if harian.hasilTemuan == '' or harian.keterangan == None:
+                            harian.hasilTemuan = default.defaultHasilTemuan
+                    harian.save()
             return redirect('cln_settings')
     else:
         formset = defaultFormSet(queryset=cln_default.objects.filter(
