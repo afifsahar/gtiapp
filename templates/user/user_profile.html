@@ -19,7 +19,7 @@
             <div class="col-12 align-self-center">
                 <div class="header-profile">
                     <div class="container">
-                        <img src="{{user.userProfile.userPhoto.url}}" alt="image-demo">
+                        <img src="{{user.userProfile.userPhoto.path}}" alt="image-demo">
                     </div>
                 </div>
             </div>
@@ -27,7 +27,11 @@
 
         <div class="profile-title text-center">
             <h4>{{user.first_name}} {{user.last_name}}</h4>
-            <span class="text-small">role : <strong>{{ user.groups.all.0.name }}</strong></span>
+            <span class="text-small">role : <strong>{{ user.groups.all.0.name}}
+                    {% if user.groups.all.1.name %}
+                    / {{ user.groups.all.1.name }}
+                    {% endif %}
+                </strong></span>
         </div>
     </div>
 </div>
