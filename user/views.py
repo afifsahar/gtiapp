@@ -21,17 +21,15 @@ from django.db.models import Q
 def user_home(request):
     cleaning_daily = cln_daily.objects.filter(hariIni=date.today())
     menondc_daily = mendc_daily.objects.filter(hariIni=date.today())
-    cleaning_area = cln_area.objects.all().count()
-    menondc_area = mendc_area.objects.all().count()
+    cleaning_area = cln_area.objects.all()
+    menondc_area = mendc_area.objects.all()
 
-    cleaning_works_done = cleaning_daily.exclude(kondisi='').count(
-    )+cleaning_daily.exclude(keterangan='').count()
+    cleaning_works_done = cleaning_daily.exclude(kondisi='').count()+cleaning_daily.exclude(keterangan='').count()
 
-    menondc_works_done = menondc_daily.exclude(kondisi='').count(
-    )+menondc_daily.exclude(keterangan='').count()
+    menondc_works_done = menondc_daily.exclude(kondisi='').count()+menondc_daily.exclude(keterangan='').count()
 
-    cleaning_works_percent = cleaning_daily.exclude(kondisi='', keterangan='').count()
-    menondc_works_percent = menondc_daily.exclude(kondisi='', keterangan='').count()
+    cleaning_works_percent = cleaning_area.exclude(namaAreaSubarea__dailySubarea__kondisi='', namaAreaSubarea__dailySubarea__keterangan='').count()
+    menondc_works_percent = menondc_area.exclude(namaAreaSubarea__dailySubarea__kondisi='', namaAreaSubarea__dailySubarea__keterangan='').count()
 
     # if cleaning_daily.count() != 0:
     #     # cleaning_works_percent = math.ceil(cleaning_daily.exclude(
@@ -48,10 +46,10 @@ def user_home(request):
     #     menondc_works_percent = 0
     context = {
         'tanggal': date.today(),
-        'cleaning_daily_count': cleaning_daily.count()*3,
-        'menondc_daily_count': menondc_daily.count()*3,
-        'cleaning_area_count': cleaning_area,
-        'menondc_area_count': menondc_area,
+        'cleaning_daily_count': cleaning_daily.count()*2,
+        'menondc_daily_count': menondc_daily.count()*2,
+        'cleaning_area_count': cleaning_area.count(),
+        'menondc_area_count': menondc_area.count(),
         'cleaning_works_done': cleaning_works_done,
         'menondc_works_done': menondc_works_done,
         'cleaning_works_percent': cleaning_works_percent,

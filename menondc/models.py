@@ -78,7 +78,7 @@ class mendc_subarea(models.Model):
 class mendc_default(models.Model):
     pilih_kondisi = {
         ('Ok', 'Ok'),
-        ('Not Ok', 'not Ok'),
+        ('Not Ok', 'Not Ok'),
     }
 
     defaultSubarea = models.ForeignKey(mendc_subarea, verbose_name="Nama Subarea",
@@ -108,7 +108,7 @@ class mendc_daily(models.Model):
         name="hariIni", auto_now=False, auto_now_add=False, verbose_name="Hari ini")
     pilih_kondisi = {
         ('Ok', 'Ok'),
-        ('Not Ok', 'not Ok'),
+        ('Not Ok', 'Not Ok'),
     }
     kondisi = models.CharField(name="kondisi", max_length=50,
                                choices=pilih_kondisi, verbose_name="Kondisi", blank=True, null=True, default='')

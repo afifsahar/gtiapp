@@ -383,7 +383,7 @@ def cln_default_check_all(request, area_id):
                 default.save()
             for subarea in subareas:
                 defaults = cln_default.objects.filter(defaultSubarea=subarea)
-                harians = cln_daily.objects.filter(dailySubarea=subarea, hariIni=date.today())
+                harians = cln_daily.objects.filter(dailySubarea=subarea)
                 for harian in harians:
                     for default in defaults:
                         if harian.kondisi == '' or harian.kondisi == None:
