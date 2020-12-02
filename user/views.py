@@ -24,12 +24,14 @@ def user_home(request):
     cleaning_area = cln_area.objects.all()
     menondc_area = mendc_area.objects.all()
 
-    cleaning_works_done = cleaning_daily.exclude(kondisi='').count()+cleaning_daily.exclude(keterangan='').count()
+    # cleaning_works_done = cleaning_daily.exclude(kondisi='').count()+cleaning_daily.exclude(keterangan='').count()
+    cleaning_works_done = cleaning_daily.exclude(kondisi='').count()
 
-    menondc_works_done = menondc_daily.exclude(kondisi='').count()+menondc_daily.exclude(keterangan='').count()
+    menondc_works_done = menondc_daily.exclude(kondisi='').count()
 
-    cleaning_works_percent = cleaning_area.exclude(namaAreaSubarea__dailySubarea__kondisi='', namaAreaSubarea__dailySubarea__keterangan='').count()
-    menondc_works_percent = menondc_area.exclude(namaAreaSubarea__dailySubarea__kondisi='', namaAreaSubarea__dailySubarea__keterangan='').count()
+    # if cleaning_daily.count() 
+    cleaning_works_percent = cleaning_area.exclude(namaAreaSubarea__dailySubarea__kondisi='').count()
+    menondc_works_percent = menondc_area.exclude(namaAreaSubarea__dailySubarea__kondisi='').count()
 
     # if cleaning_daily.count() != 0:
     #     # cleaning_works_percent = math.ceil(cleaning_daily.exclude(

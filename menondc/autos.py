@@ -32,6 +32,7 @@ def mendc_when_day_change():
                     harian.keterangan = default.defaultKeterangan
                 if harian.hasilTemuan == '' or harian.keterangan == None:
                     harian.hasilTemuan = default.defaultHasilTemuan
+            harian.save()
 ## when area and subarea are created
 # 1. create today daily
 # 2. create default fk to area and subarea
@@ -61,6 +62,7 @@ def cln_when_set_default():
                     harian.keterangan = default.defaultKeterangan
                 if harian.hasilTemuan == '' or harian.keterangan == None:
                     harian.hasilTemuan = default.defaultHasilTemuan
+            harian.save()
 
 # def area_subarea_dict():
 #     areadict = dict()

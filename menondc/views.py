@@ -385,6 +385,7 @@ def mendc_default_check_all(request, area_id):
                             harian.keterangan = default.defaultKeterangan
                         if harian.hasilTemuan == '' or harian.keterangan == None:
                             harian.hasilTemuan = default.defaultHasilTemuan
+                    harian.save()
             return redirect('mendc_settings')
     else:
         formset = defaultFormSet(queryset=mendc_default.objects.filter(
