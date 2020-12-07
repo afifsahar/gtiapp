@@ -224,7 +224,7 @@
             </table>
             <div class="tanggal_petugas">
                 <p>hari / tanggal <span>:</span> {{tanggal | date:"d-m-Y"}}</p>
-                <p>petugas <span>:</span>{% for day in days %}{{day.clnMaker.first_name}}
+                <p>petugas <span>:</span>{% for day in days %} {{day.clnMaker.first_name}}
                     {{day.clnMaker.last_name}}{% endfor %}</p>
             </div>
         </div>

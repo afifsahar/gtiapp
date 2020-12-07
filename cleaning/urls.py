@@ -27,6 +27,8 @@ urlpatterns = [
          cln_history_check_all, name='cln_history_check_all'),
     path('history/download-pdf', cln_history_download_pdf.as_view(),
          name='cln_history_download_pdf'),
+     path('progress/download-pdf', cln_progress_download_pdf.as_view(),
+         name='cln_progress_download_pdf'),
     path('history/send-email', cln_history_send_email,
          name='cln_history_send_email'),
     #     path('json/area/', cln_area_json, name='cln_area_json'),

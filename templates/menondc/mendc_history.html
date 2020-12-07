@@ -165,16 +165,20 @@
                             <td><strong>{{subarea.namaSubarea}}</strong></td>
                             {% if harian.kondisi == None or harian.kondisi == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
-                            {% else %}
+                            {% elif harian.kondisi == 'Ok' %}
                             <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
                                     class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            </td>
+                            {% elif harian.kondisi == 'Not Ok' %}
+                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
+                                    class="color-red icon ion-ios-checkmark-circle"></i></td>
                             </td>
                             {% endif %}
                             {% if harian.hasilTemuan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
                             <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.hasilTemuan}}">
-                                <i class="icon ion-ios-checkmark-circle-outline"></i></td>
+                                {{harian.hasilTemuan}}</td>
                             </td>
                             {% endif %}
                             {% if harian.keterangan == '' %}
@@ -214,12 +218,30 @@
 {% endblock page_wrapper %}
 
 {% block toolbar_bottom %}
+<div class="separator-large"></div>
 <ul class="toolbar-bottom toolbar-wrap">
     <li class="toolbar-item">
-        <a href="{% url 'mendc_history_send_email' %}" class="toolbar-link">
-            <i class="icon ion-ios-send"></i>
-            <p>Send Email</p>
+        {% for day in days %}
+        {% if user.groups.all.0.name == 'maker' %}
+        <a href="{% url 'user_mendc_maker_notification' user.username day.id day.hariIni %}"
+            class="toolbar-link toolbar-link-active" style="color: green;">
+            <i class="icon ion-ios-thumbs-up"></i>
+            <p>Tanda Tangani</p>
         </a>
+        {% elif user.groups.all.0.name == 'checker' %}
+        <a href="{% url 'user_mendc_checker_notification' user.username day.id day.hariIni %}"
+            class="toolbar-link toolbar-link-active" style="color: green;">
+            <i class="icon ion-ios-thumbs-up"></i>
+            <p>Tanda Tangani</p>
+        </a>
+        {% elif user.groups.all.0.name == 'signer' %}
+        <a href="{% url 'user_mendc_signer_notification' user.username day.id day.hariIni %}"
+            class="toolbar-link toolbar-link-active" style="color: green;">
+            <i class="icon ion-ios-thumbs-up"></i>
+            <p>Tanda Tangani</p>
+        </a>
+        {% endif %}
+        {% endfor %}
     </li>
     <li class="toolbar-item">
         <a href="{% url 'mendc_history_download_pdf' %}" class="toolbar-link">

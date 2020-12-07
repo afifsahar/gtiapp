@@ -20,6 +20,7 @@ from user.models import user_bri_image
 from django.views.generic import View
 from .utils import render_to_pdf
 from .autos import *
+from django.db.models import Q
 
 
 @login_required(login_url='user_login')
@@ -134,12 +135,23 @@ def mendc_progress(request):
     areas = mendc_area.objects.all()
     subareas = mendc_subarea.objects.all()
     harians = mendc_daily.objects.filter(hariIni=date.today())
+    days = None
+    if request.user.groups.all().first().name == 'maker':
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=True) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+    if request.user.groups.all().first().name == 'checker':
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+    if request.user.groups.all().first().name == 'signer':
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))
     context = {
         'areas': areas,
         'subareas': subareas,
         'harians': harians,
         'tanggal': date.today(),
-        'title': 'Monitoring Gedung'
+        'title': 'Monitoring Gedung',
+        'days':days
     }
     return render(request, 'menondc/mendc_progress.html', context)
 
@@ -156,13 +168,24 @@ def mendc_history(request):
     subareas = mendc_subarea.objects.all()
     dailies = mendc_daily.objects.filter(hariIni=obj.history)
     dailies_queryset = dailies.count()
+    days = None
+    if request.user.groups.all().first().name == 'maker':
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=True) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+    if request.user.groups.all().first().name == 'checker':
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+    if request.user.groups.all().first().name == 'signer':
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))
     context = {
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
         'tanggal': obj.history,
         'dailies_queryset': dailies_queryset,
-        'title': 'Monitoring Gedung'
+        'title': 'Monitoring Gedung',
+        'days':days
     }
     return render(request, 'menondc/mendc_history.html', context)
 
@@ -330,6 +353,26 @@ class mendc_history_download_pdf(View):
         pdf = render_to_pdf('menondc/mendc_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Monitoring_Gedung_%s.pdf" % (obj.history)
+        content = "inline; attachment; filename='%s'" % (filename)
+        response['Content-Disposition'] = content
+        return response
+
+class mendc_progress_download_pdf(View):
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        briImage = user_bri_image.objects.get(imageName="logo bri")
+        data = {
+            'days': mendc_day.objects.filter(hariIni=date.today()),
+            'areas': mendc_area.objects.all(),
+            'subareas': mendc_subarea.objects.all(),
+            'dailies': mendc_daily.objects.filter(hariIni=date.today()),
+            'tanggal': obj.today(),
+            'briImage': briImage,
+            'title': 'Monitoring Gedung'
+        }
+        pdf = render_to_pdf('menondc/mendc_pdf.html', data)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Monitoring_Gedung_%s.pdf" % (date.today())
         content = "inline; attachment; filename='%s'" % (filename)
         response['Content-Disposition'] = content
         return response

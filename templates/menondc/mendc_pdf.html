@@ -191,7 +191,7 @@
                             <table class="table table-inside">
                                 <tr>
                                     <th class="keterangan">No. Dokumen</th>
-                                    <th>CHL-OSP-003</th>
+                                    <th>CHL-OSP-004</th>
                                 </tr>
                             </table>
                         </th>
@@ -207,7 +207,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <th>CHECKLIST PENGELOLAAN KEBERSIHAN GTI</th>
+                        <th>CHECKLIST PENGELOLAAN GEDUNG M/E NON DC</th>
                         <th class="header-detail-text">
                             <table class="table table-inside">
                                 <tr>
@@ -221,7 +221,7 @@
             </table>
             <div class="tanggal_petugas">
                 <p>hari / tanggal <span>:</span> {{tanggal | date:"d-m-Y"}}</p>
-                <p>petugas <span>:</span>{% for day in days %}{{day.clnMaker.first_name}}
+                <p>petugas <span>:</span>{% for day in days %} {{day.clnMaker.first_name}}
                     {{day.clnMaker.last_name}}{% endfor %}</p>
             </div>
         </div>
@@ -283,7 +283,7 @@
                                         <td>Signer</td>
                                         <td>Checker</td>
                                         <td>Maker</td>
-                                        
+
                                     </tr>
                                     <tr class="row-tanda-tangan">
                                         {% for day in days %}

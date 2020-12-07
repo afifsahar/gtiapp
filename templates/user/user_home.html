@@ -7,13 +7,15 @@
 
 {% block navbar %}
 <div class="left"></div>
-<div class="title">{{tanggal | date:"l, d F Y"}}</div>
-<div class="right"></div>
+<div class="title"></div>
+<div class="right"><a href='{% url "user_profile" user.username %}' class="link"><i class="icon ion-ios-person"></i></a>
+</div>
 {% endblock navbar %}
 {% block page_wrapper %}
 <div class="section-title title-large">
     <div class="container">
-        <h3><span class="overline-title"><strong>Hi, {{user.first_name}} {{user.last_name}}</strong> </span></h3>
+        <span class="overline-title"><strong>Hi, {{user.first_name}} {{user.last_name}}</strong> </span>
+        <h3 class="mb-2">{{tanggal | date:"l, d F Y"}}</h3>
     </div>
     <!-- <h3>Start Your Best Experience With Maxui</h3> -->
 </div>
@@ -24,118 +26,52 @@
             <div class="mask"></div>
             <img src="{% static 'images/intro.jpg' %}" alt="image-demo">
             <div class="caption">
-                <h3 class="text-white mb-1">CHECK APP</h3>
+                <h3 class="text-white mb-1">GTI Maintenance</h3>
                 <p class="text-white">Selamat Bekerja</p>
             </div>
         </div>
     </div>
 </div>
 <!-- end intro app -->
-<!-- separator -->
-<div class="separator-small"></div>
-<!-- end separator -->
 <!-- counter -->
 <div class="counter">
     <div class="container">
-        <!-- newsletter -->
-        <div class="newsletter bg-lightblue my-2">
-            <!-- separator -->
-            <div class="separator-small"></div>
-            <!-- end separator -->
-            <div class="section-title text-center title-large">
-                <h6>Monitoring Kebersihan GTI</h6>
-            </div>
-            <!-- separator -->
-            <div class="separator-small"></div>
-            <!-- end separator -->
-        </div>
-        <div class="row my-2">
-            <div class="col-6">
-                <div class="content bg-blue text-center" style="font-size: medium;">
-                    <h4 class="color-white">{{cleaning_works_done}}/{{cleaning_daily_count}}</h4>
-                    <h5 class="color-white">Daily Works</h5>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="content bg-red text-center">
-                    <h4 class="color-white">{{cleaning_works_percent}}/{{cleaning_area_count}}</h4>
-                    <h5 class="color-white">Area Completed</h5>
-                </div>
-            </div>
-        </div>
-        <!-- newsletter -->
-        <div class="newsletter bg-lightblue my-2">
-            <!-- separator -->
-            <div class="separator-small"></div>
-            <!-- end separator -->
-            <div class="section-title text-center title-large">
-                <h6>Monitoring Gedung ME Non DC</h6>
-            </div>
-            <!-- separator -->
-            <div class="separator-small"></div>
-            <!-- end separator -->
-        </div>
-        <div class="row my-2">
-            <div class="col-6">
-                <div class="content bg-yellow text-center">
-                    <h4 class="color-white">{{menondc_works_done}}/{{menondc_daily_count}}</h4>
-                    <h5 class="color-white">Daily Works</h5>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="content bg-purple text-center">
-                    <h4 class="color-white">{{menondc_works_percent}}/{{menondc_area_count}}</h4>
-                    <h5 class="color-white">Area Completed</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end counter -->
-<!-- separator -->
-<div class="separator-medium"></div>
-<!-- end separator -->
-<!-- feature list -->
-<div class="feature-list">
-    <div class="swiper-container swiper-style-full container">
-        <div class="swiper-wrapper ">
-            <div class="swiper-slide">
-                <div class="content bg-lightblue">
-                    <div class="wrap-icon">
-                        <i class="icon ion-ios-brush bg-blue"></i>
+        <!-- feature slide -->
+        <div class="feature-slide">
+            <div class="swiper-container swiper-style">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="content shadow-sm">
+                            <div class="info-statistic bg-blue">{{days}}</div>
+                            <div class="icon"><i class="icon ion-ios-warning color-blue"></i></div>
+                            <div class="text">
+                                <h6>Approval and Signing</h5>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text">
-                        <h5>OSP Info</h5>
-                        <p>More more more osp info</p>
+                    <div class="swiper-slide">
+                        <div class="content shadow-sm">
+                            <div class="info-statistic bg-red">{{cleaning_works_done}}</div>
+                            <div class="icon"><i class="icon ion-ios-brush color-red"></i></div>
+                            <div class="text">
+                                <h6>C.P. Kebersihan</h6>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="content bg-lightgreen">
-                    <div class="wrap-icon">
-                        <i class="icon ion-ios-checkbox bg-green"></i>
-                    </div>
-                    <div class="text">
-                        <h5>INF Info</h5>
-                        <p>More more more inf info</p>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="content bg-lightred">
-                    <div class="wrap-icon">
-                        <i class="icon ion-ios-keypad bg-red"></i>
-                    </div>
-                    <div class="text">
-                        <h5>BRI Info</h5>
-                        <p>More more more bri info</p>
+                    <div class="swiper-slide">
+                        <div class="content shadow-sm">
+                            <div class="info-statistic bg-yellow">{{menondc_works_done}}</div>
+                            <div class="icon"><i class="icon ion-ios-build color-yellow"></i></div>
+                            <div class="text">
+                                <h6>C.P. Gedung M/E Non DC</h6>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- feature list -->
 <!-- separator -->
 <div class="separator-small"></div>
 <!-- end separator -->
@@ -145,21 +81,25 @@
     <li class="toolbar-item">
         <a href="{% url 'user_home' %}" class="toolbar-link toolbar-link-active">
             <i class="icon ion-ios-home"></i>
+            <p>Home</p>
         </a>
     </li>
     <li class="toolbar-item">
         <a href="{% url 'cln_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-aperture"></i>
+            <i class="icon ion-ios-brush"></i>
+            <p>Kebersihan</p>
         </a>
     </li>
     <li class="toolbar-item">
         <a href="{% url 'mendc_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-analytics"></i>
+            <i class="icon ion-ios-build"></i>
+            <p>Gedung</p>
         </a>
     </li>
     <li class="toolbar-item">
-        <a href="{% url 'user_profile' user.username %}" class="toolbar-link">
-            <!-- <i class="icon ion-ios-person"></i> --><img src="{% static 'images/square6.jpg' %}" alt="" height="28">
+        <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link">
+            <i class="icon ion-ios-warning"></i>
+            <p>Approval</p>
         </a>
     </li>
 </ul>

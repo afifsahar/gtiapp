@@ -104,21 +104,25 @@
     <li class="toolbar-item">
         <a href="{% url 'user_home' %}" class="toolbar-link">
             <i class="icon ion-ios-home"></i>
+            <p>Home</p>
         </a>
     </li>
     <li class="toolbar-item">
         <a href="{% url 'cln_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-aperture"></i>
+            <i class="icon ion-ios-brush"></i>
+            <p>Kebersihan</p>
         </a>
     </li>
     <li class="toolbar-item">
         <a href="{% url 'mendc_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-analytics"></i>
+            <i class="icon ion-ios-build"></i>
+            <p>Gedung</p>
         </a>
     </li>
     <li class="toolbar-item">
-        <a href="{% url 'user_profile' user.username %}" class="toolbar-link toolbar-link-active">
-            <i class="icon ion-ios-person"></i>
+        <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link toolbar-link-active">
+            <i class="icon ion-ios-warning"></i>
+            <p>Approval</p>
         </a>
     </li>
 </ul>

@@ -27,6 +27,8 @@ urlpatterns = [
          mendc_history_check_all, name='mendc_history_check_all'),
     path('history/download_pdf', mendc_history_download_pdf.as_view(),
          name='mendc_history_download_pdf'),
+    path('progress/download_pdf', mendc_progress_download_pdf.as_view(),
+         name='mendc_progress_download_pdf'),
     path('history/send-email', mendc_history_send_email,
          name='mendc_history_send_email'),
     #    path('json/area/', mendc_area_json, name='mendc_area_json'),

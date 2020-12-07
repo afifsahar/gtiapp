@@ -39,74 +39,30 @@
 {% endcomment %}
 
 {% block navbar %}
-<div class="left"><a href='{% url "mendc_home" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
+<div class="left"><a href='{% url "user_profile_notification" user.username %}' class="link"><i
+            class="icon ion-ios-arrow-back"></i></a>
 </div>
-<div class="title">{{title}}</div>
+<div class="title">Approval and Signing</div>
 <div class="right"></div>
 {% endblock navbar %}
 
 {% block page_wrapper %}
-<!-- newsletter -->
-<div class="newsletter bg-lightblue">
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-    <div class="section-title text-center title-large">
-        <h6>PROGRESS</h6>
-    </div>
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-</div>
-<!-- separator -->
-<div class="separator-medium"></div>
-<!-- end separator -->
-<!-- cards -->
-<!-- <div class="cards">
-    <div class="container">
-        <div class="card">
-            <div class="card-body" style="text-align: center;">
-                <h5><strong><i class="icon ion-ios-calendar"></i> {{tanggal | date:"l, d F Y"}}</strong></h5>
-            </div>
-        </div>
-    </div>
-</div> -->
-<!-- end cards -->
 <div class="faq">
     <div class="container">
         <div class="title-faq">
-            <p><i class="icon ion-ios-calendar"></i> {{tanggal | date:"l, d F Y"}}</p>
+            <p><i class="icon ion-ios-calendar"></i> {% for day in days %}{{ day.hariIni | date:"l, d F Y"}}
+                {% endfor %}</p>
         </div>
     </div>
 </div>
 <!-- separator -->
 <div class="separator-medium"></div>
 <!-- end separator -->
-{% if areaCount == 0 %}
-<!-- maintenance -->
-<div class="maintenance">
-    <div class="container">
-        <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
-        <h5 class="mb-5" style="color: red;"><strong>Area Not Found</strong></h5>
-        <div class="button-default">
-            <div class="row">
-                <div class="col-6">
-                    <a href="{% url 'mendc_settings' %}" class="button">Settings</a>
-                </div>
-                <div class="col-6">
-                    <a href="{% url 'mendc_area_add' %}" class="button button-outline">Create Area</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end maintenance -->
-{% else %}
 <!-- accordion -->
 <div id="accordionParent" class="accordion accordion-inset">
     {% for area in areas %}
     <div class="accordion-item">
-        <div class="accordion-title collapsed" data-toggle="collapse" data-target="#accordionTwo{{area.pk}}">
+        <div class="accordion-title show" data-toggle="collapse" data-target="#accordionTwo{{area.pk}}">
             {{area.namaArea}}
             <div class="accordion-after">
                 <i class="icon ion-ios-arrow-up"></i>
@@ -121,8 +77,6 @@
                             <th>Kondisi</th>
                             <th>HasilTemuan</th>
                             <th>Keterangan</th>
-                            <th>Pukul</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,11 +91,9 @@
                             {% elif harian.kondisi == 'Ok' %}
                             <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
                                     class="icon ion-ios-checkmark-circle-outline"></i></td>
-                            </td>
                             {% elif harian.kondisi == 'Not Ok' %}
                             <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
                                     class="color-red icon ion-ios-checkmark-circle"></i></td>
-                            </td>
                             {% endif %}
                             {% if harian.hasilTemuan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
@@ -156,23 +108,11 @@
                             <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.keterangan}}">
                                 <i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             {% endif %}
-                            {% if harian.kondisi != '' and harian.kondisi != None or harian.keterangan != '' or harian.hasilTemuan != '' %}
-                            <td>{{harian.done | time:"H:i" }}</td>
-                            {% else %}
-                            <td><span class="red-text">Undone</span></td>
-                            {% endif %}
-                            <td><a href="{% url 'mendc_progress_check_single' harian.id %}" class="button">Check</a>
-                            </td>
                             {% endif %}
                             {% endfor %}
                         </tr>
                         {% endif %}
                         {% endfor %}
-                        <tr>
-                            <td colspan="6" class="text-center"><a href="{% url 'mendc_progress_check_all' area.id %}"
-                                    class="bg-green button button-small" style="width: 50%;">Check All</a>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -181,40 +121,39 @@
     {% endfor %}
 </div>
 <!-- end accordion -->
-{% endif %}
 {% endblock page_wrapper %}
 
 {% block toolbar_bottom %}
 <div class="separator-large"></div>
 <ul class="toolbar-bottom toolbar-wrap">
     <li class="toolbar-item">
+        <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link toolbar-link-active">
+            <i class="icon ion-ios-thumbs-down"></i>
+            <p>Batal dan Kembali</p>
+        </a>
+    </li>
+    <li class="toolbar-item">
         {% for day in days %}
         {% if user.groups.all.0.name == 'maker' %}
-        <a href="{% url 'user_mendc_maker_notification' user.username day.id day.hariIni %}"
+        <a href="{% url 'user_cln_maker_notification' user.username day.id day.hariIni %}"
             class="toolbar-link toolbar-link-active" style="color: green;">
             <i class="icon ion-ios-thumbs-up"></i>
-            <p>Tanda Tangai</p>
+            <p>Tanda Tangani</p>
         </a>
         {% elif user.groups.all.0.name == 'checker' %}
-        <a href="{% url 'user_mendc_checker_notification' user.username day.id day.hariIni %}"
+        <a href="{% url 'user_cln_checker_notification' user.username day.id day.hariIni %}"
             class="toolbar-link toolbar-link-active" style="color: green;">
             <i class="icon ion-ios-thumbs-up"></i>
-            <p>Tanda Tangai</p>
+            <p>Tanda Tangani</p>
         </a>
         {% elif user.groups.all.0.name == 'signer' %}
-        <a href="{% url 'user_mendc_signer_notification' user.username day.id day.hariIni %}"
+        <a href="{% url 'user_cln_signer_notification' user.username day.id day.hariIni %}"
             class="toolbar-link toolbar-link-active" style="color: green;">
             <i class="icon ion-ios-thumbs-up"></i>
-            <p>Tanda Tangai</p>
+            <p>Tanda Tangani</p>
         </a>
         {% endif %}
         {% endfor %}
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'mendc_progress_download_pdf' %}" class="toolbar-link">
-            <i class="icon ion-ios-download"></i>
-            <p>Download PDF</p>
-        </a>
     </li>
 </ul>
 {% endblock toolbar_bottom %}

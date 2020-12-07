@@ -19,43 +19,31 @@ from django.db.models import Q
 
 @login_required(login_url='user_login')
 def user_home(request):
-    cleaning_daily = cln_daily.objects.filter(hariIni=date.today())
-    menondc_daily = mendc_daily.objects.filter(hariIni=date.today())
-    cleaning_area = cln_area.objects.all()
-    menondc_area = mendc_area.objects.all()
-
-    # cleaning_works_done = cleaning_daily.exclude(kondisi='').count()+cleaning_daily.exclude(keterangan='').count()
-    cleaning_works_done = cleaning_daily.exclude(kondisi='').count()
-
-    menondc_works_done = menondc_daily.exclude(kondisi='').count()
-
-    # if cleaning_daily.count() 
-    cleaning_works_percent = cleaning_area.exclude(namaAreaSubarea__dailySubarea__kondisi='').count()
-    menondc_works_percent = menondc_area.exclude(namaAreaSubarea__dailySubarea__kondisi='').count()
-
-    # if cleaning_daily.count() != 0:
-    #     # cleaning_works_percent = math.ceil(cleaning_daily.exclude(
-    #     #     kondisi='', keterangan='', hasilTemuan='').count()/(cleaning_daily.count())*100)
-    #     cleaning_works_percent = math.ceil(cleaning_daily.exclude(
-    #         kondisi='', keterangan='', hasilTemuan='').count())
-    # else:
-    #     cleaning_works_percent = 0
-    # if menondc_daily.count() != 0:
-    #     # menondc_works_percent = math.ceil(menondc_daily.exclude(
-    #     #     kondisi='', keterangan='', hasilTemuan='').count()/(menondc_daily.count())*100)
-    #     menondc_works_percent = math.ceil(menondc_daily.exclude(kondisi='', keterangan='', hasilTemuan='').count())
-    # else:
-    #     menondc_works_percent = 0
+    cleaning_works_left = cln_daily.objects.filter(Q(hariIni=date.today()) & Q(kondisi=None)).count()
+    menondc_works_left = mendc_daily.objects.filter(Q(hariIni=date.today()) & Q(kondisi='')).count()
+    cln_days = None
+    mendc_days = None
+    if request.user.groups.all().first().name == 'maker':
+        cln_days = cln_day.objects.filter(Q(clnMaker__isnull=True) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True)).count()
+        mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=True) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True)).count()
+    if request.user.groups.all().first().name == 'checker':
+        cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True)).count()
+        mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=True) & Q(mendcSigner__isnull=True)).count()
+    if request.user.groups.all().first().name == 'signer':
+        cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=False) & Q(clnSigner__isnull=True)).count()
+        mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
+            mendcChecker__isnull=False) & Q(mendcSigner__isnull=True)).count()
+    days = cln_days + mendc_days
     context = {
         'tanggal': date.today(),
-        'cleaning_daily_count': cleaning_daily.count()*2,
-        'menondc_daily_count': menondc_daily.count()*2,
-        'cleaning_area_count': cleaning_area.count(),
-        'menondc_area_count': menondc_area.count(),
-        'cleaning_works_done': cleaning_works_done,
-        'menondc_works_done': menondc_works_done,
-        'cleaning_works_percent': cleaning_works_percent,
-        'menondc_works_percent': menondc_works_percent,
+        'cleaning_works_done': cleaning_works_left,
+        'menondc_works_done': menondc_works_left,
+        'days':days,
     }
     return render(request, 'user/user_home.html', context)
 
@@ -201,10 +189,10 @@ def user_profile_notification(request, username):
 
 
 @ login_required(login_url='user_login')
-def user_cln_maker_notification(request, username, day_id):
+def user_cln_maker_notification(request, username, day_id, day_date):
     cln_days = None
     if request.user.groups.all().first().name == 'maker':
-        cln_days = cln_day.objects.get(id=day_id)
+        cln_days = cln_day.objects.get(id=day_id, hariIni=day_date)
         cln_days.clnMaker = User.objects.get(username=request.user.username)
         cln_days.save()
 
@@ -212,10 +200,10 @@ def user_cln_maker_notification(request, username, day_id):
 
 
 @ login_required(login_url='user_login')
-def user_mendc_maker_notification(request, username, day_id):
+def user_mendc_maker_notification(request, username, day_id, day_date):
     mendc_days = None
     if request.user.groups.all().first().name == 'maker':
-        mendc_days = mendc_day.objects.get(id=day_id)
+        mendc_days = mendc_day.objects.get(id=day_id, hariIni=day_date)
         mendc_days.mendcMaker = User.objects.get(
             username=request.user.username)
         mendc_days.save()
@@ -223,20 +211,20 @@ def user_mendc_maker_notification(request, username, day_id):
 
 
 @ login_required(login_url='user_login')
-def user_cln_checker_notification(request, username, day_id):
+def user_cln_checker_notification(request, username, day_id, day_date):
     cln_days = None
     if request.user.groups.all().first().name == 'checker':
-        cln_days = cln_day.objects.get(id=day_id)
+        cln_days = cln_day.objects.get(id=day_id, hariIni=day_date)
         cln_days.clnChecker = User.objects.get(username=request.user.username)
         cln_days.save()
 
     return redirect('user_profile_notification', username=request.user.username)
 
 @ login_required(login_url='user_login')
-def user_mendc_checker_notification(request, username, day_id):
+def user_mendc_checker_notification(request, username, day_id, day_date):
     mendc_days = None
     if request.user.groups.all().first().name == 'checker':
-        mendc_days = mendc_day.objects.get(id=day_id)
+        mendc_days = mendc_day.objects.get(id=day_id, hariIni=day_date)
         mendc_days.mendcChecker = User.objects.get(
             username=request.user.username)
         mendc_days.save()
@@ -244,24 +232,55 @@ def user_mendc_checker_notification(request, username, day_id):
 
 
 @ login_required(login_url='user_login')
-def user_cln_signer_notification(request, username, day_id):
+def user_cln_signer_notification(request, username, day_id, day_date):
     cln_days = None
     if request.user.groups.all().first().name == 'signer':
-        cln_days = cln_day.objects.get(id=day_id)
+        cln_days = cln_day.objects.get(id=day_id, hariIni=day_date)
         cln_days.clnSigner = User.objects.get(username=request.user.username)
         cln_days.save()
     return redirect('user_profile_notification', username=request.user.username)
 
 
 @ login_required(login_url='user_login')
-def user_mendc_signer_notification(request, username, day_id):
+def user_mendc_signer_notification(request, username, day_id, day_date):
     mendc_days = None
     if request.user.groups.all().first().name == 'signer':
-        mendc_days = mendc_day.objects.get(id=day_id)
+        mendc_days = mendc_day.objects.get(id=day_id, hariIni=day_date)
         mendc_days.mendcSigner = User.objects.get(
             username=request.user.username)
         mendc_days.save()
     return redirect('user_profile_notification', username=request.user.username)
+
+@ login_required(login_url='user_login')
+def user_cln_notification_seefile(request, username, day_id, day_date):
+    areas = cln_area.objects.all()
+    subareas = cln_subarea.objects.all()
+    dailies = cln_daily.objects.filter(hariIni=day_date)
+    days = cln_day.objects.filter(id=day_id)
+    context = {
+        'areas': areas,
+        'subareas': subareas,
+        'harians': dailies,
+        'days':days,
+    }
+    return render(request,'user/user_cln_notification_seefile.html',context)
+
+@ login_required(login_url='user_login')
+def user_mendc_notification_seefile(request, username, day_id, day_date):
+    areas = mendc_area.objects.all()
+    subareas = mendc_subarea.objects.all()
+    dailies = mendc_daily.objects.filter(hariIni=day_date)
+    days = mendc_day.objects.filter(id=day_id)
+    context = {
+        'areas': areas,
+        'subareas': subareas,
+        'harians': dailies,
+        'days':days,
+    }
+    return render(request,'user/user_mendc_notification_seefile.html',context)
+
+
+
 
 @ login_required(login_url='user_login')
 def user_profile_configuration(request, username):

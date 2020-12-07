@@ -20,6 +20,7 @@ from django.forms import modelformset_factory, inlineformset_factory, formset_fa
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
 from .autos import *
+from django.db.models import Q
 
 @login_required(login_url='user_login')
 def cln_home(request):
@@ -139,13 +140,24 @@ def cln_progress(request):
     subareas = cln_subarea.objects.all()
     harians = cln_daily.objects.filter(hariIni=date.today())
     areaCount = areas.count()
+    days = None
+    if request.user.groups.all().first().name == 'maker':
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=True) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+    if request.user.groups.all().first().name == 'checker':
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+    if request.user.groups.all().first().name == 'signer':
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=False) & Q(clnSigner__isnull=True))
     context = {
         'areas': areas,
         'subareas': subareas,
         'harians': harians,
         'tanggal': date.today(),
         "areaCount": areaCount,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Kebersihan',
+        'days':days,
     }
     return render(request, 'cleaning/cln_progress.html', context)
 
@@ -162,13 +174,24 @@ def cln_history(request):
     subareas = cln_subarea.objects.all()
     dailies = cln_daily.objects.filter(hariIni=obj.history)
     dailies_queryset = dailies.count()
+    days = None
+    if request.user.groups.all().first().name == 'maker':
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=True) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+    if request.user.groups.all().first().name == 'checker':
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+    if request.user.groups.all().first().name == 'signer':
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=False) & Q(clnSigner__isnull=True))
     context = {
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
         'tanggal': obj.history,
-        'dailies_queryset': dailies_queryset,
-        'title': 'Checklist Kebersihan'
+        'areaCount': dailies_queryset,
+        'title': 'Checklist Kebersihan',
+        'days':days
     }
     return render(request, 'cleaning/cln_history.html', context)
 
@@ -336,6 +359,26 @@ class cln_history_download_pdf(View):
         pdf = render_to_pdf('cleaning/cln_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Checklist_Kebersihan_%s.pdf" % (obj.history)
+        content = "inline; attachment; filename='%s'" % (filename)
+        response['Content-Disposition'] = content
+        return response
+
+class cln_progress_download_pdf(View):
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        briImage = user_bri_image.objects.get(imageName="logo bri")
+        data = {
+            'days': cln_day.objects.filter(hariIni=date.today()),
+            'areas': cln_area.objects.all(),
+            'subareas': cln_subarea.objects.all(),
+            'dailies': cln_daily.objects.filter(hariIni=date.today()),
+            'tanggal': date.today(),
+            'briImage': briImage,
+            'title': 'Checklist Kebersihan'
+        }
+        pdf = render_to_pdf('cleaning/cln_pdf.html', data)
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "Checklist_Kebersihan_%s.pdf" % (date.today())
         content = "inline; attachment; filename='%s'" % (filename)
         response['Content-Disposition'] = content
         return response
