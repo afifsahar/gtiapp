@@ -230,19 +230,19 @@
         {% if user.groups.all.0.name == 'maker' %}
         <a href="{% url 'user_cln_maker_notification' user.username day.id day.hariIni %}"
             class="toolbar-link toolbar-link-active" style="color: green;">
-            <i class="icon ion-ios-thumbs-up"></i>
+            <i class="icon ion-ios-paper"></i>
             <p>Tanda Tangani</p>
         </a>
         {% elif user.groups.all.0.name == 'checker' %}
         <a href="{% url 'user_cln_checker_notification' user.username day.id day.hariIni %}"
             class="toolbar-link toolbar-link-active" style="color: green;">
-            <i class="icon ion-ios-thumbs-up"></i>
+            <i class="icon ion-ios-paper"></i>
             <p>Tanda Tangani</p>
         </a>
         {% elif user.groups.all.0.name == 'signer' %}
         <a href="{% url 'user_cln_signer_notification' user.username day.id day.hariIni %}"
             class="toolbar-link toolbar-link-active" style="color: green;">
-            <i class="icon ion-ios-thumbs-up"></i>
+            <i class="icon ion-ios-paper"></i>
             <p>Tanda Tangani</p>
         </a>
         {% endif %}
