@@ -85,29 +85,31 @@
                         <tr>
                             {% for harian in harians %}
                             {% if harian.dailySubarea.id == subarea.id %}
-                            <td><strong>{{subarea.namaSubarea}}</strong></td>
+                            <td class="subarea"><strong>{{subarea.namaSubarea}}</strong></td>
                             {% if harian.kondisi == None or harian.kondisi == '' %}
-                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
+                            <td class="icoon kondisi"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% elif harian.kondisi == 'Ok' %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
-                                    class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.kondisi}}"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             </td>
                             {% elif harian.kondisi == 'Not Ok' %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
-                                    class="color-red icon ion-ios-checkmark-circle"></i></td>
+                            <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.kondisi}}"><i class="color-red icon ion-ios-checkmark-circle"></i></td>
                             </td>
                             {% endif %}
                             {% if harian.hasilTemuan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.hasilTemuan}}">
+                            <td class="hasilTemuan" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.hasilTemuan}}">
                                 {{harian.hasilTemuan}}</td>
                             </td>
                             {% endif %}
                             {% if harian.keterangan == '' %}
-                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
+                            <td class="icoon keterangan"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.keterangan}}">
+                            <td class="icoon keterangan" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.keterangan}}">
                                 <i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             {% endif %}
                             {% endif %}

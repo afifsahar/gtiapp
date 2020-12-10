@@ -28,8 +28,35 @@
     .table td {
         padding: .5rem !important;
         margin: .5rem !important;
+    }
+    .table .hasilTemuan {
+        box-sizing: border-box;
+        min-width: 250px;
+        max-width: 350px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: pre-line;
+        /* display: inline; */
+    }
+
+    .table .hasilTemuan::first-line {
+        box-sizing: border-box;
+        line-height: 0;
+    }
+
+    .table .subarea,
+    .table .aksi {
+        width: 15%;
         white-space: nowrap;
-        width: 1%;
+    }
+
+    .table .kondisi,
+    .table .pukul,
+    .table .keterangan,
+    .table .aksi {
+        width: 10%;
+        text-align: center;
+        white-space: nowrap;
     }
 </style>
 {% endblock css %}
@@ -117,43 +144,44 @@
                 <table class="table table-responsive">
                     <thead>
                         <tr>
-                            <th>Subarea</th>
-                            <th>Kondisi</th>
-                            <th>HasilTemuan</th>
-                            <th>Keterangan</th>
-                            <th>Pukul</th>
-                            <th>Aksi</th>
+                            <th class="subarea">Subarea</th>
+                            <th class="kondisi">Kondisi</th>
+                            <th style="text-align: center;">HasilTemuan</th>
+                            <th class="keterangan">Keterangan</th>
+                            <th class="pukul">Pukul</th>
+                            <th class="aksi">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for subarea in subareas %}
                         {% if subarea.namaAreaSubarea.id == area.id %}
                         <tr>
-                            {% for harian in harians %}
                             {% if harian.dailySubarea.id == subarea.id %}
                             <td><strong>{{subarea.namaSubarea}}</strong></td>
                             {% if harian.kondisi == None or harian.kondisi == '' %}
-                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
+                            <td class="icoon kondisi"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% elif harian.kondisi == 'Ok' %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
-                                    class="icon ion-ios-checkmark-circle-outline"></i></td>
+                            <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.kondisi}}"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             </td>
                             {% elif harian.kondisi == 'Not Ok' %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.kondisi}}"><i
-                                    class="color-red icon ion-ios-checkmark-circle"></i></td>
+                            <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.kondisi}}"><i class="color-red icon ion-ios-checkmark-circle"></i></td>
                             </td>
                             {% endif %}
                             {% if harian.hasilTemuan == '' %}
                             <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.hasilTemuan}}">
+                            <td class="hasilTemuan" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.hasilTemuan}}">
                                 {{harian.hasilTemuan}}</td>
                             </td>
                             {% endif %}
                             {% if harian.keterangan == '' %}
-                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
+                            <td class="icoon keterangan"><i class="icon ion-ios-close-circle-outline"></i></td>
                             {% else %}
-                            <td class="icoon" data-toggle="tooltip" data-placement="top" title="{{harian.keterangan}}">
+                            <td class="icoon keterangan" data-toggle="tooltip" data-placement="top"
+                                title="{{harian.keterangan}}">
                                 <i class="icon ion-ios-checkmark-circle-outline"></i></td>
                             {% endif %}
                             {% if harian.kondisi != '' and harian.kondisi != None or harian.keterangan != '' or harian.hasilTemuan != '' %}
