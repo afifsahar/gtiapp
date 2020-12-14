@@ -1,0 +1,134 @@
+{% extends 'base.html' %}{% load static %}
+{% block css %}
+<style>
+    .form-elements .section-title {
+        margin-top: 15px;
+    }
+
+    .form-wrapper .minus-button {
+        margin: 3px auto;
+        font-weight: 900;
+        color: #ffffff;
+        font-size: xx-large;
+    }
+
+    .toolbar-bottom::before {
+        height: 3px;
+    }
+
+    .ion-ios-add {
+        font-size: 33px !important;
+    }
+</style>
+{% endblock css %}
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href='{% url "wo_home" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<!-- newsletter -->
+<div class="newsletter bg-lightblue">
+    <!-- separator -->
+    <div class="separator-small"></div>
+    <!-- end separator -->
+    <div class="section-title text-center title-large">
+        <h6>Add Work Order</h6>
+    </div>
+    <!-- separator -->
+    <div class="separator-small"></div>
+    <!-- end separator -->
+</div>
+<!-- form elements -->
+<div class="form-elements">
+    <div class="container">
+        <form method="POST" class="form-outline form-horizontal">
+            <!-- section title -->
+            <div class="section-title">
+                <h6>Description</h6>
+            </div>
+            <!-- end section title -->
+            {% csrf_token %}
+            {% if d_form.errors %}
+            {% for field in d_form %}
+            {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% for error in d_form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {% for field in c_form %}
+                    <p>{{field.label}}</p>
+                    <p>{{field}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {% for field in d_form %}
+                    <p>{{field.label}}</p>
+                    <p>{{field}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if w_form.errors %}
+            {% for field in w_form %}
+            {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% for error in w_form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endif %}
+            <!-- separator -->
+            <div class="separator-small"></div>
+            <!-- end separator -->
+            <!-- section title -->
+            <div class="section-title">
+                <h6>Work Order</h6>
+            </div>
+            <!-- end section title -->
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {% for field in w_form %}
+                    <p>{{field.label}}</p>
+                    <p>{{field}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- separator -->
+            <div class="separator-large"></div>
+            <!-- end separator -->
+            <div class="button-default">
+                <button type="submit" class="button">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- end form elements -->
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+
+{% block js %}
+<!-- <script src="{%  static 'js/formset-cln.js'%} "></script> -->
+{% endblock js %}

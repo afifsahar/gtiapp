@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'cleaning.apps.CleaningConfig',
     'menondc.apps.MenondcConfig',
+    'workorder.apps.WorkorderConfig',
 ]
 
 MIDDLEWARE = [
@@ -149,13 +150,13 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = "rxzdwtofyttujinf"
 DEFAULT_FROM_EMAIL = "gtiapp2020@gmail.com"
 
-### Secure Deployment Checklist
+# Secure Deployment Checklist
 # DEBUG = False
-## Secure Session and Cookie
+# Secure Session and Cookie
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
-## HTTPS
-#SECURE_HSTS_SECOND = 31536000(=1year)
+# HTTPS
+# SECURE_HSTS_SECOND = 31536000(=1year)
 #SECURE_HSTS_INCLUDE_SUBDOMAINS =True
 #SECURE_HSTS_INCLUDE_PRELOAD =True
 ##

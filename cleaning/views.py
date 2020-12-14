@@ -95,7 +95,7 @@ def cln_area_edit(request, area_id):
                 subar = f.save(commit=False)
                 subar.namaAreaSubarea = ar
                 subar.save()
-            cln_when_create_subarea()
+            # cln_when_create_subarea()
             return redirect('cln_settings')
     else:
         formset = SubareaFormSet(queryset=cln_subarea.objects.filter(

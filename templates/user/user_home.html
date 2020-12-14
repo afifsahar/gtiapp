@@ -1,5 +1,16 @@
 {% extends "base.html" %}{% load static %}
-{% block css %}{% endblock css %}
+{% block css %}
+<style>
+    .swiper-style .swiper-slide .icon {
+        margin-top: 0px;
+    }
+
+    .swiper-style {
+        padding: 10px 10px;
+    }
+</style>
+
+{% endblock css %}
 
 {% comment %}
 {% block navbar_home %}navbar-home{% endblock navbar_home %}
@@ -8,8 +19,7 @@
 {% block navbar %}
 <div class="left"></div>
 <div class="title"></div>
-<div class="right"><a href='{% url "user_profile" user.username %}' class="link"><i class="icon ion-ios-person"></i></a>
-</div>
+<div class="right"></div>
 {% endblock navbar %}
 {% block page_wrapper %}
 <div class="section-title title-large">
@@ -40,30 +50,72 @@
         <div class="feature-slide">
             <div class="swiper-container swiper-style">
                 <div class="swiper-wrapper">
+                    <a href=" {% url 'cln_home' %} ">
+                        <div class="swiper-slide">
+                            <div class="content shadow-sm">
+                                <div class="info-statistic bg-red">{{cleaning_works_done}}</div>
+                                <div class="icon"><i class="icon ion-ios-brush color-red"></i></div>
+                                <div class="text">
+                                    <h6>C.P. Kebersihan</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href=" {% url 'mendc_home' %} ">
+                        <div class="swiper-slide">
+                            <div class="content shadow-sm">
+                                <div class="info-statistic bg-yellow">{{menondc_works_done}}</div>
+                                <div class="icon"><i class="icon ion-ios-build color-yellow"></i></div>
+                                <div class="text">
+                                    <h6>C.P. Gedung M/E Non DC</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a href=" {% url 'wo_home' %} ">
+                        <div class="swiper-slide">
+                            <div class="content shadow-sm">
+                                <div class="info-statistic bg-green">0</div>
+                                <div class="icon"><i class="icon ion-ios-stopwatch color-green"></i></div>
+                                <div class="text">
+                                    <h6>Work Order</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- feature slide -->
+        <div class="feature-slide">
+            <div class="swiper-container swiper-style">
+                <div class="swiper-wrapper">
+                    <a href="{% url 'user_profile_notification' user.username %}">
+                        <div class="swiper-slide">
+                            <div class="content shadow-sm">
+                                <div class="info-statistic bg-blue">{{days}}</div>
+                                <div class="icon"><i class="icon ion-ios-warning color-blue"></i></div>
+                                <div class="text">
+                                    <h6>Approval and Signing</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                     <div class="swiper-slide">
                         <div class="content shadow-sm">
-                            <div class="info-statistic bg-blue">{{days}}</div>
-                            <div class="icon"><i class="icon ion-ios-warning color-blue"></i></div>
+                            <div class="info-statistic bg-lime">0</div>
+                            <div class="icon"><i class="icon ion-ios-mail color-lime"></i></div>
                             <div class="text">
-                                <h6>Approval and Signing</h5>
+                                <h6>Inbox</h6>
                             </div>
                         </div>
                     </div>
                     <div class="swiper-slide">
                         <div class="content shadow-sm">
-                            <div class="info-statistic bg-red">{{cleaning_works_done}}</div>
-                            <div class="icon"><i class="icon ion-ios-brush color-red"></i></div>
+                            <div class="info-statistic bg-orange">0</div>
+                            <div class="icon"><i class="icon ion-ios-paper-plane color-orange"></i></div>
                             <div class="text">
-                                <h6>C.P. Kebersihan</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="content shadow-sm">
-                            <div class="info-statistic bg-yellow">{{menondc_works_done}}</div>
-                            <div class="icon"><i class="icon ion-ios-build color-yellow"></i></div>
-                            <div class="text">
-                                <h6>C.P. Gedung M/E Non DC</h6>
+                                <h6>Outbox</h6>
                             </div>
                         </div>
                     </div>
@@ -84,22 +136,22 @@
             <p>Home</p>
         </a>
     </li>
-    <li class="toolbar-item">
-        <a href="{% url 'cln_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-brush"></i>
-            <p>Kebersihan</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
+    <!-- <li class="toolbar-item">
         <a href="{% url 'mendc_home' %}" class="toolbar-link">
             <i class="icon ion-ios-build"></i>
             <p>Gedung</p>
         </a>
-    </li>
+    </li>-->
     <li class="toolbar-item">
         <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link">
             <i class="icon ion-ios-warning"></i>
             <p>Approval</p>
+        </a>
+    </li>
+    <li class="toolbar-item">
+        <a href="{% url 'user_profile' user.username %}" class="toolbar-link">
+            <i class="icon ion-ios-person"></i>
+            <p>Profile</p>
         </a>
     </li>
 </ul>

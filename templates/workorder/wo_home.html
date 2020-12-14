@@ -1,0 +1,125 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}
+<style>
+    .float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 75px;
+        right: 25px;
+        background-color: #0C9;
+        color: #FFF;
+        border-radius: 50%;
+        text-align: center;
+        box-shadow: 2px 2px 3px #999;
+    }
+
+    .my-float {
+        margin-top: 22px;
+    }
+
+    .ion-ios-add {
+        font-size: 40px !important;
+    }
+
+    .forum-action ul li {
+        margin-right: 10px;
+    }
+</style>
+
+{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"></div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+{% block page_wrapper %}
+<div class="container">
+    {% if dayCount == 0 %}
+    <!-- separator -->
+    <div class="separator-large"></div>
+    <!-- end separator -->
+    <!-- maintenance -->
+    <div class="maintenance">
+        <div class="container">
+            <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
+            <h5 class="mb-5" style="color: red;"><strong>Work Order Not Found</strong></h5>
+        </div>
+    </div>
+    {% else %}
+    {% for day in days %}
+    {% for description in descriptions %}
+    {% if description.descriptionDay.id == day.id %}
+    <div class="card bg-lightblue card-forum">
+        <div class="card-body">
+            <div class="card-avatar-image">
+                <div class="text">
+                    <h6 class="card-title">{{description.description}}</h6>
+                    <span class="title-name">{{description.woUser}}</span>
+                    <span class="date"><i class="icon ion-ios-square"></i>{{description.createAt}}</span>
+                </div>
+            </div>
+            <div class="forum-action">
+                <ul>
+                    <li><a href="#"><i class="icon ion-ios-download"></i>Download PDF</a></li>
+                    <li><a href="#"><i class="icon ion-ios-list"></i>Detail</a></li>
+                    <li><a href="{% url 'wo_progress_add' day.id %}"><i class="icon ion-ios-star"></i>Add Progress</a></li>
+                    <li><a href="{% url 'wo_work_edit' day.id %}"><i class="icon ion-ios-arrow-dropup"></i>Edit</a></li>
+                    <li><a href="{% url 'wo_work_delete' day.id %}"><i class="icon ion-ios-trash"></i>Delete</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- separator -->
+    <div class="separator-medium"></div>
+    <!-- end separator -->
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    {% endif %}
+</div>
+
+<div class="button-default">
+    <a href="{% url 'wo_work_add' %}" class="float"><i class="icon ion-ios-add my-float"></i></a>
+</div>
+{% endblock page_wrapper %}
+{% block toolbar_bottom %}
+<ul class="toolbar-bottom toolbar-wrap">
+    <li class="toolbar-item">
+        <a href="{% url 'user_home' %}" class="toolbar-link">
+            <i class=" icon ion-ios-home"></i>
+            <p>Home</p>
+        </a>
+    </li>
+    <li class="toolbar-item">
+        <a href="{% url 'cln_home' %}" class="toolbar-link">
+            <i class="icon ion-ios-brush"></i>
+            <p>Kebersihan</p>
+        </a>
+    </li>
+    <li class="toolbar-item">
+        <a href="{% url 'mendc_home' %}" class="toolbar-link">
+            <i class="icon ion-ios-build"></i>
+            <p>Gedung</p>
+        </a>
+    </li>
+    <li class="toolbar-item">
+        <a href="{% url 'wo_home' %}" class="toolbar-link toolbar-link-active">
+            <i class="icon ion-ios-stopwatch"></i>
+            <p>WO</p>
+        </a>
+    </li>
+    <li class="toolbar-item">
+        <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link">
+            <i class="icon ion-ios-warning"></i>
+            <p>Approval</p>
+        </a>
+    </li>
+</ul>
+{% endblock toolbar_bottom %}
+{% block js %}{% endblock js %}

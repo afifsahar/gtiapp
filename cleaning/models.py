@@ -135,30 +135,6 @@ class cln_daily(models.Model):
         verbose_name = 'daily'
         verbose_name_plural = 'dailies'
 
-    # def save(self, *args, **kwargs):
-    #     try:
-    #         days = cln_day.objects.get(hariIni=self.hariIni).id
-    #         if expression:
-    #             pass
-    #     except expression as identifier:
-    #         pass
-    #     self.dailyDay =
-    #     super(Model, self).save(*args, **kwargs)
-    # def to_dict_json(self):
-    #     return{
-    #         'id': self.id,
-    #         'pk': self.pk,
-    #         'hariIni': self.hariIni,
-    #         'kondisiJam9': self.kondisiJam9,
-    #         'kondisiJam14': self.kondisiJam14,
-    #         'ketJam9': self.ketJam9,
-    #         'ketJam14': self.ketJam14,
-    #         'doneJam9': self.doneJam9,
-    #         'doneJam14': self.doneJam14,
-    #         'dailySubarea': self.dailySubarea.id,
-    #         'namadailySubarea': self.dailySubarea.namaSubarea,
-    #     }
-
 
 class cln_latest_history(models.Model):
     history = models.DateField(
