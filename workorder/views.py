@@ -122,7 +122,8 @@ def wo_work_edit(request, day_id):
             work = w_form.save(commit=False)
             work.workorderDay = day
             work.workorderDescription = desc
-            work.woMaker = request.user
+            if work.woMaker == None or work.woMaker == '':
+                work.woMaker = request.user
             work.save()
             # progress = wo_progress.objects.create(
             #     progressDay=day,
@@ -188,10 +189,8 @@ def wo_work_delete_confirm(request, day_id):
     }
     return redirect('wo_home')
 
-# @login_required(login_url='user_login')
-# @maker_only
-
-
+@login_required(login_url='user_login')
+@maker_only
 def wo_progress_add(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     progs = wo_progress.objects.get(progressDay=days, isDelete=False)

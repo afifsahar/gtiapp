@@ -108,10 +108,13 @@
             background-color: lightgray;
             text-align: center;
             vertical-align: center;
+
         }
 
         pages .table-one .table-one-content {
             height: 40px;
+            text-align: center;
+            vertical-align: center;
         }
 
         pages .table-two .table-two-header,
@@ -153,24 +156,36 @@
             vertical-align: center;
             height: 20px;
         }
-        .table-three .table-three-inside-description tr td{
+
+        .table-three .table-three-inside-description tr td,
+        .table-five .table-five-inside-description tr td {
             padding-left: 3px;
-        }
-        .table-three .table-three-inside-description .cell-width{
-            height: 20px
+            height: 100px;
+            border-color: transparent;
         }
 
-        /* pages .table-three .table-three-description {
-            height: 100px;
+        .table-three .table-three-inside-description .cell-wide,
+        .table-five .table-five-inside-description .cell-wide {
+            height: 90px;
+
+        }
+
+        .table-three .table-three-inside-description .cell-narrow,
+        .table-five .table-five-inside-description .cell-narrow {
+            height: 25px;
+        }
+
+        .table-three .table-three-inside-description .cell-desc,
+        .table-five .table-five-inside-description .cell-desc {
             text-align: left;
             vertical-align: top;
-
         }
 
-        pages .table-three .table-three-signature {
-            text-align: left;
-            vertical-align: bottom;
-        } */
+        .table-three .table-three-inside-description .cell-sign,
+        .table-five .table-five-inside-description .cell-sign {
+            text-align: center;
+            vertical-align: middle;
+        }
 
         .table-four .table-four-blank {
             background-color: darkgray;
@@ -178,13 +193,16 @@
         }
 
         .table-four .table-four-autorisasi {
-            height: 70px;
+            height: 90px;
             text-align: center;
             vertical-align: top;
+            font-size: large;
         }
 
         .table-four .table-four-name {
             height: 20px;
+            text-align: center;
+            vertical-align: middle;
         }
 
         .table-four .table-four-workorder {
@@ -230,7 +248,8 @@
             vertical-align: bottom;
             text-align: left;
         }
-        .table-six .table-six-description{
+
+        .table-six .table-six-description {
             width: 66.67%;
         }
     </style>
@@ -278,7 +297,7 @@
                 </thead>
             </table>
         </div>
-        
+
         <div class="table-responsive table-one">
             <table class="table table-bordered">
                 <tbody>
@@ -288,7 +307,8 @@
                         <td class="table-one-header">No. Telephone/Ext</td>
                     </tr>
                     <tr>
-                        <td class="table-one-content">{{descriptions.woUser.first_name}} {{descriptions.woUser.last_name}}</td>
+                        <td class="table-one-content">{{descriptions.woUser.first_name}}
+                            {{descriptions.woUser.last_name}}</td>
                         <td class="table-one-content">{{descriptions.division}}</td>
                         <td class="table-one-content"></td>
                     </tr>
@@ -548,20 +568,23 @@
                         <td colspan="2">
                             <table class="table-three-inside-description">
                                 <tr>
-                                    <td>Description</td>
+                                    <td class="cell-narrow">Description</td>
                                 </tr>
                                 <tr>
-                                    <td class="cell-width">sdfsdfsdf</td>
+                                    <td class="cell-wide cell-desc">
+                                        <p>{{descriptions.description}}</p>
+                                    </td>
                                 </tr>
                             </table>
                         </td>
                         <td>
                             <table class="table-three-inside-description">
                                 <tr>
-                                    <td class="cell-width">ergergergerg</td>
+                                    <td class="cell-wide cell-sign"><img src="{{descriptions.woUser.qr_code.path}}">
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>User Signature</td>
+                                    <td class="cell-narrow">User Signature</td>
                                 </tr>
                             </table>
                         </td>
@@ -579,25 +602,37 @@
                         <td colspan="3" class="table-four-pl3">* Fill by OSP</td>
                     </tr>
                     <tr>
-                        <td class="table-four-pl3">* Handle By : </td>
-                        <td class="table-four-pl3">* Date Report : </td>
-                        <td class="table-four-pl3">* Time Report : </td>
+                        <td class="table-four-pl3">* Handle By : {{workorders.woMaker.first_name}}
+                            {{workorders.woMaker.first_name}} </td>
+                        <td class="table-four-pl3">* Date Report : {{workorders.createAt | date:"d-m-Y" }} </td>
+                        <td class="table-four-pl3">* Time Report : {{workorders.createAt | date:"H:i:s" }}</td>
                     </tr>
                     <tr>
-                        <td colspan="3" class="table-four-workorder table-four-pl3">* Work Order</td>
+                        <td colspan="3" class="table-four-workorder table-four-pl3">* Work Order
+                            <p>{{workorders.workorder}}</p>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="3" class="table-four-duration table-four-pl3">Duration</td>
                     </tr>
                     <tr>
-                        <td class="table-four-content table-four-autorisasi">Signer</td>
-                        <td class="table-four-content table-four-autorisasi">Checker</td>
-                        <td class="table-four-content table-four-autorisasi">Maker</td>
+                        <td class="table-four-content table-four-autorisasi">Signer
+                            <p><img src="{{workorders.woSigner.qr_code.path}}" alt="qr_code_signer"></p>
+                        </td>
+                        <td class="table-four-content table-four-autorisasi">Checker
+                            <p><img src="{{workorders.woChecker.qr_code.path}}" alt="qr_code_checker"></p>
+                        </td>
+                        <td class="table-four-content table-four-autorisasi">Maker
+                            <p><img src="{{workorders.woMaker.qr_code.path}}" alt="qr_code_maker"></p>
+                        </td>
                     </tr>
                     <tr>
-                        <td class="table-four-content table-four-name"></td>
-                        <td class="table-four-content table-four-name"></td>
-                        <td class="table-four-content table-four-name"></td>
+                        <td class="table-four-content table-four-name">{{workorders.woSigner.first_name}}
+                            {{workorders.woSigner.last_name}}</td>
+                        <td class="table-four-content table-four-name">{{workorders.woChecker.first_name}}
+                            {{workorders.woChecker.last_name}}</td>
+                        <td class="table-four-content table-four-name">{{workorders.woMaker.first_name}}
+                            {{workorders.woMaker.last_name}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -612,7 +647,8 @@
                         <td colspan="5" class="table-five-pl3">* Fill by BRIKS</td>
                     </tr>
                     <tr>
-                        <td colspan="5" class="table-five-pl3">* Handle By : </td>
+                        <td colspan="5" class="table-five-pl3">* Handle By : {{progresss.woBriks.first_name}}
+                            {{progresss.woBriks.last_name}} </td>
                     </tr>
                     <tr>
                         <td rowspan="2" class="table-five-progress-header table-five-progress-date">Date</td>
@@ -625,30 +661,41 @@
                         <td class="table-five-progress-header">Petugas BRIKS</td>
                         <td class="table-five-progress-header">Petugas OSP</td>
                     </tr>
+                    {% for rincian in rincians %}
                     <tr>
-                        <td class="table-five-pl3">Something</td>
-                        <td class="table-five-pl3">Somethings</td>
-                        <td class="table-five-pl3">Something</td>
-                        <td class="table-five-pl3">Somethings</td>
-                        <td class="table-five-pl3">Something</td>
+                        <td class="table-five-pl3">{{rincian.date}}</td>
+                        <td class="table-five-pl3">{{rincian.status}}</td>
+                        <td class="table-five-pl3">{{rincian.information}}</td>
+                        <td class="table-five-pl3">
+                            <img src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user"></td>
+                        <td class="table-five-pl3"><img src="{{rincian.briksUser.qr_code.path}}"
+                                alt="qr-code-briks-user"></td>
                     </tr>
+                    {% endfor %}
                     <tr>
-                        <td class="table-five-pl3">Something</td>
-                        <td class="table-five-pl3">Somethings</td>
-                        <td class="table-five-pl3">Something</td>
-                        <td class="table-five-pl3">Somethings</td>
-                        <td class="table-five-pl3">Something</td>
-                    </tr>
-                    <tr>
-                        <td class="table-five-pl3">Something</td>
-                        <td class="table-five-pl3">Somethings</td>
-                        <td class="table-five-pl3">Something</td>
-                        <td class="table-five-pl3">Somethings</td>
-                        <td class="table-five-pl3">Something</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="table-five-confirmed table-five-pl3">Confirmed by User</td>
-                        <td colspan="2" class="table-five-signature table-five-pl3">User Signature</td>
+                        <td colspan="3">
+                            <table class="table-five-inside-description">
+                                <tr>
+                                    <td class="cell-narrow">Confirmed by User</td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-wide cell-desc">
+                                        <p>{{descriptions.woUser.first_name}} {{descriptions.woUser.last_name}}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="2">
+                            <table class="table-five-inside-description">
+                                <tr>
+                                    <td class="cell-wide cell-sign"><img src="{{descriptions.woUser.qr_code.path}}"
+                                            alt="qr-code-maker"></td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-narrow">User Signature</td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </tbody>
             </table>
