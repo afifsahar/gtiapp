@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'cleaning.apps.CleaningConfig',
     'menondc.apps.MenondcConfig',
     'workorder.apps.WorkorderConfig',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [

@@ -5,6 +5,7 @@ from datetime import datetime, date
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _, gettext_lazy as __
+from multiselectfield import MultiSelectField
 
 User = get_user_model()
 
@@ -61,10 +62,15 @@ class wo_description(models.Model):
                                null=True, blank=True, limit_choices_to={'groups__name': 'maker'})
     division = models.CharField(
         _("Division"), max_length=10, null=True, blank=True, default="OSP")
-    area = models.CharField(
-        _("Area"), name='area', choices=area_choice, max_length=20, null=True, blank=True)
-    categoryService = models.CharField(_("Category Service"), name='categoryService',
-                                       choices=category_service, max_length=20, null=True, blank=True)
+    # area = models.CharField(
+    #     _("Area"), name='area', choices=area_choice, max_length=20, null=True, blank=True)
+    # categoryService = models.CharField(_("Category Service"), name='categoryService',
+    #                                    choices=category_service, max_length=20, null=True, blank=True)
+    area = MultiSelectField(
+        _("Area"), name='area', choices=area_choice, null=True, blank=True)
+    categoryService = MultiSelectField(_("Category Service"), name='categoryService',
+                                       choices=category_service, null=True, blank=True)
+    csOthers=models.CharField(_("Category Service Others"), name='csOthers',max_length=20, null=True, blank=True, default='')
     description = models.TextField(
         _("Description"), null=True, blank=True, max_length=1000, name="description")
     descriptionDay = models.ForeignKey(wo_day, verbose_name=_(
@@ -155,9 +161,9 @@ class wo_rincian(models.Model):
     information = models.TextField(
         _("Information"), name="information", max_length=500, null=True, blank=True)
     briksUser = models.ForeignKey(User, verbose_name=_("Petugas BRIKS"), related_name="briksUser",
-                                  on_delete=models.PROTECT, null=True, blank=True, limit_choices_to={'groups__name': 'briks'})
+                                  on_delete=models.PROTECT, null=True, blank=True, limit_choices_to={'groups__name': 'briks'}, default='')
     ospUser = models.ForeignKey(User, verbose_name=_("Petugas OSP"), related_name="ospUser",
-                                on_delete=models.PROTECT, null=True, blank=True, limit_choices_to={'groups__name': 'maker'})
+                                on_delete=models.PROTECT, null=True, blank=True, limit_choices_to={'groups__name': 'maker'}, default='')
     rincianProgress = models.ForeignKey(wo_progress, verbose_name=_(
         "Rincian Progress"), related_name="rincianProgress", on_delete=models.PROTECT, null=True, blank=True)
 
@@ -166,7 +172,7 @@ class wo_rincian(models.Model):
         verbose_name_plural = _("rincians")
 
     def __str__(self):
-        return "Rincian {0}".format(self.rincianWorkorder.createAt)
+        return "Rincian {0}".format(self.createAt)
 
     def get_absolute_url(self):
         return reverse("rincian_detail", kwargs={"pk": self.pk})

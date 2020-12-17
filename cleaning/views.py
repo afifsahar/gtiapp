@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from user.models import user_bri_image
-from user.views import user_login
+# from user.views import user_login
 from user.decorators import *
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -8,19 +8,19 @@ from user.models import *
 from django.conf import settings
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
-from django.core.mail import send_mail, EmailMessage, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from .utils import render_to_pdf
 from django.views.generic import View
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from datetime import datetime, date
 import datetime
 from .forms import *
-from django.forms import modelformset_factory, inlineformset_factory, formset_factory
+from django.forms import modelformset_factory
 from .models import *
-from django.shortcuts import render, redirect, get_object_or_404
 from .autos import *
 from django.db.models import Q
+
 
 @login_required(login_url='user_login')
 def cln_home(request):
@@ -157,7 +157,7 @@ def cln_progress(request):
         'tanggal': date.today(),
         "areaCount": areaCount,
         'title': 'Checklist Kebersihan',
-        'days':days,
+        'days': days,
     }
     return render(request, 'cleaning/cln_progress.html', context)
 
@@ -191,7 +191,7 @@ def cln_history(request):
         'tanggal': obj.history,
         'areaCount': dailies_queryset,
         'title': 'Checklist Kebersihan',
-        'days':days
+        'days': days
     }
     return render(request, 'cleaning/cln_history.html', context)
 
@@ -359,9 +359,10 @@ class cln_history_download_pdf(View):
         pdf = render_to_pdf('cleaning/cln_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Checklist_Kebersihan_%s.pdf" % (obj.history)
-        content = "inline; attachment; filename='%s'" % (filename)
+        content = "attachment; filename=%s" % (filename)
         response['Content-Disposition'] = content
         return response
+
 
 class cln_progress_download_pdf(View):
     @method_decorator(login_required)
@@ -379,7 +380,7 @@ class cln_progress_download_pdf(View):
         pdf = render_to_pdf('cleaning/cln_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Checklist_Kebersihan_%s.pdf" % (date.today())
-        content = "inline; attachment; filename='%s'" % (filename)
+        content = "attachment; filename=%s" % (filename)
         response['Content-Disposition'] = content
         return response
 
@@ -426,7 +427,8 @@ def cln_default_check_all(request, area_id):
                 default.save()
             for subarea in subareas:
                 defaults = cln_default.objects.filter(defaultSubarea=subarea)
-                harians = cln_daily.objects.filter(dailySubarea=subarea, hariIni=date.today())
+                harians = cln_daily.objects.filter(
+                    dailySubarea=subarea, hariIni=date.today())
                 for harian in harians:
                     for default in defaults:
                         if harian.kondisi == '' or harian.kondisi == None:
@@ -452,4 +454,3 @@ def cln_default_check_all(request, area_id):
         'title': 'Checklist Kebersihan'
     }
     return render(request, 'cleaning/cln_default_check_all.html', context)
-

@@ -66,9 +66,9 @@
             </div>
             <div class="forum-action">
                 <ul>
-                    <li><a href="#"><i class="icon ion-ios-download"></i>Download PDF</a></li>
+                    <li><a href="{% url 'wo_work_download_pdf' day.id %}"><i class="icon ion-ios-download"></i>Download PDF</a></li>
                     <li><a href="#"><i class="icon ion-ios-list"></i>Detail</a></li>
-                    <li><a href="{% url 'wo_progress_add' day.id %}"><i class="icon ion-ios-star"></i>Add Progress</a></li>
+                    <li><a href="{% url 'wo_progress_add' day.id %}"><i class="icon ion-ios-add-circle-outline"></i>Tambah Progress</a></li>
                     <li><a href="{% url 'wo_work_edit' day.id %}"><i class="icon ion-ios-arrow-dropup"></i>Edit</a></li>
                     <li><a href="{% url 'wo_work_delete' day.id %}"><i class="icon ion-ios-trash"></i>Delete</a></li>
                 </ul>

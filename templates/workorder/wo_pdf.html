@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>GTI APP</title>
+    <style>
+        @page {
+            size: a4 portrait;
+
+            @frame header_frame {
+                -pdf-frame-content: header_content;
+                left: 0.5cm;
+                top: 1cm;
+                width: 20cm;
+                height: 130px;
+            }
+
+            @frame content_frame {
+                left: 0.5cm;
+                top: 4.0cm;
+                width: 20cm;
+                height: 24.2cm;
+
+
+            }
+
+            @frame content_frame {
+                -pdf-frame-content: content_frame;
+                left: 8.6cm;
+                top: 26cm;
+                width: 11.4cm;
+                height: 100px;
+            }
+
+            @frame footer_frame {
+                -pdf-frame-content: footer_pageNumber;
+                left: 2.5cm;
+                top: 28.7cm;
+                width: 11.4cm;
+            }
+        }
+
+        table {
+            -pdf-keep-with-next: true;
+        }
+
+        p {
+            margin: 0;
+            -pdf-keep-with-next: true;
+        }
+
+        .table {
+            font-family: 'Times New Roman', serif;
+            font-size: smaller;
+            box-sizing: border-box;
+        }
+
+        .table thead tr th,
+        .table tbody tr td {
+            vertical-align: middle;
+            border: .7px solid black;
+            box-sizing: border-box;
+            padding: 3px auto !important;
+            margin: 0;
+            font-size: 11px;
+            line-height: 50%;
+        }
+
+        .table thead tr th {
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .table .table-inside {
+            margin: 0;
+        }
+
+        .table .table-inside tr th {
+            margin: 0;
+            border: transparent;
+            text-align: left;
+            text-transform: capitalize;
+            box-sizing: border-box;
+            padding-left: 3px;
+        }
+
+        .table-header .table .header-text {
+            width: 60%;
+            height: 50px;
+            font-size: 20px;
+            box-sizing: border-box;
+
+        }
+
+        .table-header .table .header-detail-text {
+            width: 25%;
+        }
+
+        pages .table .table-inside tr p {
+            box-sizing: border-box;
+            text-align: center;
+            vertical-align: center;
+        }
+
+        pages .table-one .table-one-header {
+            background-color: lightgray;
+            text-align: center;
+            vertical-align: center;
+        }
+
+        pages .table-one .table-one-content {
+            height: 40px;
+        }
+
+        pages .table-two .table-two-header,
+        pages .table-three .table-three-header {
+            background-color: lightgray;
+            text-align: left;
+            vertical-align: center;
+            padding-left: 2px;
+            height: 30px;
+        }
+
+        pages .table-two .table-two-content,
+        pages .table-three .table-three-content {
+            padding: 3px 3px 3px 3px;
+
+        }
+
+        pages .table-two .table-two-inside th {
+            padding: 1px 1px 1px 1px;
+        }
+
+        pages .table-two .table-two-inside .cell-one {
+            width: 32%;
+            border: .7px solid black;
+            vertical-align: center;
+            height: 20px;
+        }
+
+        pages .table-two .table-two-inside .cell-two,
+        pages .table-three .table-three-inside .cell-two {
+            text-align: left;
+            padding-left: 3px;
+            padding-bottom: 0px;
+        }
+
+        pages .table-three .table-three-inside .cell-one {
+            width: 20px;
+            border: .7px solid black;
+            vertical-align: center;
+            height: 20px;
+        }
+        .table-three .table-three-inside-description tr td{
+            padding-left: 3px;
+        }
+        .table-three .table-three-inside-description .cell-width{
+            height: 20px
+        }
+
+        /* pages .table-three .table-three-description {
+            height: 100px;
+            text-align: left;
+            vertical-align: top;
+
+        }
+
+        pages .table-three .table-three-signature {
+            text-align: left;
+            vertical-align: bottom;
+        } */
+
+        .table-four .table-four-blank {
+            background-color: darkgray;
+            height: 10px;
+        }
+
+        .table-four .table-four-autorisasi {
+            height: 70px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .table-four .table-four-name {
+            height: 20px;
+        }
+
+        .table-four .table-four-workorder {
+            height: 100px;
+            vertical-align: top;
+        }
+
+        .table-four .table-four-pl3 {
+            padding-left: 3px;
+        }
+
+        .table-five .table-five-monitoring {
+            height: 30px;
+            background-color: lightgray;
+            text-align: center;
+            vertical-align: center;
+        }
+
+        .table-five .table-five-pl3 {
+            padding-left: 3px;
+        }
+
+        .table-five .table-five-progress-header {
+            text-align: center;
+            vertical-align: center;
+        }
+
+        .table-five .table-five-progress-information {
+            width: 40%;
+        }
+
+        .table-five .table-five-progress-paraf {
+            width: 10%;
+        }
+
+        .table-five .table-five-confirmed {
+            height: 80px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .table-five .table-five-signature {
+            vertical-align: bottom;
+            text-align: left;
+        }
+        .table-six .table-six-description{
+            width: 66.67%;
+        }
+    </style>
+</head>
+
+<body>
+    <pages>
+        <div class="table-responsive table-header" id="header_content">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th rowspan="3"><img src="{{briImage.briImage.path}}" height="80" weight="80"></th>
+                        <th>PT. BANK RAKYAT INDONESIA (PERSERO) TBK.</th>
+                        <th>
+                            <table class="table table-inside">
+                                <tr>
+                                    <th class="keterangan">
+                                        <p>FRM-OSP-008</p>
+                                    </th>
+                                </tr>
+                            </table>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2" class="header-text">Form Work Order</th>
+                        <th class="header-detail-text">
+                            <table class="table table-inside">
+                                <tr>
+                                    <th class="keterangan">Revisi</th>
+                                    <th>00</th>
+                                </tr>
+                            </table>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="header-detail-text">
+                            <table class="table table-inside">
+                                <tr>
+                                    <th class="keterangan">Tanggal Efektif</th>
+                                    <th>01 Oktober 2020</th>
+                                </tr>
+                            </table>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        
+        <div class="table-responsive table-one">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="table-one-header">User</td>
+                        <td class="table-one-header">Division/Section</td>
+                        <td class="table-one-header">No. Telephone/Ext</td>
+                    </tr>
+                    <tr>
+                        <td class="table-one-content">{{descriptions.woUser.first_name}} {{descriptions.woUser.last_name}}</td>
+                        <td class="table-one-content">{{descriptions.division}}</td>
+                        <td class="table-one-content"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-two">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="table-two-header">Area</td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.UG' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.UG</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.1' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.1</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.2' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.2</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.3' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.3</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.4' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.4</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.5' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.5</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.6' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.6</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.7' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.7</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.8' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.8</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-two-content">
+                            <table class="table-two-inside">
+                                <tr>
+                                    {% if 'Lt.9' in descriptions.area %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Lt.9</th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-three">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="table-three-header">Category Service</td>
+                    </tr>
+                    <tr>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Mechanical' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Mechanical</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Security' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Security</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Electronic' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Electronic</th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Electrical' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Electrical</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Cleaning' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Cleaning</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Others' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Others. . . </th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Others' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Air Conditioner</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Civil/Architectur' in descriptions.categoryService %}
+                                    <th class="cell-one">v</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two">Civil/Architectur</th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="table-three-content">
+                            <table class="table-three-inside">
+                                <tr>
+                                    {% if 'Others' in descriptions.categoryService %}
+                                    <th class="cell-one">{{descriptions.csOthers}}</th>
+                                    {% else %}
+                                    <th class="cell-one"> </th>
+                                    {% endif %}
+                                    <th class="cell-two"></th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table class="table-three-inside-description">
+                                <tr>
+                                    <td>Description</td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-width">sdfsdfsdf</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table-three-inside-description">
+                                <tr>
+                                    <td class="cell-width">ergergergerg</td>
+                                </tr>
+                                <tr>
+                                    <td>User Signature</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-four">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="table-four-blank table-four-pl3"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="table-four-pl3">* Fill by OSP</td>
+                    </tr>
+                    <tr>
+                        <td class="table-four-pl3">* Handle By : </td>
+                        <td class="table-four-pl3">* Date Report : </td>
+                        <td class="table-four-pl3">* Time Report : </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="table-four-workorder table-four-pl3">* Work Order</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="table-four-duration table-four-pl3">Duration</td>
+                    </tr>
+                    <tr>
+                        <td class="table-four-content table-four-autorisasi">Signer</td>
+                        <td class="table-four-content table-four-autorisasi">Checker</td>
+                        <td class="table-four-content table-four-autorisasi">Maker</td>
+                    </tr>
+                    <tr>
+                        <td class="table-four-content table-four-name"></td>
+                        <td class="table-four-content table-four-name"></td>
+                        <td class="table-four-content table-four-name"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-five">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="table-five-monitoring">Monitoring Progress</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="table-five-pl3">* Fill by BRIKS</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="table-five-pl3">* Handle By : </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" class="table-five-progress-header table-five-progress-date">Date</td>
+                        <td rowspan="2" class="table-five-progress-header table-five-progress-status">Status</td>
+                        <td rowspan="2" class="table-five-progress-header table-five-progress-information">Information
+                        </td>
+                        <td colspan="2" class="table-five-progress-header table-five-progress-paraf">Paraf</td>
+                    </tr>
+                    <tr>
+                        <td class="table-five-progress-header">Petugas BRIKS</td>
+                        <td class="table-five-progress-header">Petugas OSP</td>
+                    </tr>
+                    <tr>
+                        <td class="table-five-pl3">Something</td>
+                        <td class="table-five-pl3">Somethings</td>
+                        <td class="table-five-pl3">Something</td>
+                        <td class="table-five-pl3">Somethings</td>
+                        <td class="table-five-pl3">Something</td>
+                    </tr>
+                    <tr>
+                        <td class="table-five-pl3">Something</td>
+                        <td class="table-five-pl3">Somethings</td>
+                        <td class="table-five-pl3">Something</td>
+                        <td class="table-five-pl3">Somethings</td>
+                        <td class="table-five-pl3">Something</td>
+                    </tr>
+                    <tr>
+                        <td class="table-five-pl3">Something</td>
+                        <td class="table-five-pl3">Somethings</td>
+                        <td class="table-five-pl3">Something</td>
+                        <td class="table-five-pl3">Somethings</td>
+                        <td class="table-five-pl3">Something</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="table-five-confirmed table-five-pl3">Confirmed by User</td>
+                        <td colspan="2" class="table-five-signature table-five-pl3">User Signature</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </pages>
+</body>
+
+</html>

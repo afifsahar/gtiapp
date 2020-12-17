@@ -353,7 +353,7 @@ class mendc_history_download_pdf(View):
         pdf = render_to_pdf('menondc/mendc_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Monitoring_Gedung_%s.pdf" % (obj.history)
-        content = "inline; attachment; filename='%s'" % (filename)
+        content = "attachment; filename=%s" % (filename)
         response['Content-Disposition'] = content
         return response
 
@@ -373,7 +373,7 @@ class mendc_progress_download_pdf(View):
         pdf = render_to_pdf('menondc/mendc_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
         filename = "Monitoring_Gedung_%s.pdf" % (date.today())
-        content = "inline; attachment; filename='%s'" % (filename)
+        content = "attachment; filename=%s" % (filename)
         response['Content-Disposition'] = content
         return response
 
