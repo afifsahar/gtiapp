@@ -25,7 +25,7 @@ from django.db.models import Q
 
 
 # Create your views here.
-
+@login_required(login_url='user_login')
 def wo_home(request):
     days = wo_day.objects.filter(isDelete=False)
     descriptions = wo_description.objects.filter(isDelete=False)
@@ -37,7 +37,8 @@ def wo_home(request):
     }
     return render(request, 'workorder/wo_home.html', context)
 
-
+@login_required(login_url='user_login')
+@maker_only
 def wo_work_seefile(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     descriptions = wo_description.objects.get(
@@ -58,8 +59,8 @@ def wo_work_seefile(request, day_id):
     return render(request, 'workorder/wo_work_seefile.html', context)
 
 
-# @login_required(login_url='user_login')
-# @maker_only
+@login_required(login_url='user_login')
+@maker_only
 def wo_work_add(request):
     if request.method == "POST":
         # a_form = areaForm(request.POST or None)
@@ -100,7 +101,8 @@ def wo_work_add(request):
     }
     return render(request, 'workorder/wo_work_add.html', context)
 
-
+@login_required(login_url='user_login')
+@maker_only
 def wo_work_edit(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     descriptions = wo_description.objects.get(descriptionDay=days.id, isDelete=False)
@@ -149,8 +151,8 @@ def wo_work_edit(request, day_id):
     }
     return render(request, 'workorder/wo_work_edit.html', context)
 
-# @login_required(login_url='user_login')
-# @maker_only
+@login_required(login_url='user_login')
+@maker_only
 def wo_work_delete(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     context = {
@@ -159,6 +161,8 @@ def wo_work_delete(request, day_id):
     }
     return render(request, 'workorder/wo_work_delete.html', context)
 
+@login_required(login_url='user_login')
+@maker_only
 def wo_work_delete_confirm(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     descriptions = wo_description.objects.get(
@@ -217,7 +221,7 @@ def wo_progress_add(request, day_id):
 
 
 class wo_work_download_pdf(View):
-    # @method_decorator(login_required)
+    @method_decorator(login_required)
     def get(self,request, *args, **kwargs):
         briImage = user_bri_image.objects.get(imageName="logo bri")
         days = wo_day.objects.get(id=self.kwargs['day_id'], isDelete=False)
