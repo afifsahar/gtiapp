@@ -148,8 +148,7 @@
 <!-- separator -->
 <div class="separator-medium"></div>
 <!-- end separator -->
-{% if areaCount == 0 %}
-<!-- maintenance -->
+<!-- {% if areaCount == 0 %}
 <div class="maintenance">
     <div class="container">
         <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
@@ -166,8 +165,7 @@
         </div>
     </div>
 </div>
-<!-- end maintenance -->
-{% else %}
+{% else %} -->
 <!-- accordion -->
 <div id="accordionParent" class="accordion accordion-inset">
     {% for area in areas %}
@@ -251,7 +249,7 @@
     {% endfor %}
 </div>
 <!-- end accordion -->
-{% endif %}
+<!-- {% endif %} -->
 {% endblock page_wrapper %}
 
 {% block toolbar_bottom %}

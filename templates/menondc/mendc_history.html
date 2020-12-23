@@ -49,6 +49,7 @@
     .ion-ios-add {
         font-size: 33px !important;
     }
+
     .table .hasilTemuan {
         box-sizing: border-box;
         min-width: 250px;
@@ -140,9 +141,8 @@
 <!-- separator -->
 <div class="separator-medium"></div>
 <!-- end separator -->
-{% if areaCount == 0 %}
-<!-- maintenance -->
-<div class="maintenance">
+<!-- {% if areaCount == 0 %} -->
+<!-- <div class="maintenance">
     <div class="container">
         <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
         <h5 class="mb-5" style="color: red;"><strong>Area Not Found</strong></h5>
@@ -157,9 +157,8 @@
             </div>
         </div>
     </div>
-</div>
-<!-- end maintenance -->
-{% else %}
+</div> -->
+<!-- {% else %} -->
 <!-- accordion -->
 <div id="accordionParent" class="accordion accordion-inset">
     {% for area in areas %}
@@ -243,7 +242,7 @@
     {% endfor %}
 </div>
 <!-- end accordion -->
-{% endif %}
+<!-- {% endif %} -->
 {% endblock page_wrapper %}
 
 {% block toolbar_bottom %}
