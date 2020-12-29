@@ -584,7 +584,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="cell-narrow">User Signature</td>
+                                    <td class="cell-narrow">User Signature : {{descriptions.woUser.first_name}}
+                                        {{descriptions.woUser.last_name}}</td>
                                 </tr>
                             </table>
                         </td>
@@ -667,9 +668,13 @@
                         <td class="table-five-pl3">{{rincian.status}}</td>
                         <td class="table-five-pl3">{{rincian.information}}</td>
                         <td class="table-five-pl3">
-                            <img src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user"></td>
-                        <td class="table-five-pl3"><img src="{{rincian.briksUser.qr_code.path}}"
-                                alt="qr-code-briks-user"></td>
+                            <img src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user">
+                            <p>{{rincian.briksUser.first_name}} {{rincian.briksUser.last_name}}</p>
+                        </td>
+                        <td class="table-five-pl3">
+                            <img src="{{rincian.ospUser.qr_code.path}}" alt="qr-code-osp-user">
+                            <p>{{rincian.ospUser.first_name}} {{rincian.ospUser.last_name}}</p>
+                        </td>
                     </tr>
                     {% endfor %}
                     <tr>
@@ -680,7 +685,7 @@
                                 </tr>
                                 <tr>
                                     <td class="cell-wide cell-desc">
-                                        <p>{{descriptions.woUser.first_name}} {{descriptions.woUser.last_name}}</p>
+                                        <p> </p>
                                     </td>
                                 </tr>
                             </table>
@@ -692,7 +697,8 @@
                                             alt="qr-code-maker"></td>
                                 </tr>
                                 <tr>
-                                    <td class="cell-narrow">User Signature</td>
+                                    <td class="cell-narrow">User Signature : {{descriptions.woUser.first_name}}
+                                        {{descriptions.woUser.last_name}}</td>
                                 </tr>
                             </table>
                         </td>

@@ -66,9 +66,11 @@
             </div>
             <div class="forum-action">
                 <ul>
-                    <li><a href="{% url 'wo_work_download_pdf' day.id %}"><i class="icon ion-ios-download"></i>Download PDF</a></li>
-                    <li><a href="#"><i class="icon ion-ios-list"></i>Detail</a></li>
-                    <li><a href="{% url 'wo_progress_add' day.id %}"><i class="icon ion-ios-add-circle-outline"></i>Tambah Progress</a></li>
+                    <li><a href="{% url 'wo_work_download_pdf' day.id %}"><i class="icon ion-ios-download"></i>Download
+                            PDF</a></li>
+                    <li><a href="{% url 'wo_work_detail'  day.id %}"><i class="icon ion-ios-list"></i>Detail</a></li>
+                    <li><a href="{% url 'wo_progress_add' day.id %}"><i
+                                class="icon ion-ios-add-circle-outline"></i>Tambah Progress</a></li>
                     <li><a href="{% url 'wo_work_edit' day.id %}"><i class="icon ion-ios-arrow-dropup"></i>Edit</a></li>
                     <li><a href="{% url 'wo_work_delete' day.id %}"><i class="icon ion-ios-trash"></i>Delete</a></li>
                 </ul>
@@ -81,6 +83,33 @@
     {% endif %}
     {% endfor %}
     {% endfor %}
+
+
+    {% comment %}
+    {% if is_paginated %}
+
+    {% if days.has_previous %}
+    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page=1">First</a>
+    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ days.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    {% for num in days.paginator.page_range %}
+    {% if days.number == num %}
+    <a class="btn btn-info mb-4" href="{% url 'wo_home' %}?page={{ num }}">{{ num }}</a>
+    {% elif num > days.number|add:'-3' and num < days.number|add:'3' %}
+    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ num }}">{{ num }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if days.has_next %}
+    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ days.next_page_number }}">Next</a>
+    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ days.paginator.num_pages }}">Last</a>
+    {% endif %}
+
+    {% endif %}
+    {% endcomment %}
+
+
     {% endif %}
 </div>
 

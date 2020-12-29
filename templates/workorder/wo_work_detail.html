@@ -1,0 +1,209 @@
+{% extends "base.html" %}{% load static %}
+{% block css %}
+<style>
+    .accordion-inset .accordion-content {
+        padding: 10px 0 !important;
+    }
+
+    .button {
+        line-height: 25px;
+        margin-top: 0;
+        min-width: 100%;
+        width: max-content;
+    }
+
+    .button .button-extra-small {
+        line-height: 20px;
+        font-size: 10px;
+        padding: 0 8px;
+    }
+
+    .table .icoon {
+        box-sizing: border-box;
+        font-size: larger;
+        text-align: center;
+    }
+
+
+    .table th,
+    .table td {
+        padding: .5rem !important;
+        margin: .5rem !important;
+    }
+
+    .table .hasilTemuan {
+        box-sizing: border-box;
+        min-width: 250px;
+        max-width: 350px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: pre-line;
+        /* display: inline; */
+    }
+
+    .table .hasilTemuan::first-line {
+        box-sizing: border-box;
+        line-height: 0;
+    }
+
+    .table .subarea,
+    .table .aksi {
+        width: 15%;
+        white-space: nowrap;
+    }
+
+    .table .kondisi,
+    .table .pukul,
+    .table .keterangan,
+    .table .aksi {
+        width: 10%;
+        text-align: center;
+        white-space: nowrap;
+    }
+</style>
+{% endblock css %}
+
+{% comment %}
+{% block navbar_home %}navbar-home{% endblock navbar_home %}
+{% endcomment %}
+
+{% block navbar %}
+<div class="left"><a href="{% url 'wo_home' %}" class="link"><i class="icon ion-ios-arrow-back"></i></a>
+</div>
+<div class="title">{{title}}</div>
+<div class="right"></div>
+{% endblock navbar %}
+
+{% block page_wrapper %}
+<!-- newsletter -->
+<div class="newsletter bg-lightblue">
+    <!-- separator -->
+    <div class="separator-small"></div>
+    <!-- end separator -->
+    <div class="section-title text-center title-large">
+        <h6> {{days.createAt | date:"l, d F Y"}}</h6>
+
+    </div>
+    <!-- separator -->
+    <div class="separator-small"></div>
+    <!-- end separator -->
+</div>
+<!-- separator -->
+<!-- <div class="separator-medium"></div> -->
+<!-- end separator -->
+<!-- cards -->
+<!-- <div class="cards">
+    <div class="container">
+        <div class="card">
+            <div class="card-body" style="text-align: center;">
+                <h5><strong><i class="icon ion-ios-calendar"></i> {{tanggal | date:"l, d F Y"}}</strong></h5>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!-- end cards -->
+<!-- <div class="faq">
+    <div class="container">
+        <div class="title-faq">
+            <p><i class="icon ion-ios-calendar"></i> {{days.createAt | date:"l, d F Y"}}</p>
+        </div>
+    </div>
+</div> -->
+<!-- separator -->
+<div class="separator-medium"></div>
+<!-- end separator -->
+<!-- privacy -->
+<div class="privacy">
+    <div class="container">
+        <div class="privacy-description">
+            <div class="block">
+                <div class="section-title">
+                    <h6>Area</h6>
+                </div>
+                <div class="privacy-list">
+                    {% for area in descriptions.area %}
+                    <div class="content">
+                        <div class="icons text-large">
+                            <i class="icon ion-ios-arrow-dropright-circle"></i>
+                        </div>
+                        <p>{{area}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="section-title">
+                    <h6>Category Service</h6>
+                </div>
+                <div class="privacy-list">
+                    {% for cs in descriptions.categoryService %}
+                    <div class="content">
+                        <div class="icons text-large">
+                            <i class="icon ion-ios-arrow-dropright-circle"></i>
+                        </div>
+                        <p>{{cs}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- separator -->
+                <div class="separator-small"></div>
+                <!-- end separator -->
+                <div class="section-title">
+                    <h6>Description</h6>
+                </div>
+                <p>{{descriptions.description}}</p>
+                <!-- separator -->
+                <div class="separator-small"></div>
+                <!-- end separator -->
+                <div class="section-title">
+                    <h6>Report</h6>
+                </div>
+                <p><strong>Handle by</strong> : {{workorders.woMaker.first_name}} {{workorders.woMaker.first_name}}</p>
+                <p><strong>Date and Time Report</strong> : {{workorders.createAt | date:"d-m-Y" }}
+                    {{workorders.createAt | date:"H:i:s" }}</p>
+                <p><strong>Duration</strong> : {{workorders.woMaker.duration}}</p>
+                <p><strong>Due Date</strong> : {{workorders.woMaker.dueDate}}</p>
+                <!-- separator -->
+                <div class="separator-small"></div>
+                <!-- end separator -->
+                <div class="section-title">
+                    <h6>Work Order</h6>
+                </div>
+                <p>{{workorders.workorder}}</p>
+                <!-- separator -->
+                <div class="separator-small"></div>
+                <!-- end separator -->
+                <div class="section-title">
+                    <h6>Progress</h6>
+                </div>
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Informasi</th>
+                            <th>Petugas BRIKS</th>
+                            <th>Petugas OSP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for rincian in rincians %}
+                            <td>{{rincian.date}}</td>
+                            <td>{{rincian.status}}</td>
+                            <td>{{rincian.information}}</td>
+                            <td>{{rincian.briksUser}}</td>
+                            <td>{{rincian.ospUser}}</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end privacy -->
+{% endblock page_wrapper %}
+
+{% block toolbar_bottom %}
+{% endblock toolbar_bottom %}
+{% block js %}
+{% endblock js %}

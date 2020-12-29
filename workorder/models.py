@@ -70,7 +70,8 @@ class wo_description(models.Model):
         _("Area"), name='area', choices=area_choice, null=True, blank=True)
     categoryService = MultiSelectField(_("Category Service"), name='categoryService',
                                        choices=category_service, null=True, blank=True)
-    csOthers=models.CharField(_("Category Service Others"), name='csOthers',max_length=20, null=True, blank=True, default='')
+    csOthers = models.CharField(_("Category Service Others"), name='csOthers',
+                                max_length=20, null=True, blank=True, default='')
     description = models.TextField(
         _("Description"), null=True, blank=True, max_length=1000, name="description")
     descriptionDay = models.ForeignKey(wo_day, verbose_name=_(

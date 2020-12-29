@@ -90,6 +90,35 @@
             </li>
             {% endfor %}
         </ul>
+        <div class="separator-large"></div>
+        <div class="section-title">
+            <h6>Work Order</h6>
+        </div>
+        <div class="separator-small"></div>
+        <ul>
+            {% for wo_day in wo_days %}
+            <li class="list-item">
+                <div class="list-media">
+                    <i class="icon ion-ios-information-circle"></i>
+                </div>
+                <div class="list-label">
+                    <div class="list-title">
+                        <!-- <a href="{% url 'user_wo_notification_seefile' user.username wo_day.id wo_day.createAt %}">{{ wo_day.hariIni | date:"D, d-m-Y" }}</a> -->
+                    </div>
+                    <div class="list-after">
+                        <div class="button-default text-white">
+                            <!-- <a href="{% url 'user_wo_notification_seefile' user.username wo_day.id wo_day.hariIni %}" type="button" class="button button-small mt-0">Lihat Pekerjaan</a> -->
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="list-item">
+                <div class="list-label">
+                    <div class="list-title" style='color:red'>Task Not Found</div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 {% elif user.groups.all.0.name == 'checker' %}
@@ -153,6 +182,35 @@
             </li>
             {% endfor %}
         </ul>
+        <div class="separator-large"></div>
+        <div class="section-title">
+            <h6>Work Order</h6>
+        </div>
+        <div class="separator-small"></div>
+        <ul>
+            {% for wo_day in wo_days %}
+            <li class="list-item">
+                <div class="list-media">
+                    <i class="icon ion-ios-information-circle"></i>
+                </div>
+                <div class="list-label">
+                    <div class="list-title">
+                        <!-- <a href="{% url 'user_wo_notification_seefile' user.username wo_day.id wo_day.createAt %}">{{ wo_day.hariIni | date:"D, d-m-Y" }}</a> -->
+                    </div>
+                    <div class="list-after">
+                        <div class="button-default text-white">
+                            <!-- <a href="{% url 'user_wo_notification_seefile' user.username wo_day.id wo_day.hariIni %}" type="button" class="button button-small mt-0">Lihat Pekerjaan</a> -->
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="list-item">
+                <div class="list-label">
+                    <div class="list-title" style='color:red'>Task Not Found</div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 {% elif user.groups.all.0.name == 'signer' %}
@@ -208,6 +266,35 @@
                                 type="button" class="button button-small mt-0">Lihat Perkerjaan</a>
                         </div>
                     </div>
+            </li>
+            {% empty %}
+            <li class="list-item">
+                <div class="list-label">
+                    <div class="list-title" style='color:red'>Task Not Found</div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="separator-large"></div>
+        <div class="section-title">
+            <h6>Work Order</h6>
+        </div>
+        <div class="separator-small"></div>
+        <ul>
+            {% for wo_day in wo_days %}
+            <li class="list-item">
+                <div class="list-media">
+                    <i class="icon ion-ios-information-circle"></i>
+                </div>
+                <div class="list-label">
+                    <div class="list-title">
+                        <!-- <a href="{% url 'user_wo_notification_seefile' user.username wo_day.id wo_day.createAt %}">{{ wo_day.hariIni | date:"D, d-m-Y" }}</a> -->
+                    </div>
+                    <div class="list-after">
+                        <div class="button-default text-white">
+                            <!-- <a href="{% url 'user_wo_notification_seefile' user.username wo_day.id wo_day.hariIni %}" type="button" class="button button-small mt-0">Lihat Pekerjaan</a> -->
+                        </div>
+                    </div>
+                </div>
             </li>
             {% empty %}
             <li class="list-item">

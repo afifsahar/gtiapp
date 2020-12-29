@@ -9,18 +9,22 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import auth
 import datetime
 from datetime import datetime, date
 from cleaning.models import *
 from menondc.models import *
+from workorder.models import *
 import math
 from django.db.models import Q
 
 
 @login_required(login_url='user_login')
 def user_home(request):
-    cleaning_works_left = cln_daily.objects.filter(Q(hariIni=date.today()) & Q(kondisi=None)).count()
-    menondc_works_left = mendc_daily.objects.filter(Q(hariIni=date.today()) & Q(kondisi='')).count()
+    cleaning_works_left = cln_daily.objects.filter(
+        Q(hariIni=date.today()) & Q(kondisi=None)).count()
+    menondc_works_left = mendc_daily.objects.filter(
+        Q(hariIni=date.today()) & Q(kondisi='')).count()
     cln_days = None
     mendc_days = None
     if request.user.groups.all().first().name == 'maker':
@@ -28,22 +32,28 @@ def user_home(request):
             clnChecker__isnull=True) & Q(clnSigner__isnull=True)).count()
         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=True) & Q(
             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True)).count()
+        # wo_days = wo_workorder.objects.filter(Q(woMaker__isnull=True) & Q(
+        #     woChecker__isnull=True) & Q(woSigner__isnull=True)).count()
     if request.user.groups.all().first().name == 'checker':
         cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=True) & Q(clnSigner__isnull=True)).count()
         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True)).count()
+        # wo_days = wo_workorder.objects.filter(Q(woMaker__isnull=False) & Q(
+        #     woChecker__isnull=True) & Q(woSigner__isnull=True)).count()
     if request.user.groups.all().first().name == 'signer':
         cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=False) & Q(clnSigner__isnull=True)).count()
         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
             mendcChecker__isnull=False) & Q(mendcSigner__isnull=True)).count()
+        # wo_days = wo_workorder.objects.filter(Q(woMaker__isnull=False) & Q(
+        #     woChecker__isnull=False) & Q(woSigner__isnull=True)).count()
     days = cln_days + mendc_days
     context = {
         'tanggal': date.today(),
         'cleaning_works_done': cleaning_works_left,
         'menondc_works_done': menondc_works_left,
-        'days':days,
+        'days': days,
     }
     return render(request, 'user/user_home.html', context)
 
@@ -171,19 +181,26 @@ def user_profile_notification(request, username):
             clnChecker__isnull=True) & Q(clnSigner__isnull=True))[:5]
         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=True) & Q(
             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))[:5]
+        wo_days = wo_workorder.objects.filter(Q(woMaker__isnull=True) & Q(
+            woChecker__isnull=True) & Q(woSigner__isnull=True))[:5]
     if request.user.groups.all().first().name == 'checker':
         cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=True) & Q(clnSigner__isnull=True))[:5]
         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))[:5]
+        wo_days = wo_workorder.objects.filter(Q(woMaker__isnull=False) & Q(
+            woChecker__isnull=True) & Q(woSigner__isnull=True))[:5]
     if request.user.groups.all().first().name == 'signer':
         cln_days = cln_day.objects.filter(Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=False) & Q(clnSigner__isnull=True))[:5]
         mendc_days = mendc_day.objects.filter(Q(mendcMaker__isnull=False) & Q(
             mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))[:5]
+        wo_days = wo_workorder.objects.filter(Q(woMaker__isnull=False) & Q(
+            woChecker__isnull=False) & Q(woSigner__isnull=True))[:5]
     context = {
         'cln_days': cln_days,
         'mendc_days': mendc_days,
+        'wo_days': wo_days
     }
     return render(request, 'user/user_profile_notification.html', context)
 
@@ -195,6 +212,17 @@ def user_cln_maker_notification(request, username, day_id, day_date):
         cln_days = cln_day.objects.get(id=day_id, hariIni=day_date)
         cln_days.clnMaker = User.objects.get(username=request.user.username)
         cln_days.save()
+
+    return redirect('user_profile_notification', username=request.user.username)
+
+
+@ login_required(login_url='user_login')
+def user_wo_maker_notification(request, username, day_id, day_date):
+    wo_days = None
+    if request.user.groups.all().first().name == 'maker':
+        wo_days = wo_workorder.objects.get(id=day_id, createAt=day_date)
+        wo_days.woMaker = User.objects.get(username=request.user.username)
+        wo_days.save()
 
     return redirect('user_profile_notification', username=request.user.username)
 
@@ -219,6 +247,18 @@ def user_cln_checker_notification(request, username, day_id, day_date):
         cln_days.save()
 
     return redirect('user_profile_notification', username=request.user.username)
+
+
+@ login_required(login_url='user_login')
+def user_wo_checker_notification(request, username, day_id, day_date):
+    wo_days = None
+    if request.user.groups.all().first().name == 'checker':
+        wo_days = wo_workorder.objects.get(id=day_id, createAt=day_date)
+        wo_days.woChecker = User.objects.get(username=request.user.username)
+        wo_days.save()
+
+    return redirect('user_profile_notification', username=request.user.username)
+
 
 @ login_required(login_url='user_login')
 def user_mendc_checker_notification(request, username, day_id, day_date):
@@ -251,6 +291,18 @@ def user_mendc_signer_notification(request, username, day_id, day_date):
         mendc_days.save()
     return redirect('user_profile_notification', username=request.user.username)
 
+
+@ login_required(login_url='user_login')
+def user_wo_checker_notification(request, username, day_id, day_date):
+    wo_days = None
+    if request.user.groups.all().first().name == 'signer':
+        wo_days = wo_workorder.objects.get(id=day_id, createAt=day_date)
+        wo_days.woSigner = User.objects.get(username=request.user.username)
+        wo_days.save()
+
+    return redirect('user_profile_notification', username=request.user.username)
+
+
 @ login_required(login_url='user_login')
 def user_cln_notification_seefile(request, username, day_id, day_date):
     areas = cln_area.objects.all()
@@ -261,9 +313,10 @@ def user_cln_notification_seefile(request, username, day_id, day_date):
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
-        'days':days,
+        'days': days,
     }
-    return render(request,'user/user_cln_notification_seefile.html',context)
+    return render(request, 'user/user_cln_notification_seefile.html', context)
+
 
 @ login_required(login_url='user_login')
 def user_mendc_notification_seefile(request, username, day_id, day_date):
@@ -275,16 +328,15 @@ def user_mendc_notification_seefile(request, username, day_id, day_date):
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
-        'days':days,
+        'days': days,
     }
-    return render(request,'user/user_mendc_notification_seefile.html',context)
-
-
+    return render(request, 'user/user_mendc_notification_seefile.html', context)
 
 
 @ login_required(login_url='user_login')
 def user_profile_configuration(request, username):
     return redirect('404_page_not_found')
+
 
 def user_401_unauthorized_maker(request):
     return render(request, 'user/user_401_unauthorized_maker.html')

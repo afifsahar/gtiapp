@@ -21,14 +21,20 @@ from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
 from .autos import *
 from django.db.models import Q
-
+from django.core.paginator import Paginator, EmptyPage
 
 
 # Create your views here.
 @login_required(login_url='user_login')
 def wo_home(request):
-    days = wo_day.objects.filter(isDelete=False)
+    days = wo_day.objects.filter(isDelete=False).order_by('-createAt')
     descriptions = wo_description.objects.filter(isDelete=False)
+    # paginator = Paginator(days, 3)
+    # page_number = request.GET.get('page')
+    # try:
+    #     page = paginator.get_page(page_number)  # get_page or page
+    # except EmptyPage:
+    #     page = paginator.get_page(1)
     context = {
         'dayCount': days.count(),
         'days': days,
@@ -37,9 +43,10 @@ def wo_home(request):
     }
     return render(request, 'workorder/wo_home.html', context)
 
+
 @login_required(login_url='user_login')
 @maker_only
-def wo_work_seefile(request, day_id):
+def wo_work_detail(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     descriptions = wo_description.objects.get(
         descriptionDay=days.id, isDelete=False)
@@ -47,7 +54,7 @@ def wo_work_seefile(request, day_id):
         workorderDay=days.id, workorderDescription=descriptions.id, isDelete=False)
     progresss = wo_progress.objects.get(
         progressDay=days.id, progressDescription=descriptions.id, isDelete=False)
-    rincians = wo_rincian.objects.get(
+    rincians = wo_rincian.objects.filter(
         rincianProgress=progresss.id, isDelete=False)
     context = {
         'days': days,
@@ -56,7 +63,7 @@ def wo_work_seefile(request, day_id):
         'rincians': rincians,
         'title': 'Work Order'
     }
-    return render(request, 'workorder/wo_work_seefile.html', context)
+    return render(request, 'workorder/wo_work_detail.html', context)
 
 
 @login_required(login_url='user_login')
@@ -65,7 +72,7 @@ def wo_work_add(request):
     if request.method == "POST":
         # a_form = areaForm(request.POST or None)
         # cs_form = csForm(request.POST or None)
-        # a_form.is_valid and cs_form.is_valid and 
+        # a_form.is_valid and cs_form.is_valid and
         d_form = descriptionForm(request.POST or None)
         w_form = workorderForm(request.POST or None)
         if d_form.is_valid() and w_form.is_valid():
@@ -85,7 +92,7 @@ def wo_work_add(request):
             progress.save()
             rinc = wo_rincian(rincianProgress=progress)
             rinc.save()
-            
+
             return redirect('wo_home')
     else:
         # a_form = areaForm()
@@ -101,11 +108,13 @@ def wo_work_add(request):
     }
     return render(request, 'workorder/wo_work_add.html', context)
 
+
 @login_required(login_url='user_login')
 @maker_only
 def wo_work_edit(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
-    descriptions = wo_description.objects.get(descriptionDay=days.id, isDelete=False)
+    descriptions = wo_description.objects.get(
+        descriptionDay=days.id, isDelete=False)
     workorders = wo_workorder.objects.get(
         workorderDay=days.id, workorderDescription=descriptions.id, isDelete=False)
     if request.method == "POST":
@@ -151,6 +160,7 @@ def wo_work_edit(request, day_id):
     }
     return render(request, 'workorder/wo_work_edit.html', context)
 
+
 @login_required(login_url='user_login')
 @maker_only
 def wo_work_delete(request, day_id):
@@ -160,6 +170,7 @@ def wo_work_delete(request, day_id):
         'title': 'Work Order'
     }
     return render(request, 'workorder/wo_work_delete.html', context)
+
 
 @login_required(login_url='user_login')
 @maker_only
@@ -193,8 +204,9 @@ def wo_work_delete_confirm(request, day_id):
     }
     return redirect('wo_home')
 
+
 @login_required(login_url='user_login')
-@maker_only
+@briks_only
 def wo_progress_add(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     progs = wo_progress.objects.get(progressDay=days, isDelete=False)
@@ -207,13 +219,15 @@ def wo_progress_add(request, day_id):
             for f in formset:
                 rinc = f.save(commit=False)
                 rinc.rincianProgress = progs
+                if rinc.briksUser == '' or rinc.briksUser == None:
+                    rinc.briksUser = request.user
                 rinc.save()
             return redirect('wo_home')
     else:
         formset = RincianFormSet(queryset=wo_rincian.objects.filter(
             rincianProgress=progs), prefix='rincian')
     context = {
-        'progs':progs,
+        'progs': progs,
         'formset': formset,
         'title': 'Work Order'
     }
@@ -222,19 +236,23 @@ def wo_progress_add(request, day_id):
 
 class wo_work_download_pdf(View):
     @method_decorator(login_required)
-    def get(self,request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         briImage = user_bri_image.objects.get(imageName="logo bri")
         days = wo_day.objects.get(id=self.kwargs['day_id'], isDelete=False)
-        descriptions = wo_description.objects.get(descriptionDay=days, isDelete=False)
-        workorders = wo_workorder.objects.get(workorderDay=days, workorderDescription=descriptions.id, isDelete=False)
-        progresss = wo_progress.objects.get(progressDay=days, progressDescription=descriptions.id, isDelete=False)
-        rincians = wo_rincian.objects.filter(rincianProgress=progresss, isDelete=False)
+        descriptions = wo_description.objects.get(
+            descriptionDay=days, isDelete=False)
+        workorders = wo_workorder.objects.get(
+            workorderDay=days, workorderDescription=descriptions.id, isDelete=False)
+        progresss = wo_progress.objects.get(
+            progressDay=days, progressDescription=descriptions.id, isDelete=False)
+        rincians = wo_rincian.objects.filter(
+            rincianProgress=progresss, isDelete=False)
         data = {
-            'briImage':briImage,
+            'briImage': briImage,
             'days': days,
             'descriptions': descriptions,
             'workorders': workorders,
-            'progresss':progresss,
+            'progresss': progresss,
             'rincians': rincians,
         }
         pdf = render_to_pdf('workorder/wo_pdf.html', data)
