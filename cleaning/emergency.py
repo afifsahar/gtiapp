@@ -2,8 +2,7 @@ import datetime
 from datetime import date, timedelta
 from cleaning.models import *
 
-emerg_date = date(2020, 12, 22)
-
+emerg_date = date(2021, 1, 5)
 
 # def cln_when_day_fail():
 if not cln_day.objects.filter(hariIni=emerg_date):

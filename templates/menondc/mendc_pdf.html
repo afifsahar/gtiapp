@@ -19,9 +19,11 @@
 
             @frame content_frame {
                 left: 0.5cm;
-                top: 2cm;
+                top: 4.5cm;
                 width: 20cm;
                 height: 24.2cm;
+
+
             }
 
             @frame content_frame {
@@ -102,7 +104,7 @@
         }
 
         .table .table-subarea {
-            padding-left: 3px;
+            padding-left: 2px;
             box-sizing: border-box;
         }
 
@@ -129,6 +131,7 @@
         #table-tanda-tangan .table .row-tanda-tangan td {
             height: 75px;
             text-align: center;
+
         }
 
         #table-tanda-tangan .table .row-penanggung-jawab td {
@@ -159,7 +162,7 @@
         }
 
         .kondisi {
-            width: 10%;
+            width: 8%;
             box-sizing: border-box;
             text-align: center;
             vertical-align: center;
@@ -171,7 +174,7 @@
         }
 
         pages .header-area table .keterangan {
-            width: 27%;
+            width: 30%;
             box-sizing: border-box;
         }
 
@@ -201,7 +204,7 @@
                             <table class="table table-inside">
                                 <tr>
                                     <th class="keterangan">No. Dokumen</th>
-                                    <th>CHL-OSP-004</th>
+                                    <th>CHL-OSP-003</th>
                                 </tr>
                             </table>
                         </th>
@@ -217,7 +220,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <th>CHECKLIST PENGELOLAAN GEDUNG M/E NON DC</th>
+                        <th>CHECKLIST PENGELOLAAN KEBERSIHAN GTI</th>
                         <th class="header-detail-text">
                             <table class="table table-inside">
                                 <tr>
@@ -235,6 +238,7 @@
                     {{day.mendcMaker.last_name}}{% endfor %}</p>
             </div>
         </div>
+
         <div class=" table-responsive header-area">
             <table class="table table-bordered">
                 <thead>
@@ -270,11 +274,11 @@
                         <td class="table-harian"><strong></strong></td>
                         <td class="table-harian"><strong></strong></td>
                         {% endif %}
-                        <td>
-                            <p class="hasilTemuan">{{daily.hasilTemuan}}</p>
+                        <td class="hasilTemuan">
+                            <p>{{daily.hasilTemuan}}</p>
                         </td>
-                        <td>
-                            <p class="hasilTemuan">{{daily.keterangan}}</p>
+                        <td class="hasilTemuan">
+                            <p>{{daily.keterangan}}</p>
                         </td>
                     </tr>
                     {% endif %} {% endfor %} {% endif %} {% endfor %}{% endfor %}
@@ -293,7 +297,6 @@
                                         <td>Signer</td>
                                         <td>Checker</td>
                                         <td>Maker</td>
-
                                     </tr>
                                     <tr class="row-tanda-tangan">
                                         {% for day in days %}
@@ -306,10 +309,11 @@
                                         {% for day in days %}
                                         <td class="table-harian">{{day.mendcSigner.first_name}}
                                             {{day.mendcSigner.last_name}}</td>
-                                        <td class="table-harian">{{day.mendcChecker.first_name}}
+                                        <td class="table-harian">{{day.mendc  Checker.first_name}}
                                             {{day.mendcChecker.last_name}}</td>
                                         <td class="table-harian">{{day.mendcMaker.first_name}}
-                                            {{day.mendcMaker.last_name}}</td>
+                                            {{day.mendcMaker.last_name}}
+                                        </td>
                                         {% endfor %}
                                     </tr>
                                 </tbody>

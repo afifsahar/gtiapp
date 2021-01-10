@@ -45,7 +45,6 @@ def wo_home(request):
 
 
 @login_required(login_url='user_login')
-@maker_only
 def wo_work_detail(request, day_id):
     days = wo_day.objects.get(id=day_id, isDelete=False)
     descriptions = wo_description.objects.get(
@@ -118,15 +117,12 @@ def wo_work_edit(request, day_id):
     workorders = wo_workorder.objects.get(
         workorderDay=days.id, workorderDescription=descriptions.id, isDelete=False)
     if request.method == "POST":
-        # a_form = areaForm(request.POST or None,instance=descriptions)
-        # cs_form = csForm(request.POST or None,instance=descriptions)
-        # a_form.is_valid and cs_form.is_valid and
+        # wc_form = workorderCreateAtForm(
+        #     request.POST or None, instance=workorders)
         d_form = descriptionForm(request.POST or None, instance=descriptions)
         w_form = workorderForm(request.POST or None, instance=workorders)
-        if d_form.is_valid() and w_form.is_valid():
+        if d_form.is_valid() and w_form.is_valid() and wc_form.is_valid():
             day = days
-            # cs_form.save()
-            # a_form.save()
             desc = d_form.save(commit=False)
             desc.descriptionDay = day
             desc.save()
@@ -136,24 +132,14 @@ def wo_work_edit(request, day_id):
             if work.woMaker == None or work.woMaker == '':
                 work.woMaker = request.user
             work.save()
-            # progress = wo_progress.objects.create(
-            #     progressDay=day,
-            #     progressDescription=desc
-            # )
-            # progress.save()
-            # rinc = wo_rincian(rincianProgress=progress)
-            # rinc.save()
-            # cs_form.save()
-            # a_form.save()
+            # wc = wc_form.save(commit=False)
+            # wc.save()
             return redirect('wo_home')
     else:
-        # a_form = areaForm(instance=descriptions)
-        # cs_form = csForm(instance=descriptions)
+        wc_form = workorderCreateAtForm(instance=workorders)
         d_form = descriptionForm(instance=descriptions)
         w_form = workorderForm(instance=workorders)
     context = {
-        # 'a_form': a_form,
-        # 'cs_form': cs_form,
         'd_form': d_form,
         'w_form': w_form,
         'title': 'Work Order'

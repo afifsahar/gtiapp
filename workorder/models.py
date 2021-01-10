@@ -46,9 +46,10 @@ class wo_description(models.Model):
     category_service = (
         ('Mechanical', 'Mechanical'),
         ('Electrical', 'Electrical'),
+        ('Air Conditioner', 'Air Conditioner'),
         ('Security', 'Security'),
         ('Cleaning', 'Cleaning'),
-        ('Sivil/Architectur', 'Sivil/Architectur'),
+        ('Civil/Architectur', 'Civil/Architectur'),
         ('Electronics', 'Electronics'),
         ('Others', 'Others'),
     )
@@ -93,6 +94,8 @@ class wo_workorder(models.Model):
         _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
     create_at = models.DateTimeField(
         _("Create At"), name="createAt", auto_now=False, auto_now_add=True)
+    # create_at_edit = models.DateTimeField(
+    #     _("Create At Editable"), name="createAtEdit", auto_now=False, auto_now_add=True, editable=True)
     is_delete = models.BooleanField(
         _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
     woMaker = models.ForeignKey(User, verbose_name=_("WO Maker"), related_name="woMaker",

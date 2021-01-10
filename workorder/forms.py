@@ -12,32 +12,12 @@ class DateInput(forms.DateInput):
         kwargs["format"] = "%d-%m-%Y"
         super().__init__(**kwargs)
 
-# class areaForm(forms.ModelForm):
-
-#     class Meta:
-#         model = wo_description
-#         fields = []
-
-# class csForm(forms.ModelForm):
-
-#     class Meta:
-#         model = wo_description
-#         fields = []
-
-        # widgets = {
-        #     'area': forms.SelectMultiple(attrs={'id': "area", 'name': 'area', 'label': 'Area', 'help text': 'Area', 'required': 'True', 'autocomplete': 'off', 'class': "form-control"}),
-        #     'categoryService': forms.SelectMultiple(attrs={'id': "categoryService", 'name': 'categoryService', 'label': 'Category Service', 'help text': 'Category Service', 'required': 'True', 'autocomplete': 'off', 'class': "form-control"}),
-        # }
 
 class descriptionForm(forms.ModelForm):
 
     class Meta:
         model = wo_description
-        fields = ['area','categoryService','description', 'woUser']
-
-    # grs = [(gr.id, gr) for gr in User.objects.filter(groups__name='maker')]
-    # grs.insert(0, ('', '--- Petugas OSP ---'))
-    # woUser = forms.ChoiceField(choices=grs, initial='WO User',)
+        fields = ['area', 'categoryService', 'description', 'woUser']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,7 +45,23 @@ class workorderForm(forms.ModelForm):
         self.fields["duration"].widget.attrs.update(
             {'type': "text", 'id': "duration", 'name': 'duration', 'autocomplete': 'off', 'label': 'Duration', 'help text': 'Duration'})
         self.fields["dueDate"].widget.attrs.update(
-            {'type': "date",'id': "dueDate", 'name': 'dueDate', 'autocomplete': 'off', 'label': 'Due Date', 'help text': 'Due Date'})
+            {'type': "date", 'id': "dueDate", 'name': 'dueDate', 'autocomplete': 'off', 'label': 'Due Date', 'help text': 'Due Date'})
+
+
+# class workorderCreateAtForm(forms.ModelForm):
+
+#     class Meta:
+#         model = wo_workorder
+#         fields = ['createAt']
+#         widgets = {
+#             'createAt': forms.DateTimeInput(format=('%Y-%m-%d'), attrs={'id': "createAt", 'name': 'createAt', 'autocomplete': 'off', 'label': 'Create At', 'help text': 'Create At', 'class': "form-control"}),
+#         }
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+
+#         self.fields["createAt"].widget.attrs.update(
+#             {'id': "createAt", 'name': 'createAt', 'autocomplete': 'off', 'label': 'Create At', 'help text': 'Create At', 'class': "form-control"})
 
 
 class rincianForm(forms.ModelForm):
@@ -83,6 +79,6 @@ class rincianForm(forms.ModelForm):
         self.fields["date"].widget.attrs.update(
             {'type': "date", 'id': "date", 'name': 'date', 'autocomplete': 'off', 'label': 'Date', 'help text': 'Date'})
         self.fields["status"].widget.attrs.update(
-            {'type': "text", 'id': "status", 'name': 'status','autocomplete': 'off', 'label': 'Status', 'help text': 'Status'})
+            {'type': "text", 'id': "status", 'name': 'status', 'autocomplete': 'off', 'label': 'Status', 'help text': 'Status'})
         self.fields["information"].widget.attrs.update(
             {'type': "text", 'id': "information", 'name': 'information', 'autocomplete': 'off', 'label': 'Information', 'help text': 'Information', 'height': "200", 'rows': '3'})

@@ -350,5 +350,9 @@ def user_401_unauthorized_checker(request):
     return render(request, 'user/user_401_unauthorized_checker.html')
 
 
+def user_401_unauthorized_briks(request):
+    return render(request, 'user/user_401_unauthorized_briks.html')
+
+
 def user_404_page_not_found(request):
     return render(request, 'user/user_404_page_not_found.html')

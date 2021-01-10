@@ -366,7 +366,7 @@ class mendc_progress_download_pdf(View):
             'areas': mendc_area.objects.all(),
             'subareas': mendc_subarea.objects.all(),
             'dailies': mendc_daily.objects.filter(hariIni=date.today()),
-            'tanggal': obj.today(),
+            'tanggal': date.today(),
             'briImage': briImage,
             'title': 'Monitoring Gedung'
         }

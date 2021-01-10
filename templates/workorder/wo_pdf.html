@@ -478,12 +478,12 @@
                         <td class="table-three-content">
                             <table class="table-three-inside">
                                 <tr>
-                                    {% if 'Electronic' in descriptions.categoryService %}
+                                    {% if 'Electronics' in descriptions.categoryService %}
                                     <th class="cell-one">v</th>
                                     {% else %}
                                     <th class="cell-one"> </th>
                                     {% endif %}
-                                    <th class="cell-two">Electronic</th>
+                                    <th class="cell-two">Electronics</th>
                                 </tr>
                             </table>
                         </td>
@@ -530,7 +530,7 @@
                         <td class="table-three-content">
                             <table class="table-three-inside">
                                 <tr>
-                                    {% if 'Others' in descriptions.categoryService %}
+                                    {% if 'Air Conditioner' in descriptions.categoryService %}
                                     <th class="cell-one">v</th>
                                     {% else %}
                                     <th class="cell-one"> </th>
@@ -604,7 +604,7 @@
                     </tr>
                     <tr>
                         <td class="table-four-pl3">* Handle By : {{workorders.woMaker.first_name}}
-                            {{workorders.woMaker.first_name}} </td>
+                            {{workorders.woMaker.last_name}} </td>
                         <td class="table-four-pl3">* Date Report : {{workorders.createAt | date:"d-m-Y" }} </td>
                         <td class="table-four-pl3">* Time Report : {{workorders.createAt | date:"H:i:s" }}</td>
                     </tr>

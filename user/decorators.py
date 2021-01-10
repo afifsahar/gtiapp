@@ -46,7 +46,7 @@ def briks_only(view_func):
         if group == 'briks':
             return view_func(request, *args, **kwargs)
         else:
-            return redirect('401_unauthorized_maker')
+            return redirect('401_unauthorized_briks')
     return wrapper_function
 
 

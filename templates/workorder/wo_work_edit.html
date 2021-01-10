@@ -19,14 +19,16 @@
     .ion-ios-add {
         font-size: 33px !important;
     }
+
     label {
         margin-right: 15px;
     }
+
     input[type="checkbox"] {
         cursor: pointer;
         -webkit-appearance: none;
         appearance: none;
-        background: lightgray; 
+        background: lightgray;
         border-width: 5px;
         border-style: solid;
         border-radius: 1px;
@@ -37,7 +39,8 @@
         height: 20px;
         border-width: 0;
         transition: all .3s linear;
-    } 
+    }
+
     input[type="checkbox"]:checked {
         background-color: red;
     }
@@ -45,7 +48,7 @@
     input[type="checkbox"]:focus {
         outline: 0 none;
         box-shadow: none;
-    } 
+    }
 </style>
 {% endblock css %}
 {% comment %}
@@ -133,12 +136,35 @@
             </div>
             {% endfor %}
             {% endif %}
+
+            {% if wc_form.errors %}
+            {% for field in wc_form %}
+            {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% for error in wc_form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+            {% endfor %}
+            {% endif %}
             <!-- separator -->
             <div class="separator-small"></div>
             <!-- end separator -->
             <!-- section title -->
             <div class="section-title">
                 <h6>Work Order</h6>
+            </div>
+            <div class="form-wrapper">
+                <div class="input-wrap">
+                    {% for field in wc_form %}
+                    <p>{{field.label}}</p>
+                    <p>{{field}}</p>
+                    {% endfor %}
+                </div>
             </div>
             <!-- end section title -->
             <div class="form-wrapper">
