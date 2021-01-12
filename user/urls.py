@@ -34,7 +34,7 @@ urlpatterns = [
          user_mendc_signer_notification, name="user_mendc_signer_notification"),
 
 
-     path('profile=<username>/notification/check_kebersihan_id=<day_id>_date=<day_date>/seefile',
+    path('profile=<username>/notification/check_kebersihan_id=<day_id>_date=<day_date>/seefile',
          user_cln_notification_seefile, name="user_cln_notification_seefile"),
     path('profile=<username>/notification/perangkat_gedung_id=<day_id>_date=<day_date>/seefile',
          user_mendc_notification_seefile, name="user_mendc_notification_seefile"),
@@ -66,6 +66,8 @@ urlpatterns = [
          name='401_unauthorized_checker'),
     path('401-unauthorized/signer', user_401_unauthorized_signer,
          name='401_unauthorized_signer'),
+    path('401-unauthorized/briks', user_401_unauthorized_briks,
+         name='401_unauthorized_briks'),
     path('404-page-not-found', user_404_page_not_found,
          name='404_page_not_found'),
 

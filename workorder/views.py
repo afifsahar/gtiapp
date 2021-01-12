@@ -121,7 +121,7 @@ def wo_work_edit(request, day_id):
         #     request.POST or None, instance=workorders)
         d_form = descriptionForm(request.POST or None, instance=descriptions)
         w_form = workorderForm(request.POST or None, instance=workorders)
-        if d_form.is_valid() and w_form.is_valid() and wc_form.is_valid():
+        if d_form.is_valid() and w_form.is_valid():
             day = days
             desc = d_form.save(commit=False)
             desc.descriptionDay = day
@@ -136,7 +136,7 @@ def wo_work_edit(request, day_id):
             # wc.save()
             return redirect('wo_home')
     else:
-        wc_form = workorderCreateAtForm(instance=workorders)
+        # wc_form = workorderCreateAtForm(instance=workorders)
         d_form = descriptionForm(instance=descriptions)
         w_form = workorderForm(instance=workorders)
     context = {

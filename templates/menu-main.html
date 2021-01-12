@@ -19,7 +19,7 @@
 <div id="menu-main" class="menu menu-box-right menu-box-detached rounded-m" data-menu-width="260"
     data-menu-active="nav-pages" data-menu-effect="menu-over">
     <div class="menu-items">
-        <a id="nav-profile" href="index.html">
+        <a id="nav-profile" href="{% url 'user_profile' user.username %}">
             <i class="far fa-user font-14 color-brown1-dark"></i>
             <span>Profile</span>
             <i class="fa fa-circle"></i>
