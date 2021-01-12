@@ -29,15 +29,15 @@ from django.core.paginator import Paginator, EmptyPage
 def wo_home(request):
     days = wo_day.objects.filter(isDelete=False).order_by('-createAt')
     descriptions = wo_description.objects.filter(isDelete=False)
-    # paginator = Paginator(days, 3)
-    # page_number = request.GET.get('page')
-    # try:
-    #     page = paginator.get_page(page_number)  # get_page or page
-    # except EmptyPage:
-    #     page = paginator.get_page(1)
+    paginator = Paginator(days, 3)
+    page_number = request.GET.get('page', 1)
+    try:
+        pg = paginator.page(page_number)  # get_page or page
+    except EmptyPage:
+        pg = paginator.page(1)
     context = {
         'dayCount': days.count(),
-        'days': days,
+        'days': pg,
         'descriptions': descriptions,
         'title': 'Work Order',
     }

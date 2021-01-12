@@ -220,7 +220,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <th>CHECKLIST PENGELOLAAN KEBERSIHAN GTI</th>
+                        <th>CHECKLIST PENGELOLAAN GEDUNG GTI</th>
                         <th class="header-detail-text">
                             <table class="table table-inside">
                                 <tr>
@@ -309,10 +309,9 @@
                                         {% for day in days %}
                                         <td class="table-harian">{{day.mendcSigner.first_name}}
                                             {{day.mendcSigner.last_name}}</td>
-                                        <td class="table-harian">{{day.mendc  Checker.first_name}}
+                                        <td class="table-harian">{{day.mendcChecker.first_name}}
                                             {{day.mendcChecker.last_name}}</td>
-                                        <td class="table-harian">{{day.mendcMaker.first_name}}
-                                            {{day.mendcMaker.last_name}}
+                                        <td class="table-harian">{{day.mendcMaker.first_name}} {{day.mendcMaker.last_name}}
                                         </td>
                                         {% endfor %}
                                     </tr>

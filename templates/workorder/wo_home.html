@@ -1,154 +1,111 @@
-{% extends "base.html" %}{% load static %}
-{% block css %}
-<style>
-    .float {
-        position: fixed;
-        width: 60px;
-        height: 60px;
-        bottom: 75px;
-        right: 25px;
-        background-color: #0C9;
-        color: #FFF;
-        border-radius: 50%;
-        text-align: center;
-        box-shadow: 2px 2px 3px #999;
-    }
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-    .my-float {
-        margin-top: 22px;
-    }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/workorder/wo_home.css' %}">
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <!-- <link rel="manifest" href="{% static '_manifest.json' %}" data-pwa-version="set_in_manifest_and_pwa_js" /> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app/icons/icon-192x192.png' %}" />
 
-    .ion-ios-add {
-        font-size: 40px !important;
-    }
 
-    .forum-action ul li {
-        margin-right: 10px;
-    }
-</style>
+</head>
 
-{% endblock css %}
-
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
-
-{% block navbar %}
-<div class="left"></div>
-<div class="title">{{title}}</div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<div class="container">
-    {% if dayCount == 0 %}
-    <!-- separator -->
-    <div class="separator-large"></div>
-    <!-- end separator -->
-    <!-- maintenance -->
-    <div class="maintenance">
-        <div class="container">
-            <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
-            <h5 class="mb-5" style="color: red;"><strong>Work Order Not Found</strong></h5>
+<body class="theme-light" data-highlight="blue2">
+    <!-- <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div> -->
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            {% include 'menu.html' %}
         </div>
-    </div>
-    {% else %}
-    {% for day in days %}
-    {% for description in descriptions %}
-    {% if description.descriptionDay.id == day.id %}
-    <div class="card bg-lightblue card-forum">
-        <div class="card-body">
-            <div class="card-avatar-image">
-                <div class="text">
-                    <h6 class="card-title">{{description.description}}</h6>
-                    <span class="title-name">{{description.woUser}}</span>
-                    <span class="date"><i class="icon ion-ios-square"></i>{{description.createAt}}</span>
+        <div class="page-content" style="min-height:60vh!important">
+            <div class="page-title page-title-small mt-2">
+                <h4 class="text-white">Work Order</h4>
+                <h6 class="text-white"><i class="fas fa-calendar-week"></i></h6>
+            </div>
+            <div class="card header-card shape-rounded" data-card-height="70">
+                <div class="card-overlay bg-highlight opacity-95"></div>
+                <div class="card-overlay dark-mode-tint"></div>
+                <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
+            </div>
+            {% for day in days %}
+            {% for description in descriptions %}
+            {% if description.descriptionDay.id == day.id %}
+            <div class="card card-style mt-1 mb-0">
+                <div class="content" style="margin: 10px 10px 10px 10px;">
+                    <h6 class="font-600" style="text-overflow: ellipsis; white-space: nowrap;overflow: hidden;">
+                        {{description.description}}</h6>
+                    <div class="font-10 mt-n2">
+                        <span><i class="fa fa-user font-10"></i>
+                            {{description.woUser.first_name}}
+                            {{description.woUser.last_name}}</span>
+                        <span class=" color-brown1-dark "><i class="ml-2 far fa-calendar font-10"></i>
+                            {{description.createAt}}</span>
+                    </div>
+                    <div class="float-left">
+                        <p class="font-12 mb-n1 mt-n1" style="margin-bottom: 0;">
+                            <a type="button" href="{% url 'wo_work_download_pdf' day.id %}" type="button"
+                                class="mr-4 color-highlight"><i class="fas fa-download"></i> Download</a>
+                            <a href="{% url 'wo_progress_add' day.id %}" class="mr-4"><i class="fas fa-plus-circle"></i>
+                                Tambah Progress</a>
+                        </p>
+                        <p class="font-12 mb-n1 mt-n1" style="margin-bottom: 0;">
+                            <a href="{% url 'wo_work_detail' day.id %}" class="mr-4"><i class="fas fa-list"></i>
+                                Detail</a>
+                            <a href="{% url 'wo_work_edit' day.id %}" class="mr-4 color-green1-light"><i
+                                    class="fas fa-edit"></i> Edit</a>
+                            <a href="{% url 'wo_work_delete' day.id %}" class="mr-4 color-red1-light"><i
+                                    class="fas fa-trash-alt"></i> Delete</a>
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="forum-action">
-                <ul>
-                    <li><a href="{% url 'wo_work_download_pdf' day.id %}"><i class="icon ion-ios-download"></i>Download
-                            PDF</a></li>
-                    <li><a href="{% url 'wo_work_detail'  day.id %}"><i class="icon ion-ios-list"></i>Detail</a></li>
-                    <li><a href="{% url 'wo_progress_add' day.id %}"><i
-                                class="icon ion-ios-add-circle-outline"></i>Tambah Progress</a></li>
-                    <li><a href="{% url 'wo_work_edit' day.id %}"><i class="icon ion-ios-arrow-dropup"></i>Edit</a></li>
-                    <li><a href="{% url 'wo_work_delete' day.id %}"><i class="icon ion-ios-trash"></i>Delete</a></li>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+            <nav aria-label="pagination-demo">
+                <ul class="pagination pagination- justify-content-center my-4">
+                    <!-- {% if days.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link rounded-xs color-white bg-black shadow-xl border-0"
+                            href="{% url 'wo_home' %}?page={{days.previous_page_number}}" tabindex="-1"
+                            aria-disabled="true"><i class="fa fa-angle-left"></i></a>
+                    </li>
+                    {% endif %} -->
+                    {% for num in days.paginator.page_range %}
+                    <li
+                        class="page-item {% if days.number == num %} active {% elif num > days.number|add:'-3' and num < days.number|add:'3' %} {% endif %}">
+                        <a class="page-link rounded-xs color-black bg-theme shadow-xl border-0"
+                            href="{% url 'wo_home' %}?page={{ num }}">{{ num }}</a></li>
+
+                    {% endfor %}
+                    <!-- {% if days.has_next %}
+                    <li class="page-item">
+                        <a class="page-link rounded-xs color-white bg-black shadow-xl border-0"
+                            href="{% url 'wo_home' %}?page={{days.next_page_number}}"><i
+                                class="fa fa-angle-right"></i></a>
+                    </li>
+                    {% endif %} -->
                 </ul>
-            </div>
+            </nav>
+            <a type="button" href="{% url 'wo_work_add' %}" class="float"><i class="fas fa-plus my-float"
+                    style="font-size: 20px !important;"></i></a>
         </div>
+        {% include 'menu-main.html' %}
     </div>
-    <!-- separator -->
-    <div class="separator-medium"></div>
-    <!-- end separator -->
-    {% endif %}
-    {% endfor %}
-    {% endfor %}
-
-
-    {% comment %}
-    {% if is_paginated %}
-
-    {% if days.has_previous %}
-    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page=1">First</a>
-    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ days.previous_page_number }}">Previous</a>
-    {% endif %}
-
-    {% for num in days.paginator.page_range %}
-    {% if days.number == num %}
-    <a class="btn btn-info mb-4" href="{% url 'wo_home' %}?page={{ num }}">{{ num }}</a>
-    {% elif num > days.number|add:'-3' and num < days.number|add:'3' %}
-    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ num }}">{{ num }}</a>
-    {% endif %}
-    {% endfor %}
-
-    {% if days.has_next %}
-    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ days.next_page_number }}">Next</a>
-    <a class="btn btn-outline-info mb-4" href="{% url 'wo_home' %}?page={{ days.paginator.num_pages }}">Last</a>
-    {% endif %}
-
-    {% endif %}
-    {% endcomment %}
-
-
-    {% endif %}
-</div>
-
-<div class="button-default">
-    <a href="{% url 'wo_work_add' %}" class="float"><i class="icon ion-ios-add my-float"></i></a>
-</div>
-{% endblock page_wrapper %}
-{% block toolbar_bottom %}
-<ul class="toolbar-bottom toolbar-wrap">
-    <li class="toolbar-item">
-        <a href="{% url 'user_home' %}" class="toolbar-link">
-            <i class=" icon ion-ios-home"></i>
-            <p>Home</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'cln_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-brush"></i>
-            <p>Kebersihan</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'mendc_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-build"></i>
-            <p>Gedung</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'wo_home' %}" class="toolbar-link toolbar-link-active">
-            <i class="icon ion-ios-stopwatch"></i>
-            <p>WO</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link">
-            <i class="icon ion-ios-warning"></i>
-            <p>Approval</p>
-        </a>
-    </li>
-</ul>
-{% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>

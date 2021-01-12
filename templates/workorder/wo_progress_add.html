@@ -1,106 +1,100 @@
-{% extends 'base.html' %}{% load static %}
-{% block css %}
-<style>
-    .form-elements .section-title {
-        margin-top: 15px;
-    }
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-    .form-wrapper .minus-button {
-        margin: 3px auto;
-        font-weight: 900;
-        color: #ffffff;
-        font-size: xx-large;
-    }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/workorder/wo_progress_add.css' %}">
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <!-- <link rel="manifest" href="{% static '_manifest.json' %}" data-pwa-version="set_in_manifest_and_pwa_js" /> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app/icons/icon-192x192.png' %}" />
+</head>
 
-    .toolbar-bottom::before {
-        height: 3px;
-    }
 
-    .ion-ios-add {
-        font-size: 33px !important;
-    }
-</style>
-{% endblock css %}
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
-
-{% block navbar %}
-<div class="left"><a href='{% url "wo_home" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
-</div>
-<div class="title">{{title}}</div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<!-- newsletter -->
-<div class="newsletter bg-lightblue">
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-    <div class="section-title text-center title-large">
-        <h6>Tambah Progress 
-          {{progs.progressDay.createAt}}</h6>
+<body class="theme-light" data-highlight="blue2">
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
     </div>
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-</div>
-<!-- separator -->
-<div class="separator-medium"></div>
-<!-- end separator -->
-<!-- form elements -->
-<div class="form-elements">
-    <div class="container">
-        <form method="POST" class="form-outline form-horizontal">
-            {% csrf_token %}
-            <!-- section title -->
-            <div class="section-title">
-                <h6>Progress</h6>
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            {% include 'menu.html' %}
+        </div>
+        <div class="page-content" style="min-height:60vh!important; ">
+            <div class="card mb-3 pb-1" data-card-height="60">
+                <div class="card-top">
+                    <div class="page-title page-title-small">
+                        <a href="{% url 'wo_home' %}" class="text-white">
+                            <h4 class="text-white"><i class="fa fa-arrow-left mr-3"></i> Work Order</h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-overlay bg-highlight opacity-95"></div>
             </div>
-            <!-- end section title -->
-            <div class="form-wrapper">
+            <div data-card-height="50" class="card card-style shadow-xl preload-img"
+                data-src="{% static 'images/pictures/13.jpg' %}" style="margin-bottom: 15px;">
+                <div class="card-top text-center my-1 px-4">
+                    <h6 class="color-white font-15 mb-0"> Tambah Progress</h6>
+                    <p class="color-white font-15 opacity-70 mb-3"> Work Order {{progs.progressDay.createAt}}</p>
+                </div>
+                <div class="card-overlay bg-black opacity-80 rounded-0"></div>
+            </div>
+            <form method="POST">
                 {% for dict in formset.errors %}
                 {% for error in dict.values %}
-                {{ error }}
+                <div class="alert alert-danger">
+                    <strong>{{ error }}</strong>
+                </div>
                 {% endfor %}
                 {% endfor %}
                 {% for form in formset %}
-                <div class="input-wrap row item">
-                     <div class="col-9">
-                    <!-- {% for field in form %} -->
-                    <!-- {% if field.label != "Id" %} -->
-                        <!-- {{field.label}} -->
-                        <!-- {{field}} -->
-                    <!-- {% endif %} -->
-                    <!-- {% endfor %} -->
-                    {{form}}
-                    </div>
-                    <div class="col-3 pt-3">
-                        <a id="{{formset.prefix}}" class="button minus-button bg-red wo-remove-form-row"><i
-                                class="icon ion-ios-remove"></i></a>
+                <div class="card card-style my-2">
+                    <div class="content my-2">
+                        <div class="row mb-1">
+                            <div class="col-9">
+                                <h6 class="color-black font-20 mb-0"> Progress {{ forloop.counter }} </h6>
+                            </div>
+                            <div class="col-3">
+                                <a id="{{formset.prefix}}" type="button" href="#"
+                                    class="bg-danger text-white btn btn-xs text-uppercase font-700 rounded-sm font-11"
+                                    style="padding-top: 2px !important; padding-bottom: 2px !important; width: 100%; ">
+                                    <i class="fas fa-minus"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="input-style input-style-1 input-required pb-1 mt-0 pt-0">
+                            {{form}}
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
                 {{ formset.management_form }}
-            </div>
-            <div class="button-default">
-                <a id="{{formset.prefix}}" class="button bg-green wo-add-form-row">Tambah Progress</a>
-            </div>
-            <!-- separator -->
-            <div class="separator-large"></div>
-            <!-- end separator -->
-            <div class="button-default">
-                <button type="submit" class="button">SUBMIT</button>
-            </div>
-        </form>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button id="{{formset.prefix}}" style="width: 90%;"
+                            class="wo-remove-form-row btn btn-full btn-margins rounded-sm btn-s bg-blue1-dark text-center font-700 text-uppercase">Tambah
+                            Progress</button>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" style="width: 90%;"
+                            class="col-12 btn btn-full btn-margins rounded-sm btn-sm bg-green1-dark text-center font-700 text-uppercase">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% include 'menu-main.html' %}
     </div>
-</div>
-<!-- end form elements -->
-{% endblock page_wrapper %}
-
-{% block toolbar_bottom %}
-{% endblock toolbar_bottom %}
-
-{% block js %}
-<script src="{%  static 'js/formset-wo.js'%} "></script>
-{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+    <script type="text/javascript" src="{%  static 'scripts/formset-wo.js'%} "></script>
+</body>

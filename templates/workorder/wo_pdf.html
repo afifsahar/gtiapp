@@ -478,12 +478,12 @@
                         <td class="table-three-content">
                             <table class="table-three-inside">
                                 <tr>
-                                    {% if 'Electronics' in descriptions.categoryService %}
+                                    {% if 'Electronic' in descriptions.categoryService %}
                                     <th class="cell-one">v</th>
                                     {% else %}
                                     <th class="cell-one"> </th>
                                     {% endif %}
-                                    <th class="cell-two">Electronics</th>
+                                    <th class="cell-two">Electronic</th>
                                 </tr>
                             </table>
                         </td>
@@ -530,7 +530,7 @@
                         <td class="table-three-content">
                             <table class="table-three-inside">
                                 <tr>
-                                    {% if 'Air Conditioner' in descriptions.categoryService %}
+                                    {% if 'Others' in descriptions.categoryService %}
                                     <th class="cell-one">v</th>
                                     {% else %}
                                     <th class="cell-one"> </th>
@@ -584,8 +584,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="cell-narrow">User Signature : {{descriptions.woUser.first_name}}
-                                        {{descriptions.woUser.last_name}}</td>
+                                    <td class="cell-narrow">User Signature</td>
                                 </tr>
                             </table>
                         </td>
@@ -604,7 +603,7 @@
                     </tr>
                     <tr>
                         <td class="table-four-pl3">* Handle By : {{workorders.woMaker.first_name}}
-                            {{workorders.woMaker.last_name}} </td>
+                            {{workorders.woMaker.first_name}} </td>
                         <td class="table-four-pl3">* Date Report : {{workorders.createAt | date:"d-m-Y" }} </td>
                         <td class="table-four-pl3">* Time Report : {{workorders.createAt | date:"H:i:s" }}</td>
                     </tr>
@@ -668,13 +667,9 @@
                         <td class="table-five-pl3">{{rincian.status}}</td>
                         <td class="table-five-pl3">{{rincian.information}}</td>
                         <td class="table-five-pl3">
-                            <img src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user">
-                            <p>{{rincian.briksUser.first_name}} {{rincian.briksUser.last_name}}</p>
-                        </td>
-                        <td class="table-five-pl3">
-                            <img src="{{rincian.ospUser.qr_code.path}}" alt="qr-code-osp-user">
-                            <p>{{rincian.ospUser.first_name}} {{rincian.ospUser.last_name}}</p>
-                        </td>
+                            <img src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user"></td>
+                        <td class="table-five-pl3"><img src="{{rincian.briksUser.qr_code.path}}"
+                                alt="qr-code-briks-user"></td>
                     </tr>
                     {% endfor %}
                     <tr>
@@ -685,7 +680,7 @@
                                 </tr>
                                 <tr>
                                     <td class="cell-wide cell-desc">
-                                        <p> </p>
+                                        <p>{{descriptions.woUser.first_name}} {{descriptions.woUser.last_name}}</p>
                                     </td>
                                 </tr>
                             </table>
@@ -697,8 +692,7 @@
                                             alt="qr-code-maker"></td>
                                 </tr>
                                 <tr>
-                                    <td class="cell-narrow">User Signature : {{descriptions.woUser.first_name}}
-                                        {{descriptions.woUser.last_name}}</td>
+                                    <td class="cell-narrow">User Signature</td>
                                 </tr>
                             </table>
                         </td>

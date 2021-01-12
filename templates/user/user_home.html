@@ -1,159 +1,94 @@
-{% extends "base.html" %}{% load static %}
-{% block css %}
-<style>
-    .swiper-style .swiper-slide .icon {
-        margin-top: 0px;
-    }
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-    .swiper-style {
-        padding: 10px 10px;
-    }
-</style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <!-- <link rel="manifest" href="_manifest.json" data-pwa-version="set_in_manifest_and_pwa_js" /> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app/icons/icon-192x192.png' %}" />
+    {% block css %}
+    {% endblock css %}
+</head>
 
-{% endblock css %}
-
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
-
-{% block navbar %}
-<div class="left"></div>
-<div class="title"></div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<div class="section-title title-large">
-    <div class="container">
-        <span class="overline-title"><strong>Hi, {{user.first_name}} {{user.last_name}}</strong> </span>
-        <h3 class="mb-2">{{tanggal | date:"l, d F Y"}}</h3>
-    </div>
-    <!-- <h3>Start Your Best Experience With Maxui</h3> -->
-</div>
-<!-- intro app -->
-<div class="intro-app">
-    <div class="container">
-        <div class="intro-content">
-            <div class="mask"></div>
-            <img src="{% static 'images/intro.jpg' %}" alt="image-demo">
-            <div class="caption">
-                <h3 class="text-white mb-1">GTI Maintenance</h3>
-                <p class="text-white">Selamat Bekerja</p>
-            </div>
+<body class="theme-light" data-highlight="blue2">
+    <!-- <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div> -->
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            <a href="{% url 'user_profile' user.username %}"><i data-feather="user" data-feather-line="1"
+                    data-feather-size="21" data-feather-color="brown1-dark"
+                    data-feather-bg="brown1-fade-light"></i><span>Profile</span></a>
+            {% include 'menu.html' %}
         </div>
-    </div>
-</div>
-<!-- end intro app -->
-<!-- counter -->
-<div class="counter">
-    <div class="container">
-        <!-- feature slide -->
-        <div class="feature-slide">
-            <div class="swiper-container swiper-style">
-                <div class="swiper-wrapper">
-                    <a href=" {% url 'cln_home' %} ">
-                        <div class="swiper-slide">
-                            <div class="content shadow-sm">
-                                <div class="info-statistic bg-red">{{cleaning_works_done}}</div>
-                                <div class="icon"><i class="icon ion-ios-brush color-red"></i></div>
-                                <div class="text">
-                                    <h6>C.P. Kebersihan</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href=" {% url 'mendc_home' %} ">
-                        <div class="swiper-slide">
-                            <div class="content shadow-sm">
-                                <div class="info-statistic bg-yellow">{{menondc_works_done}}</div>
-                                <div class="icon"><i class="icon ion-ios-build color-yellow"></i></div>
-                                <div class="text">
-                                    <h6>C.P. Gedung M/E Non DC</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href=" {% url 'wo_home' %} ">
-                        <div class="swiper-slide">
-                            <div class="content shadow-sm">
-                                <div class="info-statistic bg-green">0</div>
-                                <div class="icon"><i class="icon ion-ios-stopwatch color-green"></i></div>
-                                <div class="text">
-                                    <h6>Work Order</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+        <div class="page-content pb-0">
+            <div class="page-title page-title-small">
+                <h4 data-username="{{user.first_name}} {{user.last_name}}" class="greeting-text text-white">
+                </h4>
+                <a href="#" data-menu="menu-main" class="bg-fade-gray1-dark shadow-xl preload-img"
+                    data-src="{% static 'images/avatars/5s.png' %}"></a>
             </div>
-        </div>
-        <!-- feature slide -->
-        <div class="feature-slide">
-            <div class="swiper-container swiper-style">
-                <div class="swiper-wrapper">
-                    <a href="{% url 'user_profile_notification' user.username %}">
-                        <div class="swiper-slide">
-                            <div class="content shadow-sm">
-                                <div class="info-statistic bg-blue">{{days}}</div>
-                                <div class="icon"><i class="icon ion-ios-warning color-blue"></i></div>
-                                <div class="text">
-                                    <h6>Approval and Signing</h5>
-                                </div>
+            <div class="card header-card shape-rounded" data-card-height="95">
+                <div class="card-overlay bg-highlight opacity-95"></div>
+                <div class="card-overlay dark-mode-tint"></div>
+                <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
+            </div>
+            <div data-card-height="cover-card" class="card bg-transparent">
+                <div class="card-center text-center">
+                    <h1 class="fa-3x font-900 mb-0 color-highlight mt-lg-1">GTIAPP</h1>
+                    <p class="font-13"></p>
+
+                    <div class="row mx-auto mt-3 mb-0" style="max-width:330px;">
+                        <a href="{% url 'cln_progress' %}" class="col-4">
+                            <i class="fas fa-clipboard-list font-40 pt-3 color-green1-dark"></i>
+                            <p>Checklist Kebersihan</p>
+                        </a>
+                        <a href="{% url 'mendc_progress' %}" class="col-4">
+                            <i class="fas fa-building font-40 pt-3 color-blue2-dark"></i>
+                            <p>Checklist Gedung</p>
+                        </a>
+                        <a href="{% url 'wo_home' %}" class="col-4">
+                            <i class="fas fa-list-alt font-40 pt-3 color-teal-dark"></i>
+                            <p>Work Order</p>
+                        </a>
+                        <a href="#Approval" class="col-4">
+                            <div class="header-icon"><i
+                                    class="fas fa-file-contract font-40 pt-3 color-magenta1-dark"></i><span
+                                    class="badge bg-magenta1-dark">00</span></div>
+
+                            <p>Approval</p>
+                        </a>
+                        <a href="#Inbox" class="col-4">
+                            <div class="header-icon"><i
+                                    class="fas fa-file-import font-40 pt-3 color-red1-dark"></i><span
+                                    class="badge bg-red1-dark">00</span></div>
+                            <p>Inbox</p>
+                        </a>
+                        <a href="#Outbox" class="col-4">
+                            <div class="header-icon"><i
+                                    class="fas fa-file-export font-40 pt-3 color-brown1-dark"></i><span
+                                    class="badge bg-brown1-dark">00</span>
                             </div>
-                        </div>
-                    </a>
-                    <div class="swiper-slide">
-                        <div class="content shadow-sm">
-                            <div class="info-statistic bg-lime">0</div>
-                            <div class="icon"><i class="icon ion-ios-mail color-lime"></i></div>
-                            <div class="text">
-                                <h6>Inbox</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="content shadow-sm">
-                            <div class="info-statistic bg-orange">0</div>
-                            <div class="icon"><i class="icon ion-ios-paper-plane color-orange"></i></div>
-                            <div class="text">
-                                <h6>Outbox</h6>
-                            </div>
-                        </div>
+                            <p>Outbox</p>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+        {% include 'menu-main.html' %}
     </div>
-</div>
-<!-- separator -->
-<div class="separator-small"></div>
-<!-- end separator -->
-{% endblock page_wrapper %}
-{% block toolbar_bottom %}
-<ul class="toolbar-bottom toolbar-wrap">
-    <li class="toolbar-item">
-        <a href="{% url 'user_home' %}" class="toolbar-link toolbar-link-active">
-            <i class="icon ion-ios-home"></i>
-            <p>Home</p>
-        </a>
-    </li>
-    <!-- <li class="toolbar-item">
-        <a href="{% url 'mendc_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-build"></i>
-            <p>Gedung</p>
-        </a>
-    </li>-->
-    <li class="toolbar-item">
-        <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link">
-            <i class="icon ion-ios-warning"></i>
-            <p>Approval</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'user_profile' user.username %}" class="toolbar-link">
-            <i class="icon ion-ios-person"></i>
-            <p>Profile</p>
-        </a>
-    </li>
-</ul>
-{% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>

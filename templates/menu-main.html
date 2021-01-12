@@ -1,0 +1,90 @@
+{% load static %}
+
+{% block css %}
+<style>
+    .menu-items a,
+    .menu-items a svg,
+    .menu-items span,
+    .menu-items a i:last-child,
+    .menu-items a i:first-child {
+        line-height: 40px;
+    }
+
+    .menu-items em {
+        margin-top: 11px;
+    }
+</style>
+{% endblock css %}
+
+<div id="menu-main" class="menu menu-box-right menu-box-detached rounded-m" data-menu-width="260"
+    data-menu-active="nav-pages" data-menu-effect="menu-over">
+    <div class="menu-items">
+        <a id="nav-profile" href="index.html">
+            <i class="far fa-user font-14 color-brown1-dark"></i>
+            <span>Profile</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <h6 class="text-uppercase opacity-40 font-12 pl-3 mt-1">Checklist Kebersihan</h6>
+        <a id="nav-starters" href="{% url 'cln_progress' %}">
+            <i class="fas fa-clipboard-list font-14 color-green1-dark"></i>
+            <span>Today's Progress</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <a id="nav-features" href="{% url 'cln_history' %}">
+            <i class="fas fa-history font-14 color-red2-dark"></i>
+            <span>History</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <a id="nav-settings" href="{% url 'cln_settings' %}">
+            <i class="fas fa-cog font-14 color-blue2-dark"></i>
+            <span>Area Settings</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <h6 class="text-uppercase opacity-40 font-12 pl-3 mt-1">Checklist Gedung</h6>
+        <a id="nav-starters" href="{% url 'mendc_progress' %}">
+            <i class="fas fa-building font-14 color-blue1-dark"></i>
+            <span>Today's Progress</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <a id="nav-features" href="{% url 'mendc_history' %}">
+            <i class="fas fa-history font-14 color-red2-dark"></i>
+            <span>History</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <a id="nav-settings" href="{% url 'mendc_settings' %}">
+            <i class="fas fa-cog font-14 color-blue2-dark"></i>
+            <span>Area Settings</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <h6 class="text-uppercase opacity-40 font-12 pl-3 mt-1">Work Order</h6>
+        <a id="nav-starters" href="{% url 'wo_home' %}">
+            <i class="fas fa-list-alt font-14 color-teal-dark"></i>
+            <span>Work Order</span>
+            <i class="fa fa-circle"></i>
+        </a>
+        <h6 class="text-uppercase opacity-40 font-12 pl-3 mt-1">More Please</h6>
+        <a id="nav-starters" href="#">
+            <i class="fas fa-file-contract font-14 color-magenta1-dark"></i>
+            <span>Approval</span>
+            <em class="badge bg-highlight color-white">00</em>
+            <i class="fa fa-circle"></i>
+        </a>
+        <a id="nav-features" href="#">
+            <i class="fas fa-file-import font-14 color-red1-light"></i>
+            <span>Inbox</span>
+            <em class="badge bg-highlight color-white">00</em>
+            <i class="fa fa-circle"></i>
+        </a>
+        <a id="nav-settings" href="#">
+            <i class="fas fa-file-export font-14 color-brown2-dark"></i>
+            <span>Output</span>
+            <em class="badge bg-highlight color-white">00</em>
+            <i class="fa fa-circle"></i>
+        </a>
+        <a id="nav-logout" href=" {% url 'user_logout' %} ">
+            <i class="fas fa-sign-out-alt font-14 color-yellow1-dark"></i>
+            <span>Logout</span>
+            <i class="fa fa-circle"></i>
+        </a>
+    </div>
+</div>

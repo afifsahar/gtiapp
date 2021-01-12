@@ -1,0 +1,17 @@
+.input-style-1 input[type="date"],
+.input-style-1 input[type="text"],
+.input-style-1 textarea,
+.input-style-1 select {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    height: 30px;
+    line-height: 30px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+label {
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

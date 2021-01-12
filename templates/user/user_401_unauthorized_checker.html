@@ -1,37 +1,56 @@
-{% extends 'base.html' %}{% load static %} {% block css %}
-{% endblock css %}
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-{% block navbar %}
-<div class="left"><a href class="link link-back"><i class="icon ion-ios-arrow-back"></i></a>
-</div>
-<div class="title">{{title}}</div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<!-- separator -->
-<div class="separator-large"></div>
-<!-- end separator -->
-<!-- maintenance -->
-<div class="maintenance">
-    <div class="container">
-        <img src="{% static 'images/401_Unauthorized.png' %}" height="300" width="300" alt="">
-        <h5 class="mb-2">Checker Page Only</h5>
-        <p class="text-small">You are unauthorized to access the page. Return to the homepage or contact admin</p>
-        <div class="button-default">
-            <div class="row">
-                <div class="col-12">
-                    <a href="{% url 'user_home' %}" class="button">Home</a>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <!-- <link rel="manifest" href="{% static '_manifest.json' %}" data-pwa-version="set_in_manifest_and_pwa_js" /> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app/icons/icon-192x192.png' %}" />
+</head>
+
+<body class="theme-light" data-highlight="blue2">
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div>
+    <div id="page">
+        <div class="page-content">
+            <div class="page-title page-title-small">
+                <h2><a href="#" data-back-button><i class="fa fa-arrow-left"></i></a>Whoops!</h2>
+            </div>
+            <div class="card header-card shape-rounded" data-card-height="150">
+                <div class="card-overlay bg-highlight opacity-95"></div>
+                <div class="card-overlay dark-mode-tint"></div>
+                <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
+            </div>
+            <div class="card card-style text-center">
+                <div class="content pt-4 pb-4">
+                    <h1><i class="fa fa-exclamation-triangle color-red2-dark fa-5x"></i></h1>
+                    <h1 class="fa-6x pt-5 pb-2">401</h1>
+                    <h3 class="text-uppercase pb-3">Checker Page Only</h3>
+                    <p class="boxed-text-l">
+                        You are unauthorized to access the page. Return to the previous page or contact admin
+                    </p>
+                    <div class="row mb-0">
+                        <div class="col-12 pr-0"><a href="{% url 'user_home' %}"
+                                class="btn btn-m btn-center-m bg-highlight font-800 text-uppercase">Back Home</a></div>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- end of page content-->
     </div>
-</div>
-<!-- end maintenance -->
-{% endblock page_wrapper %}
-
-{% block toolbar_bottom %}
-{% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="scripts/custom.js"></script>
+</body>

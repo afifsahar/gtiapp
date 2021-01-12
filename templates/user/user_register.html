@@ -1,89 +1,107 @@
-{% extends "base.html" %}{% load static %}
-{% block css %}{% endblock css %}
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
 
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <!-- <link rel="manifest" href="{% static '_manifest.json' %}" data-pwa-version="set_in_manifest_and_pwa_js" /> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app/icons/icon-192x192.png' %}" />
+</head>
 
-{% block navbar %}
-<div class="left"></div>
-<div class="title"></div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<!-- separator -->
-<div class="separator-small"></div>
-<!-- end separator -->
-<!-- about us -->
-<div class="about-us">
-    <div class="header-about">
-        <div class="container">
-            <img src="{% static 'images/logo.png' %}" alt="image-demo">
-            <div class="about-title">
-                <h4>Register</h4>
-                <span class="text-small">Selamat Bekerja di <strong>CHECKAPP<strong></span>
+<body class="theme-light" data-highlight="blue2">
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div>
+
+    <div id="page">
+        <div class="page-content">
+            <div class="page-title page-title-small">
+                <h2>Register</h2>
+            </div>
+            <div class="card header-card shape-rounded" data-card-height="150">
+                <div class="card-overlay bg-highlight opacity-95"></div>
+                <div class="card-overlay dark-mode-tint"></div>
+                <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
+            </div>
+
+            <div class="card card-style">
+                <div class="content mt-2 mb-0">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}" role="alert">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+
+                        {% if form.errors %}
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% for field in form %}
+                        <div class="input-style has-icon input-style-1 input-required pb-1">
+                            {% if field.label == 'Password' %}
+                            <i class="input-icon fa fa-lock color-theme"></i>
+                            {% elif field.label == 'Username' %}
+                            <i class="input-icon fa fa-user color-theme"></i>
+                            {% elif field.label == 'Email' %}
+                            <i class="input-icon fas fa-envelope color-theme"></i>
+                            {% elif field.label == 'Confirm Password' %}
+                            <i class="input-icon fas fa-lock color-theme"></i>
+                            {% elif field.label == 'Firstname' %}
+                            <i class="input-icon far fa-user color-theme"></i>
+                            {% elif field.label == 'Lastname' %}
+                            <i class="input-icon far fa-user color-theme"></i>
+                            {% endif %}
+                            <span>{{field.label}}</span>
+                            <em>(required)</em>
+                            {{field}}
+                        </div>
+                        {% endfor %}
+                        {% for field in gform %}
+                        <div class="input-style has-icon input-style-1 input-required pb-1">
+                            <span>{{field.label}}</span>
+                            <em>(required)</em>
+                            {{field}}
+                        </div>
+                        {% endfor %}
+                        <button style="width: 100%;" type="submit"
+                            class="btn btn-m mt-2 mb-4 btn-full bg-green1-dark rounded-sm text-uppercase font-900">Register</button>
+                    </form>
+                    <div class="divider mt-4 mb-3"></div>
+                    <p class="text-center mb-2">
+                        <a href="{% url 'user_login' %}" class="color-highlight opacity-100 font-12"> Log
+                            in Here !</a>
+                    </p>
+                </div>
             </div>
         </div>
+        <!-- end of page content-->
     </div>
-</div>
-<!-- sign in -->
-<div class="sign up bg-lightblue">
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-    <div class="container">
-        <form method="POST" class="form-outline">
-            <div class="form-wrapper">
-                {% csrf_token %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>
 
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}" role="alert">
-                    {{ message }}
-                </div>
-                {% endfor %}
-
-                {% if form.errors %}
-                {% for field in form %}
-                {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-                {% endfor %}
-                {% endfor %}
-                {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-                {% endfor %}
-                {% endif %}
-
-                {% for field in form %}
-                <div class="input-wrap">
-                    {{field}}
-                </div>
-                {% endfor %}
-                {% for field in gform %}
-                <div class="input-wrap">
-                    {{field}}
-                </div>
-                {% endfor %}
-                <div class="button-default">
-                    <button type="submit" class="button">Register</button>
-                </div>
-        </form>
-        <!-- separator -->
-        <div class="separator-medium"></div>
-        <!-- end separator -->
-        <div class="link-sign-up text-center text-small">
-            <p>Have an account?<a href="" class="color-theme ml-2">Log In</a></p>
-        </div>
-        <!-- separator -->
-        <div class="separator-small"></div>
-        <!-- end separator -->
-    </div>
-</div>
-<!-- end sign in -->
-{% endblock page_wrapper %}
-{% block toolbar_bottom %}
-{% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+</html>

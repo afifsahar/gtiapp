@@ -1,288 +1,223 @@
-{% extends "base.html" %}{% load static %}
-{% block css %}
-<style>
-    .accordion-inset .accordion-content {
-        padding: 10px 0 !important;
-    }
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-    .button {
-        line-height: 25px;
-        margin-top: 0;
-        min-width: 100%;
-        width: max-content;
-    }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <style>
+        .table .btn-xxs {
+            line-height: 10px;
+            font-size: 5px;
+            padding: 0 8px;
+        }
 
-    .button .button-extra-small {
-        line-height: 20px;
-        font-size: 10px;
-        padding: 0 8px;
-    }
-
-    .table .icoon {
-        box-sizing: border-box;
-        font-size: larger;
-        text-align: center;
-    }
-
-    .table th,
-    .table td {
-        padding: .5rem !important;
-        margin: .5rem !important;
-    }
-
-    .form-elements .section-title {
-        margin-top: 15px;
-    }
-
-    .form-wrapper .minus-button {
-        font-weight: 900;
-        color: #ffffff;
-        height: 42px;
-        /* min-width: fit-content; */
-        display: inline;
-    }
-
-    .toolbar-bottom::before {
-        height: 3px;
-    }
-
-    .ion-ios-add {
-        font-size: 33px !important;
-    }
-
-    .table .hasilTemuan {
-        box-sizing: border-box;
-        min-width: 250px;
-        max-width: 350px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: pre-line;
-        /* display: inline; */
-    }
-
-    .table .hasilTemuan::first-line {
-        box-sizing: border-box;
-        line-height: 0;
-    }
-
-    .table .subarea,
-    .table .aksi {
-        width: 15%;
-        white-space: nowrap;
-    }
-
-    .table .kondisi,
-    .table .pukul,
-    .table .keterangan,
-    .table .aksi {
-        width: 10%;
-        text-align: center;
-        white-space: nowrap;
-    }
-</style>
-<!-- <link rel="stylesheet" href="{% static 'simplepicker/simplepicker.fixbug.css' %}">
-</head> -->
+        .table .icoon {
+            box-sizing: border-box;
+            font-size: larger;
+            text-align: center;
+            vertical-align: middle;
+        }
 
 
-{% endblock css %}
+        .table th,
+        .table td {
+            padding: .2rem !important;
+            margin: .2rem !important;
 
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
 
-{% block navbar %}
-<div class="left"><a href='{% url "mendc_home" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
-</div>
-<div class="title">{{title}}</div>
-<div class="right"></div>
-{% endblock navbar %}
+        }
 
-{% block page_wrapper %}
-<!-- newsletter -->
-<div class="newsletter bg-lightblue py-2">
-    <div class="section-title text-center title-large">
-        <h6>HISTORY</h6>
-        <p><i class="icon ion-ios-calendar"></i> {{tanggal | date:"l, d F Y"}}</p>
-    </div>
-</div>
-<!-- separator -->
-<div class="separator-small"></div>
-<!-- end separator -->
-<div class="form-elements bg-lightblue">
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-    <div class="container">
-        <form method="POST" class="form-outline form-horizontal">
-            {% csrf_token %}
-            <div class="form-wrapper">
-                <div class="input-wrap row">
-                    <div class="col-9">
-                        <!-- <label for="history-date">{{tanggal | date:"m/d/Y"}}</label> -->
-                        <input type="date" name="date" id="date" class="date" autocomplete="off" value="01-01-2000"
-                            placeholder="Select Date">
-                    </div>
-                    <div class="col-3">
-                        <div class="button-default">
-                            <button class="button minus-button bg-red select-date">SET</button>
+        .table .hasilTemuan {
+            box-sizing: border-box;
+            min-width: 250px !important;
+            max-width: 350px !important;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: pre-line;
+        }
+
+        .table .hasilTemuan::first-line {
+            box-sizing: border-box;
+            line-height: 0;
+        }
+
+        .table .subarea {
+            white-space: nowrap;
+            min-width: 150px !important;
+        }
+
+        .table .kondisi,
+        .table .pukul,
+        .table .keterangan,
+        .table .aksi {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .input-style-1 input[type="date"],
+        .input-style-1 input[type="text"],
+        .input-style-1 textarea,
+        .input-style-1 select {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            height: 40px;
+            line-height: 40px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+        label {
+            margin-bottom: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+    </style>
+    {% block css %}
+    {% endblock css %}
+</head>
+
+<body class="theme-light" data-highlight="blue2">
+    <!-- <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div> -->
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            <a data-menu="mendc-progress"><i data-feather="globe" data-feather-line="1" data-feather-size="21"
+                    data-feather-color="brown1-dark" data-feather-bg="brown1-fade-light"></i><span>Action</span></a>
+            {% include 'menu.html' %}
+        </div>
+        <div class="page-content" style="min-height:60vh!important">
+            <div class="page-title page-title-small text-center mt-2">
+                <h4 class="text-white">Checklist Gedung</h4>
+                <h6 class="text-white"><i class="fas fa-calendar-week"></i>History, {{tanggal | date:"l d F Y"}}</h6>
+            </div>
+            <div class="card header-card shape-rounded" data-card-height="70">
+                <div class="card-overlay bg-highlight opacity-95"></div>
+                <div class="card-overlay dark-mode-tint"></div>
+                <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="card card-style my-2">
+                    <div class="content my-0">
+                        <h6 class="mt-2">Pilih Tanggal</h6>
+                        <span class=" color-highlight "></span>
+                        <div class="input-style input-style-1 row mb-0 px-0 py-0">
+                            <div class="col-9 pr-0">
+                                <input type="date" name="date" id="date" class="date" autocomplete="off"
+                                    value="{{tanggal}}" placeholder="Select Date">
+                            </div>
+                            <div class="col-3 pl-0 text-center">
+                                <button type="submit" style="width: 90%;"
+                                    class="btn btn-full btn-margins rounded-sm btn-sm bg-red1-dark text-center font-700 text-uppercase">SET</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="picker"></div>
-        </form>
-    </div>
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-</div>
-<!-- end form elements -->
 
-<!-- separator -->
-<div class="separator-medium"></div>
-<!-- end separator -->
-<!-- {% if areaCount == 0 %} -->
-<!-- <div class="maintenance">
-    <div class="container">
-        <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
-        <h5 class="mb-5" style="color: red;"><strong>Area Not Found</strong></h5>
-        <div class="button-default">
-            <div class="row">
-                <div class="col-6">
-                    <a href="{% url 'mendc_settings' %}" class="button">Settings</a>
+            </form>
+            {% for area in areas %}
+            <div class="card card-style mb-2">
+                <div class="list-group list-custom-small list-icon-0 bg-green1-dark pl-3 pr-4"
+                    style="height: 40px; line-height: 40px;">
+                    <a data-toggle="collapse" href="#collapse-{{area.pk}}">
+                        <i class="fas fa-clipboard-list font-14" style="line-height: 20px;"></i>
+                        <span class="font-14 color-white">{{area.namaArea}}</span>
+                        <i class="fa fa-angle-down" style="line-height: 40px;"></i>
+                    </a>
                 </div>
-                <div class="col-6">
-                    <a href="{% url 'mendc_area_add' %}" class="button button-outline">Create Area</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-<!-- {% else %} -->
-<!-- accordion -->
-<div id="accordionParent" class="accordion accordion-inset">
-    {% for area in areas %}
-    <div class="accordion-item">
-        <div class="accordion-title collapsed" data-toggle="collapse" data-target="#accordionTwo{{area.pk}}">
-            {{area.namaArea}}
-            <div class="accordion-after">
-                <i class="icon ion-ios-arrow-up"></i>
-            </div>
-        </div>
-        <div id="accordionTwo{{area.pk}}" class="accordion-body collapse" data-parent="#accordionParent">
-            <div class="accordion-content">
-                <table class="table table-responsive">
-                    <thead>
-                        <tr>
-                            <th class="subarea">Subarea</th>
-                            <th class="kondisi">Kondisi</th>
-                            <th style="text-align: center;">HasilTemuan</th>
-                            <th class="keterangan">Keterangan</th>
-                            <th class="pukul">Pukul</th>
-                            <th class="aksi">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for subarea in subareas %}
-                        {% if subarea.namaAreaSubarea.id == area.id %}
-                        <tr>
-                            {% for harian in harians %}
-                            {% if harian.dailySubarea.id == subarea.id %}
-                            <td class="subarea"><strong>{{subarea.namaSubarea}}</strong></td>
-                            {% if harian.kondisi == None or harian.kondisi == '' %}
-                            <td class="icoon kondisi"><i class="icon ion-ios-close-circle-outline"></i></td>
-                            {% elif harian.kondisi == 'Ok' %}
-                            <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
-                                title="{{harian.kondisi}}"><i class="icon ion-ios-checkmark-circle-outline"></i></td>
-                            </td>
-                            {% elif harian.kondisi == 'Not Ok' %}
-                            <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
-                                title="{{harian.kondisi}}"><i class="color-red icon ion-ios-checkmark-circle"></i></td>
-                            </td>
-                            {% endif %}
-                            {% if harian.hasilTemuan == '' %}
-                            <td class="icoon"><i class="icon ion-ios-close-circle-outline"></i></td>
-                            {% else %}
-                            <td class="hasilTemuan" data-toggle="tooltip" data-placement="top"
-                                title="{{harian.hasilTemuan}}">
-                                {{harian.hasilTemuan}}</td>
-                            </td>
-                            {% endif %}
-                            {% if harian.keterangan == '' %}
-                            <td class="icoon keterangan"><i class="icon ion-ios-close-circle-outline"></i></td>
-                            {% else %}
-                            <td class="icoon keterangan" data-toggle="tooltip" data-placement="top"
-                                title="{{harian.keterangan}}">
-                                <i class="icon ion-ios-checkmark-circle-outline"></i></td>
-                            {% endif %}
-                            {% if harian.kondisi != '' and harian.kondisi != None or harian.keterangan != '' or harian.hasilTemuan != '' %}
-                            <td>{{harian.done | time:"H:i" }}</td>
-                            {% else %}
-                            <td><span class="red-text">Undone</span></td>
-                            {% endif %}
-                            <td><a href="{% url 'mendc_history_check_single' harian.id tanggal %}"
-                                    class="button">Check</a>
-                            </td>
+                <div class="collapse pt-2" id="collapse-{{area.pk}}">
+                    <table class="table table-responsive" style="display: inline-table;">
+                        <thead>
+                            <tr>
+                                <th class="subarea">Subarea</th>
+                                <th class="kondisi">Kondisi</th>
+                                <th style="text-align: center;">HasilTemuan</th>
+                                <th class="keterangan">Keterangan</th>
+                                <th class="pukul">Pukul</th>
+                                <th class="aksi">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for subarea in subareas %}
+                            {% if subarea.namaAreaSubarea.id == area.id %}
+                            <tr>
+                                {% for harian in harians %}
+                                {% if harian.dailySubarea.id == subarea.id %}
+                                <td><strong>{{subarea.namaSubarea}}</strong></td>
+                                {% if harian.kondisi == None or harian.kondisi == '' %}
+                                <td class="icoon kondisi"><i class="fas fa-times-circle text-danger"></i>
+                                </td>
+                                {% elif harian.kondisi == 'Ok' %}
+                                <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
+                                    title="{{harian.kondisi}}"><i class="fas fa-check-circle text-success"></i>
+                                </td>
+                                </td>
+                                {% elif harian.kondisi == 'Not Ok' %}
+                                <td class="icoon kondisi" data-toggle="tooltip" data-placement="top"
+                                    title="{{harian.kondisi}}"><i class="fas fa-check-circle text-warning"></i>
+                                </td>
+                                </td>
+                                {% endif %}
+                                {% if harian.hasilTemuan == '' %}
+                                <td class="icoon"><i class="fas fa-times-circle text-danger"></i></td>
+                                {% else %}
+                                <td class="hasilTemuan" data-toggle="tooltip" data-placement="top"
+                                    title="{{harian.hasilTemuan}}">
+                                    {{harian.hasilTemuan}}</td>
+                                </td>
+                                {% endif %}
+                                {% if harian.keterangan == '' %}
+                                <td class="icoon keterangan"><i class="fas fa-times-circle text-danger"></i></td>
+                                {% else %}
+                                <td class="icoon keterangan" data-toggle="tooltip" data-placement="top"
+                                    title="{{harian.keterangan}}">
+                                    <i class="fas fa-check-circle text-success"></i></td>
+                                {% endif %}
+                                {% if harian.kondisi != '' and harian.kondisi != None or harian.keterangan != '' or harian.hasilTemuan != '' %}
+                                <td>{{harian.done | time:"H:i" }}</td>
+                                {% else %}
+                                <td class="icoon"><span class="text-danger">Undone</span></td>
+                                {% endif %}
+                                <td class="icoon"><a href="{% url 'mendc_history_check_single' area.id tanggal %}"
+                                        class="btn bg-blue1-light btn-xxs">Check</a>
+                                </td>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
                             {% endif %}
                             {% endfor %}
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                        <tr>
-                            <td colspan="6" class="text-center"><a
-                                    href="{% url 'mendc_history_check_all' area.id tanggal %}"
-                                    class="bg-green button button-small" style="width: 50%;">Check All</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <tr>
+                                <td colspan="6"><a href="{% url 'mendc_history_check_all' area.id tanggal %}"
+                                        class="btn btn-xxs bg-red1-light" style="width: 100%;">Check All</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            {% endfor %}
+            <!-- footer and footer card-->
         </div>
+        <!-- end of page content-->
+        <!-- <div id="menu-main" class="menu menu-box-right menu-box-detached rounded-m" data-menu-width="260"
+            data-menu-load="menu-main.html" data-menu-active="nav-pages" data-menu-effect="menu-over">
+        </div> -->
+        {% include 'menu-main.html' %}
+        {% include 'menondc/mendc_history_action.html' %}
     </div>
-    {% endfor %}
-</div>
-<!-- end accordion -->
-<!-- {% endif %} -->
-{% endblock page_wrapper %}
-
-{% block toolbar_bottom %}
-<div class="separator-large"></div>
-<ul class="toolbar-bottom toolbar-wrap">
-    <li class="toolbar-item">
-        {% for day in days %}
-        {% if user.groups.all.0.name == 'maker' %}
-        <a href="{% url 'user_mendc_maker_notification' user.username day.id day.hariIni %}"
-            class="toolbar-link toolbar-link-active" style="color: green;">
-            <i class="icon ion-ios-paper"></i>
-            <p>Tanda Tangani</p>
-        </a>
-        {% elif user.groups.all.0.name == 'checker' %}
-        <a href="{% url 'user_mendc_checker_notification' user.username day.id day.hariIni %}"
-            class="toolbar-link toolbar-link-active" style="color: green;">
-            <i class="icon ion-ios-paper"></i>
-            <p>Tanda Tangani</p>
-        </a>
-        {% elif user.groups.all.0.name == 'signer' %}
-        <a href="{% url 'user_mendc_signer_notification' user.username day.id day.hariIni %}"
-            class="toolbar-link toolbar-link-active" style="color: green;">
-            <i class="icon ion-ios-paper"></i>
-            <p>Tanda Tangani</p>
-        </a>
-        {% endif %}
-        {% endfor %}
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'mendc_history_download_pdf' %}" class="toolbar-link">
-            <i class="icon ion-ios-download"></i>
-            <p>Download PDF</p>
-        </a>
-    </li>
-</ul>
-{% endblock toolbar_bottom %}
-{% block js %}
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-</script>
-{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>

@@ -9,4 +9,5 @@ class MenondcConfig(AppConfig):
         # import menondc.tasks
         if five_oclock():
             import menondc.autosignals
+        import menondc.emergency
 

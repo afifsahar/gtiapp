@@ -1,84 +1,100 @@
-{% extends "base.html" %}{% load static %}
-{% block css %}
-<style>
-    .footer-card .button {
-        margin: 5px 14px 5px auto;
-    }
-</style>
-{% endblock css %}
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <style>
+        .input-style-1 input[type="date"],
+        .input-style-1 input[type="text"],
+        .input-style-1 textarea,
+        .input-style-1 select {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            height: 40px;
+            line-height: 40px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
 
-{% block navbar %}
-<div class="left"><a href='{% url "mendc_history" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
-</div>
-<div class="title">{{title}}</div>
-<div class="right"></div>
-{% endblock navbar %}
+        label {
+            margin-bottom: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+    </style>
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+</head>
 
-{% block page_wrapper %}
-<!-- newsletter -->
-<div class="newsletter bg-lightblue py-2">
-    <div class="section-title text-center title-large">
-        <h6>HISTORY</h6>
-        <p><i class="icon ion-ios-calendar"></i> {{tanggal | date:"l, d F Y"}}</p>
+
+<body class="theme-light" data-highlight="blue2">
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
     </div>
-</div>
-<!-- separator -->
-<!-- separator -->
-<div class="separator-small"></div>
-<!-- end separator -->
-<form method="POST" class="form-outline form-horizontal">
-    {% for subarea, form in formfull.items %}
-    <!-- cards -->
-    <div class="cards" style="margin: 15px auto;">
-        <!-- section title -->
-        <div class="container">
-            <div class="card card-outline card-list">
-                <div class="card-body">
-                    <h5 class="card-title" style="text-align: center;"><i class="icon ion-ios-add-circle"></i>
-                        {{subarea}}</h5>
-                    <div class="form-elements">
-                        <div class="container">
-                            {% csrf_token %}
-                            <div class="form-wrapper">
-                                {% for hidden in form.hidden_fields %}
-                                {{ hidden }}
-                                {% endfor %}
-                                {% for field in form %}
-                                {% if field.label != "Id" %}
-                                <div class="input-wrap" style="margin: 10px auto;">
-                                    <label for="{{field.id}}">{{field.label}}</label>
-                                    {{field}}
-                                </div>
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end form elements -->
-                </div>
-                <div class="footer-card">
-                    <div class="card-date"><i class="icon ion-ios-calendar"></i>{{tanggal.history | date:"d M Y"}}</div>
-                    <div class="card-comment"><i class="icon ion-ios-information-circle-outline">{{areas.namaArea}}</i>
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            {% include 'menu.html' %}
+        </div>
+        <div class="page-content" style="min-height:60vh!important; ">
+            <div class="card mb-4 pb-2" data-card-height="60">
+                <div class="card-top">
+                    <div class="page-title page-title-small">
+                        <a href="{% url 'mendc_progress' %}" class="text-white">
+                            <h5 class="text-white"><i class="fa fa-arrow-left mr-3"></i>History Gedung</h5>
+                        </a>
                     </div>
                 </div>
+                <div class="card-overlay bg-highlight opacity-95"></div>
             </div>
+            <div data-card-height="50" class="card card-style shadow-xl preload-img"
+                data-src="{% static 'images/pictures/13.jpg' %}" style="margin-bottom: 15px;">
+                <div class="card-top text-center my-1 px-4">
+                    <h6 class="color-white font-15 mb-0"> {{areas.namaArea}}</h6>
+                    <p class="color-white font-15 opacity-70 mb-3"><i
+                            class="ml-2 far fa-calendar font-15 mr-2"></i>{{tanggal.history | date:"d M Y"}}</p>
+                </div>
+                <div class="card-overlay bg-black opacity-80 rounded-0"></div>
+            </div>
+            <form method="POST">
+                {% csrf_token %}
+                {% for subarea, form in formfull.items %}
+                <div class="card card-style my-2">
+                    <div class="content my-2">
+                        <h5>{{subarea}}</h5>
+                        {% csrf_token %}
+                        {% for hidden in form.hidden_fields %}{{ hidden }}
+                        {% endfor %}
+                        {% for field in form %}
+                        {% if field.label != "Id" %}
+                        <span class=" color-highlight ">{{field.label}}</span>
+                        <div class="input-style input-style-1">
+                            <span>{{field.label}}</span>
+                            {{field}}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="content mx-0 text-center">
+                    <button type="submit" style="width: -moz-available; width: -webkit-fill-available;"
+                        class="btn btn-full btn-margins rounded-sm btn-s bg-green1-dark text-center font-700 text-uppercase">Save</button>
+                </div>
+            </form>
         </div>
+        {% include 'menu-main.html' %}
     </div>
-    <!-- end cards -->
-    {% endfor %}
-    <div class="container">
-        <div class="button-default" style="margin-top: 20px;">
-            <button class="button button-medium">SAVE</button>
-        </div>
-    </div>
-    {{ formset.management_form }}
-</form>
-{% endblock page_wrapper %}
-
-{% block toolbar_bottom %}
-{% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>

@@ -1,117 +1,112 @@
-{% extends 'base.html' %}{% load static %}
-{% block css %}
-<style>
-    .form-elements .section-title {
-        margin-top: 15px;
-    }
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-    .form-wrapper .minus-button {
-        margin: 3px auto;
-        font-weight: 900;
-        color: #ffffff;
-        font-size: xx-large;
-    }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <style>
+        .input-style-1 input[type="date"],
+        .input-style-1 input[type="text"],
+        .input-style-1 textarea,
+        .input-style-1 select {
+            height: 30px;
+            line-height: 30px;
+        }
 
-    .toolbar-bottom::before {
-        height: 3px;
-    }
+        label {
+            margin-bottom: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+    </style>
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+</head>
 
-    .ion-ios-add {
-        font-size: 33px !important;
-    }
-</style>
-{% endblock css %}
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
 
-{% block navbar %}
-<div class="left"><a href='{% url "cln_settings" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
-</div>
-<div class="title">{{title}}</div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<!-- newsletter -->
-<div class="newsletter bg-lightblue">
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-    <div class="section-title text-center title-large">
-        <h6>Add Area</h6>
+<body class="theme-light" data-highlight="blue2">
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
     </div>
-    <!-- separator -->
-    <div class="separator-small"></div>
-    <!-- end separator -->
-</div>
-<!-- separator -->
-<div class="separator-medium"></div>
-<!-- end separator -->
-<!-- form elements -->
-<div class="form-elements">
-    <div class="container">
-        <form method="POST" class="form-outline form-horizontal">
-            <!-- section title -->
-            <div class="section-title">
-                <h6>Area</h6>
-            </div>
-            <!-- end section title -->
-            {% csrf_token %}
-            <div class="form-wrapper">
-                <div class="input-wrap">
-                    <!-- <input type="text"> -->
-                    {{form.namaArea.errors}}
-                    {% for field in form %}
-                    {{field}}
-                    {% endfor %}
-                </div>
-            </div>
-            <!-- section title -->
-            <div class="section-title">
-                <h6>Subarea</h6>
-            </div>
-            <!-- end section title -->
-            <div class="form-wrapper">
-                {% for dict in formset.errors %}
-                {% for error in dict.values %}
-                {{ error }}
-                {% endfor %}
-                {% endfor %}
-                {% for form in formset %}
-                <div class="input-wrap row item ">
-                    {% for field in form %}
-                    {% if field.label != "Id" %}
-                    <div class="col-9">
-                        {{field}}
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            {% include 'menu.html' %}
+        </div>
+        <div class="page-content" style="min-height:60vh!important; ">
+            <div class="card mb-4 pb-2" data-card-height="60">
+                <div class="card-top">
+                    <div class="page-title page-title-small">
+                        <a href="{% url 'cln_settings' %}" class="text-white">
+                            <h5 class="text-white"><i class="fa fa-arrow-left mr-3"></i>Area Settings</h5>
+                        </a>
                     </div>
-                    <div class="col-3">
-                        <a id="{{formset.prefix}}" class="button minus-button bg-red cln-remove-form-row"><i
-                                class="icon ion-ios-remove"></i></a>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
                 </div>
-                {% endfor %}
-                {{ formset.management_form }}
+                <div class="card-overlay bg-highlight opacity-95"></div>
             </div>
-            <div class="button-default">
-                <a id="{{formset.prefix}}" class="button bg-green cln-add-form-row">Tambah Area</a>
-            </div>
-            <!-- separator -->
-            <div class="separator-large"></div>
-            <!-- end separator -->
-            <div class="button-default">
-                <button type="submit" class="button">SUBMIT</button>
-            </div>
-        </form>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="card card-style my-2">
+                    <div class="content my-2">
+                        <span class=" color-highlight ">Area</span>
+                        {{form.namaArea.errors}}
+                        {% for field in form %}
+                        <div class="input-style input-style-1">
+                            {{field}}
+                        </div>
+                        {% endfor %}
+                        <span class=" color-highlight ">Subarea</span>
+                        {% for dict in formset.errors %}
+                        {% for error in dict.values %}
+                        {{ error }}
+                        {% endfor %}
+                        {% endfor %}
+                        {% for form in formset %}
+                        {% for field in form %}
+                        {% if field.label != "Id" %}
+                        <div class="input-style input-style-1 row mb-0 px-0 py-0 item">
+                            <div class="col-9 pr-0">
+                                {{field}}
+                            </div>
+                            <div class="col-3 pl-0">
+                                <a id="{{formset.prefix}}" type="button" href="#"
+                                    class="bg-danger text-white btn btn-sm text-uppercase font-700 rounded-sm cln-remove-form-row"
+                                    style="padding-top: 2px !important; padding-bottom: 2px !important; width: 100%; ">
+                                    <i class="fas fa-minus"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                        {{ formset.management_form }}
+                    </div>
+                </div>
+                <div class="content mx-0 row">
+                    <div class="col-6 text-center">
+                        <button id="{{formset.prefix}}" style="width: -moz-available; width: -webkit-fill-available;"
+                            class="cln-add-form-row btn btn-full btn-margins rounded-sm btn-s bg-blue1-dark text-center font-700 text-uppercase">Tambah
+                            Subarea</button>
+                    </div>
+                    <div class="col-6 text-center">
+                        <button type="submit" style="width: -moz-available; width: -webkit-fill-available;"
+                            class="btn btn-full btn-margins rounded-sm btn-sm bg-green1-dark text-center font-700 text-uppercase">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% include 'menu-main.html' %}
     </div>
-</div>
-<!-- end form elements -->
-{% endblock page_wrapper %}
-
-{% block toolbar_bottom %}
-{% endblock toolbar_bottom %}
-
-{% block js %}
-<script src="{%  static 'js/formset-cln.js'%} "></script>
-{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/formset-cln.js'%} "></script>
+</body>

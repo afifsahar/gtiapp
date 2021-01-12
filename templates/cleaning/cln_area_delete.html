@@ -1,64 +1,71 @@
-{% extends 'base.html' %}{% load static %}
-{% block css %}
-<style>
-    .form-elements .section-title {
-        margin-top: 15px;
-    }
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-    .form-wrapper .minus-button {
-        margin: 3px auto;
-        font-weight: 900;
-        color: #ffffff;
-        font-size: xx-large;
-    }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'styles/workorder/wo_work_delete.css' %}"> -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+</head>
 
-    .toolbar-bottom::before {
-        height: 3px;
-    }
-
-    .ion-ios-add {
-        font-size: 33px !important;
-    }
-</style>
-{% endblock css %}
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
-
-{% block navbar %}
-<div class="left"><a href='{% url "cln_settings" %}' class="link"><i class="icon ion-ios-arrow-back"></i></a>
-</div>
-<div class="title">Area Delete</div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<!-- pricing table -->
-<div class="pricing-table">
-    <div class="container">
-        <div class="content radius-default bg-blue pd-default">
-            <h4 class="pricing-title text-center color-white" style="font-size: medium;">Apakah anda yakin akan
-                menghapus</h4>
-            <h3 class="pricing-number text-center">{{areas.namaArea}}</h3>
-            <div class="pricing-list color-white">
-                <ul>
-                    {% for subarea in subareas %}
-                    <li><i class="icon ion-ios-close-circle-outline"></i>{{subarea.namaSubarea}}</li>
-                    {% endfor %}
-                </ul>
+<body class="theme-light" data-highlight="blue2">
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div>
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            {% include 'menu.html' %}
+        </div>
+        <div class="page-content" style="min-height:60vh!important; ">
+            <div class="card mb-4 pb-2" data-card-height="60">
+                <div class="card-top">
+                    <div class="page-title page-title-small">
+                        <a href="{% url 'cln_settings' %}" class="text-white">
+                            <h5 class="text-white"><i class="fa fa-arrow-left mr-3"></i> Area Settings</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-overlay bg-highlight opacity-95"></div>
             </div>
-            <div class="pricing-button">
-                <a href="{% url 'cln_area_delete_confirm' areas.id %}">
-                    <button class="button bg-red" style="font-weight: 600; font-size: large;">DELETE</button>
-                </a>
+            <div data-card-height="350" class="card card-style shadow-xl preload-img"
+                data-src="{% static 'images/pictures/13.jpg' %}">
+                <div class="card-top text-center mt-4 px-4">
+                    <h6 class="color-white font-20 mb-0"> Hapus Area </h6>
+                    <p class="color-white opacity-70 font-12 mb-0 mt-4">Apakah anda yakin akan
+                        menghapus <strong>{{areas.namaArea}}</strong> beserta Subarea
+                        <div class="text-left">
+                            <ul class="icon-list mb-1">
+                                {% for subarea in subareas %}
+                                <li class="ml-3"><i
+                                        class="fas fa-dot-circle color-teal-light"></i>{{subarea.namaSubarea}}
+                                </li>{% endfor %}
+                            </ul>
+                        </div>
+
+                    </p>
+                </div>
+                <div class="card-overlay bg-black opacity-80 rounded-0"></div>
+                <div class="card-bottom text-center mb-4">
+                    <a href="{% url 'cln_area_delete_confirm' areas.id %}" style="width: 70%;"
+                        class="bg-warning text-white btn btn-xs text-uppercase font-700 rounded-xl font-11">
+                        Delete
+                    </a>
+                </div>
             </div>
         </div>
+        {% include 'menu-main.html' %}
     </div>
-</div>
-<!-- end pricing table -->
-{% endblock page_wrapper %}
-
-{% block toolbar_bottom %}
-{% endblock toolbar_bottom %}
-
-{% block js %}
-{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>

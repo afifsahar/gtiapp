@@ -1,0 +1,38 @@
+input[type="checkbox"] {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: lightgray;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 1px;
+    box-sizing: border-box;
+    position: relative;
+    box-sizing: content-box;
+    width: 20px;
+    height: 20px;
+    border-width: 0;
+    transition: all .3s linear;
+}
+
+input[type="checkbox"]:checked {
+    background-color: red;
+}
+
+input[type="checkbox"]:focus {
+    outline: 0 none;
+    box-shadow: none;
+}
+
+ul {
+    list-style-type: none;
+    margin-left: 0px;
+    padding-inline-start: 0px;
+}
+
+ul li {
+    display: inline-block;
+    margin-right: 15px;
+    text-align: center;
+    vertical-align: middle;
+}

@@ -1,154 +1,100 @@
-{% extends 'base.html' %}{% load static %} {% block css %}
-<style>
-  .navbar .navbar-home::after {
-    display: none;
-  }
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-  .float {
-    position: fixed;
-    width: 60px;
-    height: 60px;
-    bottom: 15px;
-    right: 25px;
-    background-color: #0C9;
-    color: #FFF;
-    border-radius: 50%;
-    text-align: center;
-    box-shadow: 2px 2px 3px #999;
-  }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <style>
+        .btn {
+            line-height: 25px;
+            margin-top: 0;
+            min-width: 90%;
+            width: max-content;
+            padding: 0px 5px !important;
+        }
 
-  .my-float {
-    margin-top: 22px;
-  }
+        .btn .btn-xxs {
+            line-height: 10px;
+            font-size: 5px;
+            padding: 0px 5px !important;
+        }
+    </style>
+    {% block css %}
+    {% endblock css %}
+</head>
 
-  .ion-ios-add {
-    font-size: 40px !important;
-  }
-
-  .accordion-inset .accordion-content {
-    padding: 10px 0 !important;
-  }
-
-  .list-view .list-item {
-    height: 30px;
-    padding: 0;
-  }
-
-  .list-view .list-item .list-label {
-    min-height: 30px;
-  }
-
-  .button {
-    line-height: 25px;
-    margin-top: 0;
-    min-width: 100%;
-    width: max-content;
-  }
-
-  .button .button-extra-small {
-    line-height: 20px;
-    font-size: 10px;
-    padding: 0 8px;
-  }
-</style>
-{% endblock css %}
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
-
-{% block navbar %}
-<div class="left"><a href="{% url 'cln_home' %}" class="link"><i class="icon ion-ios-arrow-back"></i></a>
-</div>
-<div class="title">{{title}}</div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<!-- newsletter -->
-<div class="newsletter bg-lightblue">
-  <!-- separator -->
-  <div class="separator-small"></div>
-  <!-- end separator -->
-  <div class="section-title text-center title-large">
-    <h6>SETTINGS</h6>
-  </div>
-  <!-- separator -->
-  <div class="separator-small"></div>
-  <!-- end separator -->
-</div>
-<!-- separator -->
-<div class="separator-medium"></div>
-<!-- end separator -->
-{% if areaCount == 0 %}
-<!-- separator -->
-<div class="separator-large"></div>
-<!-- end separator -->
-<!-- maintenance -->
-<div class="maintenance">
-  <div class="container">
-    <img src="{% static 'images/maintenance.png' %}" height="300" width="300" alt="">
-    <h5 class="mb-5" style="color: red;"><strong>Area Not Found</strong></h5>
-  </div>
-</div>
-<!-- end maintenance -->
-{% else %}
-<!-- accordion -->
-<div id="accordionParent" class="accordion accordion-inset">
-  {% for area in areas %}
-  <div class="accordion-item">
-    <div class="accordion-title collapsed" data-toggle="collapse" data-target="#accordionTwo{{area.pk}}">
-      {{area.namaArea}}
-      <div class="accordion-after">
-        <i class="icon ion-ios-arrow-up"></i>
-      </div>
-    </div>
-    <div id="accordionTwo{{area.pk}}" class="accordion-body collapse" data-parent="#accordionParent">
-      <div class="accordion-content">
-        <div class="list-view list-border">
-          <ul>
-            {% for subarea in subareas %} {% if subarea.namaAreaSubarea.id == area.id %}
-            <li>
-              <a class="list-item" style="padding: 0px 15px !important;">
-                <div class="list-label">
-                  <div class="list-title">{{subarea.namaSubarea}}</div>
-                </div>
-              </a>
-            </li>
-            {% endif %} {% endfor %}
-            <li>
-              <div class="list-item" style="padding: 20px 0px;">
-                <div class="list-label">
-                  <div class="list-title row">
-                    <div class="col-4">
-                      <a href="{% url 'cln_area_edit' area.id %}"><button
-                          class="bg-green button button-etxra-small">Edit</button></a>
-                    </div>
-                    <div class="col-4">
-                      <a href="{% url 'cln_area_delete' area.id %}"><button
-                          class="bg-red button button-etxra-small">Delete</button></a>
-                    </div>
-                    <div class="col-4">
-                      <a href="{% url 'cln_default_check_all' area.id %}"><button class="button button-etxra-small">Set
-                          Default
-                          Value</button></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+<body class="theme-light" data-highlight="blue2">
+    <!-- <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div> -->
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            <a data-menu="cln-progress"><i data-feather="globe" data-feather-line="1" data-feather-size="21"
+                    data-feather-color="brown1-dark" data-feather-bg="brown1-fade-light"></i><span>Action</span></a>
+            {% include 'menu.html' %}
         </div>
-      </div>
+        <div class="page-content" style="min-height:60vh!important">
+            <div class="page-title page-title-small text-center mt-2">
+                <h4 class="text-white">Checklist Kebersihan</h4>
+                <h6 class="text-white"><i class="fas fa-calendar-week"></i>Area Settings</h6>
+            </div>
+            <div class="card header-card shape-rounded" data-card-height="70">
+                <div class="card-overlay bg-primary opacity-95"></div>
+                <div class="card-overlay dark-mode-tint"></div>
+                <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
+            </div>
+            {% for area in areas %}
+            <div class="card card-style mb-2">
+                <div class="list-group list-custom-small list-icon-0 bg-green1-dark pl-3 pr-4"
+                    style="height: 40px; line-height: 40px;">
+                    <a data-toggle="collapse" href="#collapse-{{area.pk}}">
+                        <i class="fas fa-clipboard-list font-14" style="line-height: 20px;"></i>
+                        <span class="font-14 color-white">{{area.namaArea}}</span>
+                        <i class="fa fa-angle-down" style="line-height: 40px;"></i>
+                    </a>
+                </div>
+                <div class="collapse pt-2 pr-3" id="collapse-{{area.pk}}" style="width: 100%;">
+                    <ul class="icon-list mb-1">
+                        {% for subarea in subareas %} {% if subarea.namaAreaSubarea.id == area.id %}
+                        <li class="ml-3"><i class="fas fa-dot-circle color-teal-light"></i>{{subarea.namaSubarea}}
+                        </li>
+                        {% endif %}{% endfor %}
+                    </ul>
+                    <div class="row mx-0 my-0 px-0 py-0">
+                        <div class="col-3 row mx-0 my-0 px-0 py-0">
+                            <a type="button" href="{% url 'cln_area_edit' area.id %}"
+                                class="btn btn-full btn-margins rounded-sm btn-xxs bg-brown1-dark  font-500 text-center text-white text-uppercase">Edit</a>
+                        </div>
+                        <div class="col-3 row mx-0 my-0 px-0 py-0">
+                            <a type="button" href="{% url 'cln_area_delete' area.id %}"
+                                class="btn btn-full btn-margins rounded-sm btn-xxs bg-red1-dark font-500 text-center text-white text-uppercase">Delete</a>
+                        </div>
+                        <div class="col-6 row mx-0 my-0 px-0 py-0">
+                            <a type="button" href="{% url 'cln_default_check_all' area.id %}"
+                                class="btn btn-full btn-margins rounded-sm btn-xxs bg-secondary font-300  text-center text-white text-uppercase">Set
+                                Default
+                                Value</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% include 'menu-main.html' %}
+        {% include 'cleaning/cln_settings_action.html' %}
     </div>
-  </div>
-  {% endfor %}
-</div>
-<!-- end accordion -->
-{% endif %}
-<div class="button-default">
-  <a href="{% url 'cln_area_add' %}" class="float"><i class="icon ion-ios-add my-float"></i></a>
-</div>
-{% endblock page_wrapper %}
-
-{% block toolbar_bottom %}
-{% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>

@@ -1,130 +1,97 @@
-{% extends "base.html" %}{% load static %}
-{% block css %}{% endblock css %}
+<!DOCTYPE HTML>
+<html lang="en">
+{% load static %}
 
-{% comment %}
-{% block navbar_home %}navbar-home{% endblock navbar_home %}
-{% endcomment %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>GTIAPP</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <!-- <link rel="manifest" href="{% static '_manifest.json' %}" data-pwa-version="set_in_manifest_and_pwa_js" /> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app/icons/icon-192x192.png' %}" />
+    {% block css %}
+    {% endblock css %}
+</head>
 
-
-{% block navbar %}
-<div class="left"></div>
-<div class="title"></div>
-<div class="right"></div>
-{% endblock navbar %}
-{% block page_wrapper %}
-<!-- profile -->
-<div class="profile">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 align-self-center">
-                <div class="header-profile">
-                    <div class="container">
-                        <img src="{{user.userProfile.userPhoto.path}}" alt="image-demo">
+<body class="theme-light" data-highlight="blue2">
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div>
+    <div id="page">
+        <div id="footer-bar" class="footer-bar-5">
+            {% include 'menu.html' %}
+        </div>
+        <div class="page-content" style="min-height:60vh!important">
+            <div class="page-title page-title-small text-center mt-2">
+                <h4 class="text-white">Profile</h4>
+            </div>
+            <div class="card header-card shape-rounded" data-card-height="70">
+                <div class="card-overlay bg-highlight opacity-95"></div>
+                <div class="card-overlay dark-mode-tint"></div>
+                <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
+            </div>
+            <div class="card card-style mb-2">
+                <div class="content">
+                    <div class="d-flex">
+                        <div>
+                            <img src="{% static 'images/avatars/5s.png' %}" width="50"
+                                class="mr-3 bg-highlight rounded-xl">
+                        </div>
+                        <div>
+                            <h4 class="mb-0 pt-1">{{user.first_name}} {{user.last_name}}</h4>
+                            <p class="color-highlight font-12">role : <strong>{{ user.groups.all.0.name}}
+                                    {% if user.groups.all.1.name %}
+                                    / {{ user.groups.all.1.name }}
+                                    {% endif %}
+                                </strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-style">
+                <div class="content mb-0">
+                    <h3 class="font-600">Account Settings</h3>
+                    <div class="list-group list-custom-small">
+                        <a href="{% url 'user_profile_edit' user.username %}" type="button">
+                            <i class="fas fa-user font-14 color-blue1-light"></i>
+                            <span>Edit Profile</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'user_profile_password_change' user.username %}">
+                            <i class="fas fa-key font-14 color-green1-light"></i>
+                            <span>Change Password</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'user_profile_configuration' user.username %}">
+                            <i class="fas font-14 fa-bell color-red1-light"></i>
+                            <span>Notifications</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'user_profile_notification' user.username %}" class="border-0">
+                            <i class="fas font-14 fa-users color-brown1-light"></i>
+                            <span>User Configuration</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'user_logout' %}" class="border-0">
+                            <i class="fas fa-sign-out-alt font-14 color-red1-dark"></i>
+                            <span>Logout</span>
+                            <i class="fa fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="profile-title text-center">
-            <h4>{{user.first_name}} {{user.last_name}}</h4>
-            <span class="text-small">role : <strong>{{ user.groups.all.0.name}}
-                    {% if user.groups.all.1.name %}
-                    / {{ user.groups.all.1.name }}
-                    {% endif %}
-                </strong></span>
-        </div>
+        {% include 'menu-main.html' %}
     </div>
-</div>
-<!-- end profile -->
-<!-- separator -->
-<div class="separator-medium"></div>
-<!-- end separator -->
-<div class="list-view list-separate-two list-colored">
-    <ul>
-        <li>
-            <a href="{% url 'user_profile_edit' user.username %}" class="list-item">
-                <div class="list-media">
-                    <i class="icon ion-ios-person bg-lime"></i>
-                </div>
-                <div class="list-label">
-                    <div class="list-title">Edit Profile</div>
-                    <div class="list-after"><i class="icon ion-ios-arrow-forward"></i></div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="{% url 'user_profile_password_change' user.username %}" class="list-item">
-                <div class="list-media">
-                    <i class="icon ion-ios-key bg-blue"></i>
-                </div>
-                <div class="list-label">
-                    <div class="list-title">Change Password</div>
-                    <div class="list-after"><i class="icon ion-ios-arrow-forward"></i></div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="{% url 'user_profile_configuration' user.username %}" class="list-item">
-                <div class="list-media">
-                    <i class="icon ion-ios-build bg-red"></i>
-                </div>
-                <div class="list-label">
-                    <div class="list-title">User Configuration</div>
-                    <div class="list-after"><i class="icon ion-ios-arrow-forward"></i></div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="{% url 'user_profile_notification' user.username %}" class="list-item">
-                <div class="list-media">
-                    <i class="icon ion-ios-information-circle bg-green"></i>
-                </div>
-                <div class="list-label">
-                    <div class="list-title">Notification</div>
-                    <div class="list-after"><i class="icon ion-ios-arrow-forward"></i></div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="{% url 'user_logout' %}" class="list-item">
-                <div class="list-media">
-                    <i class="icon ion-ios-power bg-purple"></i>
-                </div>
-                <div class="list-label">
-                    <div class="list-title">Log out</div>
-                    <div class="list-after"><i class="icon ion-ios-arrow-forward"></i></div>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
-{% endblock page_wrapper %}
-{% block toolbar_bottom %}
-<ul class="toolbar-bottom toolbar-wrap">
-    <li class="toolbar-item">
-        <a href="{% url 'user_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-home"></i>
-            <p>Home</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'cln_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-brush"></i>
-            <p>Kebersihan</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'mendc_home' %}" class="toolbar-link">
-            <i class="icon ion-ios-build"></i>
-            <p>Gedung</p>
-        </a>
-    </li>
-    <li class="toolbar-item">
-        <a href="{% url 'user_profile_notification' user.username %}" class="toolbar-link">
-            <i class="icon ion-ios-warning"></i>
-            <p>Approval</p>
-        </a>
-    </li>
-</ul>
-{% endblock toolbar_bottom %}
-{% block js %}{% endblock js %}
+    <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+</body>
