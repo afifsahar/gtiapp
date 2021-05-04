@@ -27,8 +27,9 @@ from django.core.paginator import Paginator, EmptyPage
 # Create your views here.
 @login_required(login_url='user_login')
 def wo_home(request):
+    wos = wo_workorder.objects.filter(isDelete=False)
     days = wo_day.objects.filter(isDelete=False).order_by('-createAt')
-    descriptions = wo_description.objects.filter(isDelete=False)
+    # descriptions = wo_description.objects.filter(isDelete=False)
     paginator = Paginator(days, 3)
     page_number = request.GET.get('page', 1)
     try:
@@ -38,7 +39,8 @@ def wo_home(request):
     context = {
         'dayCount': days.count(),
         'days': pg,
-        'descriptions': descriptions,
+        # 'descriptions': descriptions,
+        'wos': wos,
         'title': 'Work Order',
     }
     return render(request, 'workorder/wo_home.html', context)

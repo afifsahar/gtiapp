@@ -41,18 +41,18 @@
                 <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
             </div>
             {% for day in days %}
-            {% for description in descriptions %}
-            {% if description.descriptionDay.id == day.id %}
+            {% for wo in wos %}
+            {% if wo.workorderDay.id == day.id %}
             <div class="card card-style mt-1 mb-0">
                 <div class="content" style="margin: 10px 10px 10px 10px;">
                     <h6 class="font-600" style="text-overflow: ellipsis; white-space: nowrap;overflow: hidden;">
-                        {{description.description}}</h6>
+                        {{wo.workorderDescription.description}}</h6>
                     <div class="font-10 mt-n2">
                         <span><i class="fa fa-user font-10"></i>
-                            {{description.woUser.first_name}}
-                            {{description.woUser.last_name}}</span>
+                            {{wo.workorderDescription.woUser.first_name}}
+                            {{wo.workorderDescription.woUser.last_name}}</span>
                         <span class=" color-brown1-dark "><i class="ml-2 far fa-calendar font-10"></i>
-                            {{description.createAt}}</span>
+                            {{wo.dueDate}}</span>
                     </div>
                     <div class="float-left">
                         <p class="font-12 mb-n1 mt-n1" style="margin-bottom: 0;">

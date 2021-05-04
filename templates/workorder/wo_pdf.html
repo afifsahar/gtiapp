@@ -158,7 +158,7 @@
         }
 
         .table-three .table-three-inside-description tr td,
-        .table-five .table-five-inside-description tr td {
+        .table-five .table-five -inside-description tr td {
             padding-left: 3px;
             height: 100px;
             border-color: transparent;
@@ -230,12 +230,34 @@
             vertical-align: center;
         }
 
+        .table-five .table-five-progress-date {
+            width: 20%;
+            height: 5px;
+        }
+
+        .table-five .table-five-progress-status {
+            width: 20%;
+            height: 5px;
+        }
+
         .table-five .table-five-progress-information {
-            width: 40%;
+            width: 30%;
+            height: 5px;
         }
 
         .table-five .table-five-progress-paraf {
-            width: 10%;
+            width: 30%;
+            height: 20px;
+        }
+
+        .table-five .table-five-progress-petugasbriks {
+            width: 15%;
+            height: 20px;
+        }
+
+        .table-five .table-five-progress-petugasosp {
+            width: 15%;
+            height: 20px;
         }
 
         .table-five .table-five-confirmed {
@@ -604,8 +626,8 @@
                     <tr>
                         <td class="table-four-pl3">* Handle By : {{workorders.woMaker.first_name}}
                             {{workorders.woMaker.first_name}} </td>
-                        <td class="table-four-pl3">* Date Report : {{workorders.createAt | date:"d-m-Y" }} </td>
-                        <td class="table-four-pl3">* Time Report : {{workorders.createAt | date:"H:i:s" }}</td>
+                        <td class="table-four-pl3">* Date Report : {{workorders.dueDate | date:"d-m-Y" }} </td>
+                        <td class="table-four-pl3">* Time Report : </td>
                     </tr>
                     <tr>
                         <td colspan="3" class="table-four-workorder table-four-pl3">* Work Order
@@ -613,7 +635,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="3" class="table-four-duration table-four-pl3">Duration</td>
+                        <td colspan="3" class="table-four-duration table-four-pl3">Duration : {{workorders.duration}}
+                        </td>
                     </tr>
                     <tr>
                         <td class="table-four-content table-four-autorisasi">Signer
@@ -658,25 +681,49 @@
                         <td colspan="2" class="table-five-progress-header table-five-progress-paraf">Paraf</td>
                     </tr>
                     <tr>
-                        <td class="table-five-progress-header">Petugas BRIKS</td>
-                        <td class="table-five-progress-header">Petugas OSP</td>
+                        <td class="table-five-progress-header table-five-progress-petugasbriks">Petugas BRIKS</td>
+                        <td class="table-five-progress-header table-five-progress-petugasosp">Petugas OSP</td>
                     </tr>
                     {% for rincian in rincians %}
+                    {% if rincian.date == None and rincian.status == None and rincian.information == None %}
                     <tr>
-                        <td class="table-five-pl3">{{rincian.date}}</td>
-                        <td class="table-five-pl3">{{rincian.status}}</td>
-                        <td class="table-five-pl3">{{rincian.information}}</td>
-                        <td class="table-five-pl3">
-                            <img src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user"></td>
-                        <td class="table-five-pl3"><img src="{{rincian.briksUser.qr_code.path}}"
-                                alt="qr-code-briks-user"></td>
+                        <td class="table-five-pl3 table-five-progress-date"></td>
+                        <td class="table-five-pl3 table-five-progress-status"></td>
+                        <td class="table-five-pl3 table-five-progress-information"></td>
+                        <td class="table-five-pl table-five-progress-petugasbriks"></td>
+                        <td class="table-five-pl3 table-five-progress-petugasosp"></td>
                     </tr>
+                    <tr>
+                        <td class="table-five-pl3 table-five-progress-date"></td>
+                        <td class="table-five-pl3 table-five-progress-status"></td>
+                        <td class="table-five-pl3 table-five-progress-information"></td>
+                        <td class="table-five-pl table-five-progress-petugasbriks"></td>
+                        <td class="table-five-pl3 table-five-progress-petugasosp"></td>
+                    </tr>
+                    <tr>
+                        <td class="table-five-pl3 table-five-progress-date"></td>
+                        <td class="table-five-pl3 table-five-progress-status"></td>
+                        <td class="table-five-pl3 table-five-progress-information"></td>
+                        <td class="table-five-pl table-five-progress-petugasbriks"></td>
+                        <td class="table-five-pl3 table-five-progress-petugasosp"></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td class="table-five-pl3 table-five-progress-date">{{rincian.date}}</td>
+                        <td class="table-five-pl3 table-five-progress-status">{{rincian.status}}</td>
+                        <td class="table-five-pl3 table-five-progress-information">{{rincian.information}}</td>
+                        <td class="table-five-pl3 table-five-progress-petugasbriks">
+                            <img src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user"></td>
+                        <td class="table-five-pl3 table-five-progress-petugasosp"><img
+                                src="{{rincian.briksUser.qr_code.path}}" alt="qr-code-briks-user"></td>
+                    </tr>
+                    {% endif %}
                     {% endfor %}
                     <tr>
                         <td colspan="3">
                             <table class="table-five-inside-description">
                                 <tr>
-                                    <td class="cell-narrow">Confirmed by User</td>
+                                    <td class="cell-narrow"> Confirmed by User</td>
                                 </tr>
                                 <tr>
                                     <td class="cell-wide cell-desc">
@@ -692,7 +739,7 @@
                                             alt="qr-code-maker"></td>
                                 </tr>
                                 <tr>
-                                    <td class="cell-narrow">User Signature</td>
+                                    <td class="cell-narrow"> User Signature</td>
                                 </tr>
                             </table>
                         </td>

@@ -95,7 +95,6 @@ def cln_area_edit(request, area_id):
                 subar = f.save(commit=False)
                 subar.namaAreaSubarea = ar
                 subar.save()
-            # cln_when_create_subarea()
             return redirect('cln_settings')
     else:
         formset = SubareaFormSet(queryset=cln_subarea.objects.filter(
@@ -127,10 +126,6 @@ def cln_area_delete(request, area_id):
 def cln_area_delete_confirm(request, area_id):
     areas = cln_area.objects.get(id=area_id)
     areas.delete()
-    # context = {
-    #     'areas': cln_area.objects.all(),
-    #     'title': 'Checklist Kebersihan'
-    # }
     return redirect('cln_settings')
 
 
@@ -139,7 +134,6 @@ def cln_progress(request):
     areas = cln_area.objects.all()
     subareas = cln_subarea.objects.all()
     harians = cln_daily.objects.filter(hariIni=date.today())
-    areaCount = areas.count()
     days = None
     if request.user.groups.all().first().name == 'maker':
         days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=True) & Q(
@@ -155,65 +149,63 @@ def cln_progress(request):
         'subareas': subareas,
         'harians': harians,
         'tanggal': date.today(),
-        "areaCount": areaCount,
+        'areaCount': areas.count(),
         'title': 'Checklist Kebersihan',
         'days': days,
+        'harianCount': harians.count(),
     }
     return render(request, 'cleaning/cln_progress.html', context)
 
 
 @login_required(login_url='user_login')
+def cln_harian_zero(request):
+    cln_when_day_change()
+    harians = cln_daily.objects.filter(hariIni=date.today())
+    return redirect('cln_progress')
+
+@login_required(login_url='user_login')
+def cln_history_zero(request):
+    obj = cln_latest_history.objects.get(id=1)
+    cln_when_date_change(obj.history)
+    return redirect('cln_history')
+
+
+@login_required(login_url='user_login')
 def cln_history(request):
     obj = cln_latest_history.objects.get(id=1)
-    if request.method == 'POST':
-        tgl = request.POST.get('date')
-        if tgl:
-            obj.history = datetime.strptime(tgl, '%Y-%m-%d').date()
-            obj.save()
     areas = cln_area.objects.all()
     subareas = cln_subarea.objects.all()
+    if request.method == 'POST':
+        h_form = historyDateForm(request.POST or None, instance=obj)
+        if h_form.is_valid():
+            historyDate = h_form.save(commit=False)
+            historyDate.save()
+            return redirect('cln_history')
+    else:
+        h_form = historyDateForm(instance=obj)
     dailies = cln_daily.objects.filter(hariIni=obj.history)
-    dailies_queryset = dailies.count()
     days = None
     if request.user.groups.all().first().name == 'maker':
-        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=True) & Q(
+        days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=True) & Q(
             clnChecker__isnull=True) & Q(clnSigner__isnull=True))
     if request.user.groups.all().first().name == 'checker':
-        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+        days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=True) & Q(clnSigner__isnull=True))
     if request.user.groups.all().first().name == 'signer':
-        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+        days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=False) & Q(clnSigner__isnull=True))
     context = {
+        'h_form': h_form,
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
         'tanggal': obj.history,
-        'areaCount': dailies_queryset,
+        'harianCount': dailies.count(),
         'title': 'Checklist Kebersihan',
-        'days': days
+        'days': days,
     }
     return render(request, 'cleaning/cln_history.html', context)
 
-# def cln_area_json(request):
-#     areas = cln_area.objects.all()
-#     dataArea = [area.to_dict_json() for area in areas]
-#     response = {'data': dataArea}
-#     return JsonResponse(response)
-
-
-# def cln_subarea_json(request):
-#     subareas = cln_subarea.objects.all()
-#     dataSubarea = [subarea.to_dict_json() for subarea in subareas]
-#     response = {'data': dataSubarea}
-#     return JsonResponse(response)
-
-
-# def cln_daily_json(request):
-#     dailies = cln_daily.objects.filter(hariIni=date.today())
-#     dataDaily = [daily.to_dict_json() for daily in dailies]
-#     response = {'data': dataDaily}
-#     return JsonResponse(response)
 
 @login_required(login_url='user_login')
 @maker_only

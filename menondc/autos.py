@@ -55,7 +55,7 @@ def mendc_when_create_subarea():
 # 1. fill today daily keterangan with created default value only if today daily is blank
 
 
-def cln_when_set_default():
+def mendc_when_set_default():
     for subareas in mendc_subarea.objects.all():
         defaults = mendc_default.objects.filter(defaultSubarea=subareas)
         harians = mendc_daily.objects.filter(
@@ -70,6 +70,34 @@ def cln_when_set_default():
                     harian.hasilTemuan = default.defaultHasilTemuan
             harian.save()
 
+
+def mendc_when_date_change(date):
+    if not mendc_day.objects.filter(hariIni=date):
+        mendc_day(hariIni=date).save()
+
+    for subareas in mendc_subarea.objects.all():
+        defaults = mendc_default.objects.filter(defaultSubarea=subareas)
+        harians = mendc_daily.objects.filter(
+            dailySubarea=subareas, hariIni=date)
+        if not defaults:
+            defaults = mendc_default.objects.create(defaultSubarea=subareas)
+        if not harians:
+            harians = mendc_daily.objects.create(
+                dailySubarea=subareas, hariIni=date)
+
+    for subareas in mendc_subarea.objects.all():
+        defaults = mendc_default.objects.filter(defaultSubarea=subareas)
+        harians = mendc_daily.objects.filter(
+            dailySubarea=subareas, hariIni=date)
+        for harian in harians:
+            for default in defaults:
+                if harian.kondisi == '' or harian.kondisi == None:
+                    harian.kondisi = default.defaultKondisi
+                if harian.keterangan == '' or harian.keterangan == None:
+                    harian.keterangan = default.defaultKeterangan
+                if harian.hasilTemuan == '' or harian.keterangan == None:
+                    harian.hasilTemuan = default.defaultHasilTemuan
+            harian.save()
 # def area_subarea_dict():
 #     areadict = dict()
 #     for areas in mendc_area.objects.all():

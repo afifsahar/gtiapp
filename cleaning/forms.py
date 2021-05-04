@@ -70,3 +70,17 @@ class defaultForm(forms.ModelForm):
                 'label': 'keterangan', 'help text': 'keterangan', 'height': "200", 'placeholder': 'Keterangan', 'rows': '3'})
         self.fields["defaultHasilTemuan"].widget.attrs.update(
             {'id': "hasilTemuan", 'name': 'hasilTemuan', 'label': 'Hasil Temuan', 'help text': 'Hasil Temuan', 'placeholder': 'Hasil Temuan', 'rows': '3'})
+
+
+class historyDateForm(forms.ModelForm):
+    class Meta:
+        model = cln_latest_history
+        fields = ['history', ]
+        widgets = {
+            'history': forms.DateInput(format=('%Y-%m-%d'), attrs={'type': "date", 'id': "history", 'name': 'history', 'autocomplete': 'off', 'label': 'History Date', 'help text': 'History Date', 'class': 'dateselect datepicker form-control', 'placeholder': 'tanggal'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["history"].widget.attrs.update(
+            {'type': "date", 'id': "history", 'name': 'history', 'name': 'history', 'autocomplete': 'off', 'label': 'History Date', 'help text': 'History Date', 'class': 'dateselect datepicker form-control', 'placeholder': 'tanggal'})

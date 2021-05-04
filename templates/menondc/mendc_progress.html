@@ -96,6 +96,23 @@
                 <div class="card-overlay dark-mode-tint"></div>
                 <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
             </div>
+            {% if harianCount == 0 %}
+            <div class="card card-style text-center">
+                <div class="content pt-4 pb-4">
+                    <h1><i class="fa fa-exclamation-triangle color-red2-dark fa-5x"></i></h1>
+                    <!-- <h1 class="fa-6x pt-5 pb-2">401</h1> -->
+                    <h3 class="text-uppercase pb-3">Blank</h3>
+                    <p class="boxed-text-l">
+                        <h6>Click button to create areas and start working.</h6>
+                    </p>
+                    <div class="row mb-0">
+                        <div class="col-12 pr-0"><a href="{% url 'mendc_harian_zero' %}"
+                                class="btn btn-m btn-center-m bg-highlight font-800 text-uppercase">Create Area</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
             {% for area in areas %}
             <div class="card card-style mb-2">
                 <div class="list-group list-custom-small list-icon-0 bg-green1-dark pl-3 pr-4"
@@ -177,6 +194,7 @@
                 </div>
             </div>
             {% endfor %}
+            {% endif %}
             <!-- footer and footer card-->
         </div>
         <!-- end of page content-->

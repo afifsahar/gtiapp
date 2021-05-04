@@ -122,12 +122,20 @@ def mendc_area_delete(request, area_id):
 def mendc_area_delete_confirm(request, area_id):
     areas = mendc_area.objects.get(id=area_id)
     areas.delete()
-    # context = {
-    #     'areas': mendc_area.objects.all(),
-    #     'subareas': mendc_subarea.objects.all(),
-    #     'title': 'Monitoring Gedung'
-    # }
     return redirect('mendc_settings')
+
+
+@login_required(login_url='user_login')
+def mendc_harian_zero(request):
+    mendc_when_day_change()
+    return redirect('cln_progress')
+
+
+@login_required(login_url='user_login')
+def mendc_history_zero(request):
+    obj = mendc_latest_history.objects.get(id=1)
+    mendc_when_date_change(obj.history)
+    return redirect('cln_history')
 
 
 @login_required(login_url='user_login')
@@ -151,43 +159,81 @@ def mendc_progress(request):
         'harians': harians,
         'tanggal': date.today(),
         'title': 'Monitoring Gedung',
-        'days':days
+        'days': days,
+        'harianCount': harians.count()
     }
     return render(request, 'menondc/mendc_progress.html', context)
 
 
 @login_required(login_url='user_login')
 def mendc_history(request):
-    obj = mendc_latest_history.objects.get(id=1)
-    if request.method == 'POST':
-        tgl = request.POST.get('date')
-        if tgl:
-            obj.history = datetime.strptime(tgl, '%Y-%m-%d').date()
-            obj.save()
     areas = mendc_area.objects.all()
     subareas = mendc_subarea.objects.all()
+    obj = mendc_latest_history.objects.get(id=1)
+    if request.method == 'POST':
+        h_form = historyDateForm(request.POST or None, instance=obj)
+        if h_form.is_valid():
+            historyDate = h_form.save(commit=False)
+            historyDate.save()
+            return redirect('cln_history')
+    else:
+        h_form = historyDateForm(instance=obj)
     dailies = mendc_daily.objects.filter(hariIni=obj.history)
-    dailies_queryset = dailies.count()
     days = None
     if request.user.groups.all().first().name == 'maker':
-        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=True) & Q(
+        days = mendc_day.objects.filter(Q(hariIni=obj.history) & Q(mendcMaker__isnull=True) & Q(
             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
     if request.user.groups.all().first().name == 'checker':
-        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+        days = mendc_day.objects.filter(Q(hariIni=obj.history) & Q(mendcMaker__isnull=False) & Q(
             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
     if request.user.groups.all().first().name == 'signer':
-        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+        days = mendc_day.objects.filter(Q(hariIni=obj.history) & Q(mendcMaker__isnull=False) & Q(
             mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))
     context = {
+        'h_form': h_form,
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
         'tanggal': obj.history,
-        'dailies_queryset': dailies_queryset,
-        'title': 'Monitoring Gedung',
-        'days':days
+        'areaCount': dailies.count(),
+        'title': 'Checklist Gedung',
+        'days': days,
+        'harianCount': dailies.count(),
     }
     return render(request, 'menondc/mendc_history.html', context)
+
+# @login_required(login_url='user_login')
+# def mendc_history(request):
+#     obj = mendc_latest_history.objects.get(id=1)
+#     if request.method == 'POST':
+#         tgl = request.POST.get('date')
+#         if tgl:
+#             obj.history = datetime.strptime(tgl, '%Y-%m-%d').date()
+#             obj.save()
+#     areas = mendc_area.objects.all()
+#     subareas = mendc_subarea.objects.all()
+#     dailies = mendc_daily.objects.filter(hariIni=obj.history)
+#     dailies_queryset = dailies.count()
+#     days = None
+#     if request.user.groups.all().first().name == 'maker':
+#         days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=True) & Q(
+#             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+#     if request.user.groups.all().first().name == 'checker':
+#         days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+#             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+#     if request.user.groups.all().first().name == 'signer':
+#         days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(mendcMaker__isnull=False) & Q(
+#             mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))
+#     context = {
+#         'areas': areas,
+#         'subareas': subareas,
+#         'harians': dailies,
+#         'tanggal': obj.history,
+#         'dailies_queryset': dailies_queryset,
+#         'title': 'Monitoring Gedung',
+#         'days':days
+#     }
+#     return render(request, 'menondc/mendc_history.html', context)
 
 # def mendc_area_json(request):
 #     areas = mendc_area.objects.all()
@@ -357,6 +403,7 @@ class mendc_history_download_pdf(View):
         response['Content-Disposition'] = content
         return response
 
+
 class mendc_progress_download_pdf(View):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
@@ -419,7 +466,8 @@ def mendc_default_check_all(request, area_id):
                 default.save()
             for subarea in subareas:
                 defaults = mendc_default.objects.filter(defaultSubarea=subarea)
-                harians = mendc_daily.objects.filter(dailySubarea=subarea, hariIni=date.today())
+                harians = mendc_daily.objects.filter(
+                    dailySubarea=subarea, hariIni=date.today())
                 for harian in harians:
                     for default in defaults:
                         if harian.kondisi == '' or harian.kondisi == None:

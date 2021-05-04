@@ -115,8 +115,9 @@
                         <span class=" color-highlight "></span>
                         <div class="input-style input-style-1 row mb-0 px-0 py-0">
                             <div class="col-9 pr-0">
-                                <input type="date" name="date" id="date" class="date" autocomplete="off"
-                                    value="{{tanggal}}" placeholder="Select Date">
+                                {% for field in h_form %}
+                                {{field}}
+                                {% endfor %}
                             </div>
                             <div class="col-3 pl-0 text-center">
                                 <button type="submit" style="width: 90%;"
@@ -125,8 +126,24 @@
                         </div>
                     </div>
                 </div>
-
             </form>
+            {% if harianCount == 0 %}
+            <div class="card card-style text-center">
+                <div class="content pt-4 pb-4">
+                    <h1><i class="fa fa-exclamation-triangle color-red2-dark fa-5x"></i></h1>
+                    <!-- <h1 class="fa-6x pt-5 pb-2">401</h1> -->
+                    <h3 class="text-uppercase pb-3">Blank</h3>
+                    <p class="boxed-text-l">
+                        <h6>Click button to create areas and start working.</h6>
+                    </p>
+                    <div class="row mb-0">
+                        <div class="col-12 pr-0"><a href="{% url 'mendc_history_zero' %}"
+                                class="btn btn-m btn-center-m bg-highlight font-800 text-uppercase">Create Area</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
             {% for area in areas %}
             <div class="card card-style mb-2">
                 <div class="list-group list-custom-small list-icon-0 bg-green1-dark pl-3 pr-4"
@@ -190,7 +207,7 @@
                                 {% else %}
                                 <td class="icoon"><span class="text-danger">Undone</span></td>
                                 {% endif %}
-                                <td class="icoon"><a href="{% url 'mendc_history_check_single' area.id tanggal %}"
+                                <td class="icoon"><a href="{% url 'mendc_history_check_single' harian.id tanggal %}"
                                         class="btn bg-blue1-light btn-xxs">Check</a>
                                 </td>
                                 {% endif %}
@@ -208,6 +225,7 @@
                 </div>
             </div>
             {% endfor %}
+            {% endif %}
             <!-- footer and footer card-->
         </div>
         <!-- end of page content-->

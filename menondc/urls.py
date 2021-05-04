@@ -31,6 +31,8 @@ urlpatterns = [
          name='mendc_progress_download_pdf'),
     path('history/send-email', mendc_history_send_email,
          name='mendc_history_send_email'),
+    path('progress/zero', mendc_harian_zero, name='mendc_harian_zero'),
+    path('history/zero', mendc_history_zero, name='mendc_history_zero'),
     #    path('json/area/', mendc_area_json, name='mendc_area_json'),
     #    path('json/subarea/', mendc_subarea_json, name='mendc_subarea_json'),
     #    path('json/daily/', mendc_daily_json, name='mendc_daily_json'),
