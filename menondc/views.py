@@ -128,14 +128,14 @@ def mendc_area_delete_confirm(request, area_id):
 @login_required(login_url='user_login')
 def mendc_harian_zero(request):
     mendc_when_day_change()
-    return redirect('cln_progress')
+    return redirect('mendc_progress')
 
 
 @login_required(login_url='user_login')
 def mendc_history_zero(request):
     obj = mendc_latest_history.objects.get(id=1)
     mendc_when_date_change(obj.history)
-    return redirect('cln_history')
+    return redirect('mendc_history')
 
 
 @login_required(login_url='user_login')
@@ -175,7 +175,7 @@ def mendc_history(request):
         if h_form.is_valid():
             historyDate = h_form.save(commit=False)
             historyDate.save()
-            return redirect('cln_history')
+            return redirect('mendc_history')
     else:
         h_form = historyDateForm(instance=obj)
     dailies = mendc_daily.objects.filter(hariIni=obj.history)
