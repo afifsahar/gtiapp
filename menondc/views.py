@@ -171,13 +171,20 @@ def mendc_history(request):
     subareas = mendc_subarea.objects.all()
     obj = mendc_latest_history.objects.get(id=1)
     if request.method == 'POST':
-        h_form = historyDateForm(request.POST or None, instance=obj)
-        if h_form.is_valid():
-            historyDate = h_form.save(commit=False)
-            historyDate.save()
-            return redirect('mendc_history')
-    else:
-        h_form = historyDateForm(instance=obj)
+        tgl = request.POST.get('history')
+        if tgl:
+            tanggal = datetime.strptime(tgl, '%d-%m-%Y')
+            tanggal.strftime('%Y-%m-%d')
+            obj.history = tanggal
+            obj.save()
+    # if request.method == 'POST':
+    #     h_form = historyDateForm(request.POST or None, instance=obj)
+    #     if h_form.is_valid():
+    #         historyDate = h_form.save(commit=False)
+    #         historyDate.save()
+    #         return redirect('mendc_history')
+    # else:
+    #     h_form = historyDateForm(instance=obj)
     dailies = mendc_daily.objects.filter(hariIni=obj.history)
     days = None
     if request.user.groups.all().first().name == 'maker':
@@ -190,7 +197,7 @@ def mendc_history(request):
         days = mendc_day.objects.filter(Q(hariIni=obj.history) & Q(mendcMaker__isnull=False) & Q(
             mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))
     context = {
-        'h_form': h_form,
+        # 'h_form': h_form,
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
@@ -201,6 +208,43 @@ def mendc_history(request):
         'harianCount': dailies.count(),
     }
     return render(request, 'menondc/mendc_history.html', context)
+
+# @login_required(login_url='user_login')
+# def mendc_history(request):
+#     areas = mendc_area.objects.all()
+#     subareas = mendc_subarea.objects.all()
+#     obj = mendc_latest_history.objects.get(id=1)
+#     if request.method == 'POST':
+#         h_form = historyDateForm(request.POST or None, instance=obj)
+#         if h_form.is_valid():
+#             historyDate = h_form.save(commit=False)
+#             historyDate.save()
+#             return redirect('mendc_history')
+#     else:
+#         h_form = historyDateForm(instance=obj)
+#     dailies = mendc_daily.objects.filter(hariIni=obj.history)
+#     days = None
+#     if request.user.groups.all().first().name == 'maker':
+#         days = mendc_day.objects.filter(Q(hariIni=obj.history) & Q(mendcMaker__isnull=True) & Q(
+#             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+#     if request.user.groups.all().first().name == 'checker':
+#         days = mendc_day.objects.filter(Q(hariIni=obj.history) & Q(mendcMaker__isnull=False) & Q(
+#             mendcChecker__isnull=True) & Q(mendcSigner__isnull=True))
+#     if request.user.groups.all().first().name == 'signer':
+#         days = mendc_day.objects.filter(Q(hariIni=obj.history) & Q(mendcMaker__isnull=False) & Q(
+#             mendcChecker__isnull=False) & Q(mendcSigner__isnull=True))
+#     context = {
+#         'h_form': h_form,
+#         'areas': areas,
+#         'subareas': subareas,
+#         'harians': dailies,
+#         'tanggal': obj.history,
+#         'areaCount': dailies.count(),
+#         'title': 'Checklist Gedung',
+#         'days': days,
+#         'harianCount': dailies.count(),
+#     }
+#     return render(request, 'menondc/mendc_history.html', context)
 
 # @login_required(login_url='user_login')
 # def mendc_history(request):
@@ -235,25 +279,6 @@ def mendc_history(request):
 #     }
 #     return render(request, 'menondc/mendc_history.html', context)
 
-# def mendc_area_json(request):
-#     areas = mendc_area.objects.all()
-#     dataArea = [area.to_dict_json() for area in areas]
-#     response = {'data': dataArea}
-#     return JsonResponse(response)
-
-
-# def mendc_subarea_json(request):
-#     subareas = mendc_subarea.objects.all()
-#     dataSubarea = [subarea.to_dict_json() for subarea in subareas]
-#     response = {'data': dataSubarea}
-#     return JsonResponse(response)
-
-
-# def mendc_daily_json(request):
-#     dailies = mendc_daily.objects.filter(hariIni=date.today())
-#     dataDaily = [daily.to_dict_json() for daily in dailies]
-#     response = {'data': dataDaily}
-#     return JsonResponse(response)
 
 @login_required(login_url='user_login')
 @maker_only

@@ -27,8 +27,8 @@ class cln_day(models.Model):
     def __str__(self):
         return "{0}".format(self.hariIni)
 
-    def get_absolute_url(self):
-        return reverse("day_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("day_detail", kwargs={"pk": self.pk})
 
 
 class cln_area(models.Model):
@@ -79,11 +79,12 @@ class cln_subarea(models.Model):
 
 # class cln_dailyManager(models.Manager):
 
+
 class cln_default(models.Model):
-    pilih_kondisi = {
+    pilih_kondisi = (
         ('Ok', 'Ok'),
         ('Not Ok', 'Not Ok'),
-    }
+    )
     defaultSubarea = models.ForeignKey(cln_subarea, verbose_name="Nama Subarea",
                                        on_delete=models.CASCADE, related_name="defaultSubarea", blank=True, null=True)
     defaultKondisi = models.CharField(name="defaultKondisi", max_length=50,
@@ -102,17 +103,17 @@ class cln_default(models.Model):
     def __str__(self):
         return "{0}-{1}".format(self.defaultSubarea.namaSubarea, self.defaultSubarea.namaAreaSubarea.namaArea)
 
-    def get_absolute_url(self):
-        return reverse("default_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("default_detail", kwargs={"pk": self.pk})
 
 
 class cln_daily(models.Model):
     hari_ini = models.DateField(
         name="hariIni", auto_now=False, auto_now_add=False, verbose_name="Hari ini")
-    pilih_kondisi = {
+    pilih_kondisi = (
         ('Ok', 'Ok'),
         ('Not Ok', 'Not Ok'),
-    }
+    )
     kondisi = models.CharField(name="kondisi", max_length=50,
                                choices=pilih_kondisi, verbose_name="Kondisi", blank=True, null=True, default='')
     keterangan = models.TextField(name="keterangan", max_length=500,

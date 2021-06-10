@@ -15,6 +15,11 @@
         href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href=" {% static 'fonts/css/fontawesome-all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dist/simplepicker.css' %}">
     <style>
         .table .btn-xxs {
             line-height: 10px;
@@ -115,9 +120,12 @@
                         <span class=" color-highlight "></span>
                         <div class="input-style input-style-1 row mb-0 px-0 py-0">
                             <div class="col-9 pr-0">
-                                {% for field in h_form %}
+                                <!-- {% for field in h_form %}
                                 {{field}}
-                                {% endfor %}
+                                {% endfor %} -->
+                                <input type="text" id="history" name="history" value="{{tanggal | date:'d-m-Y'}}"
+                                    placeholder="{{tanggal | date:'d-m-Y'}}" autocomplete="off" required
+                                    data-date-end-date="0d" />
                             </div>
                             <div class="col-3 pl-0 text-center">
                                 <button type="submit" style="width: 90%;"
@@ -134,7 +142,8 @@
                     <!-- <h1 class="fa-6x pt-5 pb-2">401</h1> -->
                     <h3 class="text-uppercase pb-3">Blank</h3>
                     <p class="boxed-text-l">
-                        <h6>Click button to create areas and start working.</h6></p>
+                        <h6>Click button to create areas and start working.</h6>
+                    </p>
                     </p>
                     <div class="row mb-0">
                         <div class="col-12 pr-0"><a href="{% url 'cln_history_zero' %}"
@@ -238,4 +247,17 @@
     <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js">
+    </script>
+    <script type="text/javascript" src="{% static 'dist/simplepicker.js' %}"></script>
+
+    <script>
+        $("#history").datepicker({
+            format: "dd-mm-yyyy",
+            autoclose: true,
+            // date : jQuery('rst_event_date').val,
+            // startView: "months",
+            // minViewMode: "months"
+        });
+    </script>
 </body>

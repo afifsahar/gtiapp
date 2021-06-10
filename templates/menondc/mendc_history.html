@@ -10,6 +10,8 @@
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
     <title>GTIAPP</title>
     <link rel="stylesheet" type="text/css" href=" {% static 'styles/bootstrap.css' %}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"
+        rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}" />
     <link
         href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900|Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
@@ -115,9 +117,10 @@
                         <span class=" color-highlight "></span>
                         <div class="input-style input-style-1 row mb-0 px-0 py-0">
                             <div class="col-9 pr-0">
-                                {% for field in h_form %}
+                                <!-- {% for field in h_form %}
                                 {{field}}
-                                {% endfor %}
+                                {% endfor %} -->
+                                 <input type="text" id="history" name="history" value="{{tanggal | date:'d-m-Y'}}" placeholder="{{tanggal | date:'d-m-Y'}}" autocomplete="off" required data-date-end-date="0d" />
                             </div>
                             <div class="col-3 pl-0 text-center">
                                 <button type="submit" style="width: 90%;"
@@ -237,5 +240,16 @@
     </div>
     <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js">
+    </script>
     <script type="text/javascript" src="{% static 'scripts/custom.js' %}"></script>
+    <script>
+        $("#history").datepicker({
+            format: "dd-mm-yyyy",
+            autoclose: true,
+            // date : jQuery('rst_event_date').val,
+            // startView: "months",
+            // minViewMode: "months"
+        });
+    </script>
 </body>
