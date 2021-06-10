@@ -139,20 +139,19 @@ def cln_progress(request):
         days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=True) & Q(
             clnChecker__isnull=True) & Q(clnSigner__isnull=True))
     if request.user.groups.all().first().name == 'checker':
-        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=True) & Q(clnSigner__isnull=True))
     if request.user.groups.all().first().name == 'signer':
-        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
             clnChecker__isnull=False) & Q(clnSigner__isnull=True))
     context = {
         'areas': areas,
         'subareas': subareas,
         'harians': harians,
         'tanggal': date.today(),
-        'areaCount': areas.count(),
-        'title': 'Checklist Kebersihan',
+        'title': 'Monitoring Kebersihan',
         'days': days,
-        'harianCount': harians.count(),
+        'harianCount': harians.count()
     }
     return render(request, 'cleaning/cln_progress.html', context)
 
@@ -173,7 +172,9 @@ def cln_history_zero(request):
 
 @login_required(login_url='user_login')
 def cln_history(request):
-    obj = cln_latest_history.objects.get(id=1, isDelete=False)
+    areas = cln_area.objects.all()
+    subareas = cln_subarea.objects.all()
+    obj = cln_latest_history.objects.get(id=1)
     if request.method == 'POST':
         tgl = request.POST.get('history')
         if tgl:
@@ -181,35 +182,37 @@ def cln_history(request):
             tanggal.strftime('%Y-%m-%d')
             obj.history = tanggal
             obj.save()
-    areas = cln_area.objects.filter(
-        Q(createAt__date__lte=obj.history) & Q(deleteAt__date__gt=obj.history))
-    subareas = cln_subarea.objects.filter(
-        Q(createAt__date__lte=obj.history) & Q(deleteAt__date__gt=obj.history))
-    dailies = cln_daily.objects.filter(
-        Q(createAt__date__lte=obj.history) & Q(hariIni=obj.history) & Q(deleteAt__date__gt=obj.history))
-
+    # if request.method == 'POST':
+    #     h_form = historyDateForm(request.POST or None, instance=obj)
+    #     if h_form.is_valid():
+    #         historyDate = h_form.save(commit=False)
+    #         historyDate.save()
+    #         return redirect('mendc_history')
+    # else:
+    #     h_form = historyDateForm(instance=obj)
+    dailies = cln_daily.objects.filter(hariIni=obj.history)
     days = None
     if request.user.groups.all().first().name == 'maker':
         days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=True) & Q(
-            clnChecker__isnull=True) & Q(clnSigner__isnull=True) & Q(isDelete=False))
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
     if request.user.groups.all().first().name == 'checker':
         days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=False) & Q(
-            clnChecker__isnull=True) & Q(clnSigner__isnull=True) & Q(isDelete=False))
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
     if request.user.groups.all().first().name == 'signer':
         days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=False) & Q(
-            clnChecker__isnull=False) & Q(clnSigner__isnull=True) & Q(isDelete=False))
+            clnChecker__isnull=False) & Q(clnSigner__isnull=True))
     context = {
+        # 'h_form': h_form,
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
-        'tanggalstr': obj.history.strftime('%Y-%m-%d'),
         'tanggal': obj.history,
-        'harianCount': dailies.count(),
+        'areaCount': dailies.count(),
         'title': 'Checklist Kebersihan',
         'days': days,
+        'harianCount': dailies.count(),
     }
     return render(request, 'cleaning/cln_history.html', context)
-
 
 # @login_required(login_url='user_login')
 # def cln_history(request):

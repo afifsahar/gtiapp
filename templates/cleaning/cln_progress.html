@@ -82,7 +82,7 @@
     </div> -->
     <div id="page">
         <div id="footer-bar" class="footer-bar-5">
-            <a data-menu="cln-progress"><i data-feather="globe" data-feather-line="1" data-feather-size="21"
+            <a data-menu="mendc-progress"><i data-feather="globe" data-feather-line="1" data-feather-size="21"
                     data-feather-color="brown1-dark" data-feather-bg="brown1-fade-light"></i><span>Action</span></a>
             {% include 'menu.html' %}
         </div>
@@ -96,7 +96,7 @@
                 <div class="card-overlay dark-mode-tint"></div>
                 <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
             </div>
-            {% if harianCount == '0' %}
+            {% if harianCount == 0 %}
             <div class="card card-style text-center">
                 <div class="content pt-4 pb-4">
                     <h1><i class="fa fa-exclamation-triangle color-red2-dark fa-5x"></i></h1>
@@ -202,7 +202,7 @@
             data-menu-load="menu-main.html" data-menu-active="nav-pages" data-menu-effect="menu-over">
         </div> -->
         {% include 'menu-main.html' %}
-        {% include 'cleaning/cln_progress_action.html' %}
+        {% include 'menondc/mendc_progress_action.html' %}
     </div>
     <script type="text/javascript" src="{% static 'scripts/jquery.js' %}"></script>
     <script type="text/javascript" src="{% static 'scripts/bootstrap.min.js' %}"></script>
