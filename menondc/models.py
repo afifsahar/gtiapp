@@ -5,7 +5,12 @@ from datetime import datetime, date
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _, gettext_lazy as __
+
+import pytz
+from django.utils import timezone as tz
+from pytz import timezone
 User = get_user_model()
+jakarta = timezone('Asia/Jakarta')
 
 
 class mendc_day(models.Model):
@@ -18,6 +23,20 @@ class mendc_day(models.Model):
                                      on_delete=models.PROTECT, related_name="mendcChecker", blank=True, null=True, limit_choices_to={'groups__name': 'checker'})
     mendcSigner = models.ForeignKey(User, verbose_name="Signer's Signature",
                                     on_delete=models.PROTECT, related_name="mendcSigner", blank=True, null=True, limit_choices_to={'groups__name': 'signer'})
+    mendcMakerDispo = models.ForeignKey(User, verbose_name="Disposisi Maker",
+                                        on_delete=models.PROTECT, related_name="mendcMakerDispo", blank=True, null=True, limit_choices_to={'groups__name': 'maker'})
+    mendcCheckerDispo = models.ForeignKey(User, verbose_name="Disposisi Checker",
+                                          on_delete=models.PROTECT, related_name="mendcCheckerDispo", blank=True, null=True, limit_choices_to={'groups__name': 'checker'})
+    mendcSignerDispo = models.ForeignKey(User, verbose_name="Disposisi Signer",
+                                         on_delete=models.PROTECT, related_name="mendcSignerDispo", blank=True, null=True, limit_choices_to={'groups__name': 'signer'})
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     class Meta:
         verbose_name = _("day")
@@ -33,6 +52,14 @@ class mendc_day(models.Model):
 class mendc_area(models.Model):
     nama_area = models.CharField(max_length=100, name='namaArea',
                                  verbose_name='Nama Area', unique=True, blank=True, null=True)
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     def __str__(self):
         return "{0}".format(self.namaArea)
@@ -56,6 +83,14 @@ class mendc_subarea(models.Model):
         max_length=100, name='namaSubarea', verbose_name='Nama Subarea', blank=True, null=True)
     namaAreaSubarea = models.ForeignKey(
         mendc_area, verbose_name="Nama Area", on_delete=models.CASCADE, related_name="namaAreaSubarea", blank=True, null=True)
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     def __str__(self):
         return "{0} % {1}".format(self.namaSubarea, self.namaAreaSubarea.namaArea)
@@ -89,6 +124,14 @@ class mendc_default(models.Model):
                                          verbose_name="Keterangan", blank=True, null=True, default='')
     defaultHasilTemuan = models.TextField(name="defaultHasilTemuan", max_length=500,
                                           verbose_name="Hasil Temuan", blank=True, null=True, default='')
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
     # last_update = models.DateField(
     #     name="lastUpdate", auto_now=True, auto_now_add=False, verbose_name="Last Update", blank=True, null=True)
 
@@ -97,7 +140,7 @@ class mendc_default(models.Model):
         verbose_name_plural = _("defaults")
 
     def __str__(self):
-        return self.name
+        return "{0}-{1}".format(self.defaultSubarea.namaSubarea, self.defaultSubarea.namaAreaSubarea.namaArea)
 
     # def get_absolute_url(self):
     #     return reverse("default_detail", kwargs={"pk": self.pk})
@@ -121,14 +164,16 @@ class mendc_daily(models.Model):
 
     dailySubarea = models.ForeignKey(mendc_subarea, verbose_name="Nama Subarea",
                                      on_delete=models.CASCADE, related_name="dailySubarea", blank=True, null=True)
-    # last_update = models.DateField(
-    #     name="lastUpdate", auto_now=True, auto_now_add=False, verbose_name="Last Update", blank=True, null=True)
-    # sign_maker = models.BooleanField(
-    #     blank=True, null=True, verbose_name="Maker's Sign", name='makerSign', default=False)
-    # sign_checker = models.BooleanField(
-    #     blank=True, null=True, verbose_name="Checker's Sign", name='checkerSign', default=False)
-    # sign_signer = models.BooleanField(
-    #     blank=True, null=True, verbose_name="Signer's Sign", name='signerSign', default=False)
+    dailyDay = models.ForeignKey(mendc_day, verbose_name="Foreign Key to Day",
+                                 on_delete=models.CASCADE, related_name="dailyDay", blank=True, null=True)
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     def __str__(self):
         return "{0}%{1}-{2}".format(self.hariIni, self.dailySubarea.namaSubarea, self.dailySubarea.namaAreaSubarea.namaArea)
@@ -160,6 +205,14 @@ class mendc_daily(models.Model):
 class mendc_latest_history(models.Model):
     history = models.DateField(
         name="history", auto_now=False, auto_now_add=False, verbose_name="History")
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     def __str__(self):
         return "{0}".format(self.history)

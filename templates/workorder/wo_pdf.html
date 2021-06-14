@@ -181,11 +181,16 @@
             vertical-align: top;
         }
 
+        .table-three .table-three-inside-description .cell-desc p {
+            white-space: unset;
+        }
+
         .table-three .table-three-inside-description .cell-sign,
         .table-five .table-five-inside-description .cell-sign {
             text-align: center;
             vertical-align: middle;
         }
+
 
         .table-four .table-four-blank {
             background-color: darkgray;
@@ -624,8 +629,9 @@
                         <td colspan="3" class="table-four-pl3">* Fill by OSP</td>
                     </tr>
                     <tr>
-                        <td class="table-four-pl3">* Handle By : {{workorders.woMaker.first_name}}
-                            {{workorders.woMaker.first_name}} </td>
+                        <td class="table-four-pl3">* Handle By :
+                            {{workorders.workorderDescription.woUser.first_name}}
+                            {{workorders.workorderDescription.woUser.last_name}} </td>
                         <td class="table-four-pl3">* Date Report : {{workorders.dueDate | date:"d-m-Y" }} </td>
                         <td class="table-four-pl3">* Time Report : </td>
                     </tr>

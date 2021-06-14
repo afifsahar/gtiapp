@@ -77,27 +77,28 @@
             {% endfor %}
             <nav aria-label="pagination-demo">
                 <ul class="pagination pagination- justify-content-center my-4">
-                    <!-- {% if days.has_previous %}
+                    {% if days.has_previous %}
                     <li class="page-item">
                         <a class="page-link rounded-xs color-white bg-black shadow-xl border-0"
                             href="{% url 'wo_home' %}?page={{days.previous_page_number}}" tabindex="-1"
                             aria-disabled="true"><i class="fa fa-angle-left"></i></a>
                     </li>
-                    {% endif %} -->
+                    {% endif %}
                     {% for num in days.paginator.page_range %}
+                    {% if num <= days.number|add:1 and num >= days.number|add:-1 %}
                     <li
                         class="page-item {% if days.number == num %} active {% elif num > days.number|add:'-3' and num < days.number|add:'3' %} {% endif %}">
                         <a class="page-link rounded-xs color-black bg-theme shadow-xl border-0"
                             href="{% url 'wo_home' %}?page={{ num }}">{{ num }}</a></li>
-
+                    {% endif %}
                     {% endfor %}
-                    <!-- {% if days.has_next %}
+                    {% if days.has_next %}
                     <li class="page-item">
                         <a class="page-link rounded-xs color-white bg-black shadow-xl border-0"
                             href="{% url 'wo_home' %}?page={{days.next_page_number}}"><i
                                 class="fa fa-angle-right"></i></a>
                     </li>
-                    {% endif %} -->
+                    {% endif %}
                 </ul>
             </nav>
             <a type="button" href="{% url 'wo_work_add' %}" class="float"><i class="fas fa-plus my-float"

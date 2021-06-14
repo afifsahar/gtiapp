@@ -26,8 +26,8 @@ class wo_day(models.Model):
     def __str__(self):
         return "WO {0}".format(self.createAt)
 
-    def get_absolute_url(self):
-        return reverse("day_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("day_detail", kwargs={"pk": self.pk})
 
 
 class wo_description(models.Model):
@@ -85,8 +85,8 @@ class wo_description(models.Model):
     def __str__(self):
         return "Description {0}".format(self.createAt)
 
-    def get_absolute_url(self):
-        return reverse("description_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("description_detail", kwargs={"pk": self.pk})
 
 
 class wo_workorder(models.Model):
@@ -122,8 +122,8 @@ class wo_workorder(models.Model):
     def __str__(self):
         return "Work Order {0}".format(self.createAt)
 
-    def get_absolute_url(self):
-        return reverse("workorder_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("workorder_detail", kwargs={"pk": self.pk})
 
 
 class wo_progress(models.Model):
@@ -147,8 +147,8 @@ class wo_progress(models.Model):
     def __str__(self):
         return "Progress {0}".format(self.createAt)
 
-    def get_absolute_url(self):
-        return reverse("progress_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("progress_detail", kwargs={"pk": self.pk})
 
 
 class wo_rincian(models.Model):
@@ -178,5 +178,5 @@ class wo_rincian(models.Model):
     def __str__(self):
         return "Rincian {0}".format(self.createAt)
 
-    def get_absolute_url(self):
-        return reverse("rincian_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("rincian_detail", kwargs={"pk": self.pk})

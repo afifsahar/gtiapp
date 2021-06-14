@@ -30,9 +30,9 @@ def create_daily():
             harians.kondisi = default.defaultKondisi
             harians.keterangan = default.defaultKeterangan
             harians.hasilTemuan = default.defaultHasilTemuan
-    # for subareas in cln_subarea.objects.all():
-    #     defaults = cln_default.objects.filter(defaultSubarea=subareas)
-    #     harians = cln_daily.objects.filter(
+    # for subareas in mendc_subarea.objects.all():
+    #     defaults = mendc_default.objects.filter(defaultSubarea=subareas)
+    #     harians = mendc_daily.objects.filter(
     #         dailySubarea=subareas, hariIni=date.today())
         # for (harian, default) in zip(harians, defaults):
         #     harian.hariIni = datetime(

@@ -5,8 +5,12 @@ from datetime import datetime, date
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _, gettext_lazy as __
+import pytz
+from django.utils import timezone as tz
+from pytz import timezone
 
 User = get_user_model()
+jakarta = timezone('Asia/Jakarta')
 
 
 class cln_day(models.Model):
@@ -19,6 +23,20 @@ class cln_day(models.Model):
                                    on_delete=models.PROTECT, related_name="clnChecker", blank=True, null=True, limit_choices_to={'groups__name': 'checker'})
     clnSigner = models.ForeignKey(User, verbose_name="Signer's Signature",
                                   on_delete=models.PROTECT, related_name="clnSigner", blank=True, null=True, limit_choices_to={'groups__name': 'signer'})
+    clnMakerDispo = models.ForeignKey(User, verbose_name="Disposisi Maker",
+                                      on_delete=models.PROTECT, related_name="clnMakerDispo", blank=True, null=True, limit_choices_to={'groups__name': 'maker'})
+    clnCheckerDispo = models.ForeignKey(User, verbose_name="Disposisi Checker",
+                                        on_delete=models.PROTECT, related_name="clnCheckerDispo", blank=True, null=True, limit_choices_to={'groups__name': 'checker'})
+    clnSignerDispo = models.ForeignKey(User, verbose_name="Disposisi Signer",
+                                       on_delete=models.PROTECT, related_name="clnSignerDispo", blank=True, null=True, limit_choices_to={'groups__name': 'signer'})
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     class Meta:
         verbose_name = _("day")
@@ -36,6 +54,14 @@ class cln_area(models.Model):
                                  verbose_name='Nama Area', unique=True, blank=False, null=False)
     # areaDay = models.ForeignKey(cln_day, verbose_name="areaDay",
     #                             on_delete=models.CASCADE, related_name="areaDay", blank=True, null=True)
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     def __str__(self):
         return "{0}".format(self.namaArea)
@@ -59,6 +85,14 @@ class cln_subarea(models.Model):
         max_length=100, name='namaSubarea', verbose_name='Nama Subarea', blank=False, null=False, unique=False)
     namaAreaSubarea = models.ForeignKey(
         cln_area, verbose_name="Nama Area", on_delete=models.CASCADE, related_name="namaAreaSubarea", blank=True, null=True)
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     def __str__(self):
         return "{0} % {1}".format(self.namaSubarea, self.namaAreaSubarea.namaArea)
@@ -93,6 +127,14 @@ class cln_default(models.Model):
                                          verbose_name="Keterangan", blank=True, null=True, default='')
     defaultHasilTemuan = models.TextField(name="defaultHasilTemuan", max_length=500,
                                           verbose_name="Hasil Temuan", blank=True, null=True, default='')
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
     # last_update = models.DateField(
     #     name="lastUpdate", auto_now=True, auto_now_add=False, verbose_name="Last Update", blank=True, null=True)
 
@@ -124,6 +166,16 @@ class cln_daily(models.Model):
         name="done", auto_now=False, auto_now_add=False, verbose_name="Terlaksana Pada", blank=True, null=True)
     dailySubarea = models.ForeignKey(cln_subarea, verbose_name="Nama Subarea",
                                      on_delete=models.CASCADE, related_name="dailySubarea", blank=True, null=True)
+    dailyDay = models.ForeignKey(cln_day, verbose_name="Foreign Key to Day",
+                                 on_delete=models.CASCADE, related_name="dailyDay", blank=True, null=True)
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
     # last_update = models.DateField(
     #     name="lastUpdate", auto_now=True, auto_now_add=False, verbose_name="Last Update", blank=True, null=True)
 
@@ -140,6 +192,15 @@ class cln_daily(models.Model):
 class cln_latest_history(models.Model):
     history = models.DateField(
         name="history", auto_now=False, auto_now_add=False, verbose_name="History")
+
+    last_update = models.DateTimeField(
+        _("Last Update"), name="lastUpdate", auto_now=True, auto_now_add=False)
+    is_delete = models.BooleanField(
+        _("Is Delete"), name="isDelete", null=True, blank=True, default=False)
+    create_at = models.DateTimeField(
+        _("Create At"), name="createAt", default=tz.now, null=True, blank=True)
+    delete_at = models.DateTimeField(
+        _("Delete At"), name="deleteAt", default=pytz.timezone(settings.TIME_ZONE).localize(datetime(2050, 12, 31, 23, 59, 59)), null=True, blank=True)
 
     def __str__(self):
         return "{0}".format(self.history)

@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from user.models import user_bri_image
-# from user.views import user_login
 from user.decorators import *
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -18,7 +17,7 @@ import datetime
 from .forms import *
 from django.forms import modelformset_factory
 from .models import *
-from .autos import *
+from .function import *
 from django.db.models import Q
 
 
@@ -32,8 +31,8 @@ def cln_home(request):
 
 @login_required(login_url='user_login')
 def cln_settings(request):
-    areas = cln_area.objects.all()
-    subareas = cln_subarea.objects.all()
+    areas = cln_area.objects.filter(isDelete=False)
+    subareas = cln_subarea.objects.filter(isDelete=False)
     areaCount = areas.count()
     context = {
         "areas": areas,
@@ -81,7 +80,7 @@ def cln_area_add(request):
 @login_required(login_url='user_login')
 @maker_only
 def cln_area_edit(request, area_id):
-    areas = cln_area.objects.get(id=area_id)
+    areas = cln_area.objects.get(id=area_id, isDelete=False)
     SubareaFormSet = modelformset_factory(cln_subarea, form=subareaForm, exclude=(
         'namaAreaSubarea',), can_delete=False, extra=0)
     if request.method == "POST":
@@ -111,8 +110,9 @@ def cln_area_edit(request, area_id):
 @login_required(login_url='user_login')
 @maker_only
 def cln_area_delete(request, area_id):
-    areas = cln_area.objects.get(id=area_id)
-    subareas = cln_subarea.objects.filter(namaAreaSubarea=areas)
+    areas = cln_area.objects.get(id=area_id, isDelete=False)
+    subareas = cln_subarea.objects.filter(
+        namaAreaSubarea=areas, isDelete=False)
     context = {
         'areas': areas,
         'subareas': subareas,
@@ -124,57 +124,73 @@ def cln_area_delete(request, area_id):
 @login_required(login_url='user_login')
 @maker_only
 def cln_area_delete_confirm(request, area_id):
-    areas = cln_area.objects.get(id=area_id)
-    areas.delete()
+    areas = cln_area.objects.get(id=area_id, isDelete=False)
+    subareas = cln_subarea.objects.filter(
+        namaAreaSubarea=areas, isDelete=False)
+    areas.isDelete = True
+    areas.deleteAt = date.today()
+    areas.save()
+    for subarea in subareas:
+        for default in cln_default.objects.filter(defaultSubarea=subarea, isDelete=False):
+            default.isDelete = True
+            default.deleteAt = datetime.now()
+        for daily in cln_daily.objects.filter(dailySubarea=subarea, isDelete=False):
+            daily.isDelete = True
+            daily.deleteAt = datetime.now()
+        subarea.isDelete = True
+        subarea.deleteAt = datetime.now()
     return redirect('cln_settings')
 
 
 @login_required(login_url='user_login')
 def cln_progress(request):
-    areas = cln_area.objects.all()
-    subareas = cln_subarea.objects.all()
-    harians = cln_daily.objects.filter(hariIni=date.today())
+    today_date = pytz.timezone(settings.TIME_ZONE).localize(
+        datetime.combine(date.today(), datetime.min.time()))
+    areas = cln_area.objects.filter(
+        createAt__lte=today_date, isDelete=False)
+    subareas = cln_subarea.objects.filter(
+        createAt__lte=today_date, isDelete=False)
+    harians = cln_daily.objects.filter(hariIni=date.today(), isDelete=False)
     days = None
     if request.user.groups.all().first().name == 'maker':
         days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=True) & Q(
-            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True) & Q(isDelete=False))
     if request.user.groups.all().first().name == 'checker':
-        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
-            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True) & Q(isDelete=False))
     if request.user.groups.all().first().name == 'signer':
-        days = mendc_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
-            clnChecker__isnull=False) & Q(clnSigner__isnull=True))
+        days = cln_day.objects.filter(Q(hariIni=date.today()) & Q(clnMaker__isnull=False) & Q(
+            clnChecker__isnull=False) & Q(clnSigner__isnull=True) & Q(isDelete=False))
     context = {
         'areas': areas,
         'subareas': subareas,
         'harians': harians,
         'tanggal': date.today(),
-        'title': 'Monitoring Kebersihan',
+        'areaCount': areas.count(),
+        'title': 'Checklist Kebersihan',
         'days': days,
-        'harianCount': harians.count()
+        'harianCount': harians.count(),
     }
     return render(request, 'cleaning/cln_progress.html', context)
 
 
 @login_required(login_url='user_login')
 def cln_harian_zero(request):
-    cln_when_day_change()
-    harians = cln_daily.objects.filter(hariIni=date.today())
+    cln_when_day_change()  # Nanti Dicek lagi ya
+    harians = cln_daily.objects.filter(hariIni=date.today(), isDelete=False)
     return redirect('cln_progress')
 
 
 @login_required(login_url='user_login')
 def cln_history_zero(request):
-    obj = cln_latest_history.objects.get(id=1)
-    cln_when_date_change(obj.history)
+    obj = cln_latest_history.objects.get(id=1, isDelete=False)
+    cln_when_date_change(obj.history)  # Nanti Dicek lagi ya
     return redirect('cln_history')
 
 
 @login_required(login_url='user_login')
 def cln_history(request):
-    areas = cln_area.objects.all()
-    subareas = cln_subarea.objects.all()
-    obj = cln_latest_history.objects.get(id=1)
+    obj = cln_latest_history.objects.get(id=1, isDelete=False)
     if request.method == 'POST':
         tgl = request.POST.get('history')
         if tgl:
@@ -182,51 +198,49 @@ def cln_history(request):
             tanggal.strftime('%Y-%m-%d')
             obj.history = tanggal
             obj.save()
-    # if request.method == 'POST':
-    #     h_form = historyDateForm(request.POST or None, instance=obj)
-    #     if h_form.is_valid():
-    #         historyDate = h_form.save(commit=False)
-    #         historyDate.save()
-    #         return redirect('mendc_history')
-    # else:
-    #     h_form = historyDateForm(instance=obj)
-    dailies = cln_daily.objects.filter(hariIni=obj.history)
+    history_date = pytz.timezone(settings.TIME_ZONE).localize(
+        datetime.combine(obj.history, datetime.min.time()))
+    areas = cln_area.objects.filter(
+        Q(createAt__lte=history_date) & Q(deleteAt__gt=history_date))
+    subareas = cln_subarea.objects.filter(
+        Q(createAt__lte=history_date) & Q(deleteAt__gt=history_date))
+    dailies = cln_daily.objects.filter(Q(hariIni=obj.history))
     days = None
     if request.user.groups.all().first().name == 'maker':
         days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=True) & Q(
-            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True) & Q(isDelete=False))
     if request.user.groups.all().first().name == 'checker':
         days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=False) & Q(
-            clnChecker__isnull=True) & Q(clnSigner__isnull=True))
+            clnChecker__isnull=True) & Q(clnSigner__isnull=True) & Q(isDelete=False))
     if request.user.groups.all().first().name == 'signer':
         days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=False) & Q(
-            clnChecker__isnull=False) & Q(clnSigner__isnull=True))
+            clnChecker__isnull=False) & Q(clnSigner__isnull=True) & Q(isDelete=False))
+    print(obj.history)
+
     context = {
-        # 'h_form': h_form,
         'areas': areas,
         'subareas': subareas,
         'harians': dailies,
+        'tanggalstr': obj.history.strftime('%Y-%m-%d'),
         'tanggal': obj.history,
-        'areaCount': dailies.count(),
+        'harianCount': dailies.count(),
         'title': 'Checklist Kebersihan',
         'days': days,
-        'harianCount': dailies.count(),
     }
     return render(request, 'cleaning/cln_history.html', context)
 
 # @login_required(login_url='user_login')
 # def cln_history(request):
-#     obj = cln_latest_history.objects.get(id=1)
 #     areas = cln_area.objects.all()
 #     subareas = cln_subarea.objects.all()
+#     obj = cln_latest_history.objects.get(id=1)
 #     if request.method == 'POST':
-#         h_form = historyDateForm(request.POST or None, instance=obj)
-#         if h_form.is_valid():
-#             historyDate = h_form.save(commit=False)
-#             historyDate.save()
-#             return redirect('cln_history')
-#     else:
-#         h_form = historyDateForm(instance=obj)
+#         tgl = request.POST.get('history')
+#         if tgl:
+#             tanggal = datetime.strptime(tgl, '%d-%m-%Y')
+#             tanggal.strftime('%Y-%m-%d')
+#             obj.history = tanggal
+#             obj.save()
 #     dailies = cln_daily.objects.filter(hariIni=obj.history)
 #     days = None
 #     if request.user.groups.all().first().name == 'maker':
@@ -239,14 +253,15 @@ def cln_history(request):
 #         days = cln_day.objects.filter(Q(hariIni=obj.history) & Q(clnMaker__isnull=False) & Q(
 #             clnChecker__isnull=False) & Q(clnSigner__isnull=True))
 #     context = {
-#         'h_form': h_form,
+#         # 'h_form': h_form,
 #         'areas': areas,
 #         'subareas': subareas,
 #         'harians': dailies,
 #         'tanggal': obj.history,
-#         'harianCount': dailies.count(),
-#         'title': 'Checklist Kebersihan',
+#         'areaCount': dailies.count(),
+#         'title': 'Checklist Gedung',
 #         'days': days,
+#         'harianCount': dailies.count(),
 #     }
 #     return render(request, 'cleaning/cln_history.html', context)
 
@@ -279,7 +294,8 @@ def cln_progress_check_single(request, harian_id):
 @login_required(login_url='user_login')
 @maker_only
 def cln_history_check_single(request, harian_id, history_date):
-    harian = cln_daily.objects.get(id=harian_id, hariIni=history_date)
+    harian = cln_daily.objects.get(
+        id=harian_id, hariIni=history_date)
     if request.method == 'POST':
         form = dailyForm(request.POST or None, instance=harian)
         if form.is_valid():
@@ -305,7 +321,8 @@ def cln_history_check_single(request, harian_id, history_date):
 @maker_only
 def cln_progress_check_all(request, area_id):
     areas = cln_area.objects.get(id=area_id)
-    subareas = cln_subarea.objects.filter(namaAreaSubarea=areas.id)
+    subareas = cln_subarea.objects.filter(
+        namaAreaSubarea=areas.id)
     dailyFormSet = modelformset_factory(
         cln_daily, form=dailyForm, can_delete=False, extra=0)
     if request.method == "POST":
@@ -343,7 +360,8 @@ def cln_progress_check_all(request, area_id):
 @maker_only
 def cln_history_check_all(request, area_id, history_date):
     areas = cln_area.objects.get(id=area_id)
-    subareas = cln_subarea.objects.filter(namaAreaSubarea=areas.id)
+    subareas = cln_subarea.objects.filter(
+        namaAreaSubarea=areas.id)
     dailyFormSet = modelformset_factory(
         cln_daily, form=dailyForm, can_delete=False, extra=0)
     if request.method == "POST":
@@ -382,12 +400,20 @@ class cln_history_download_pdf(View):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         briImage = user_bri_image.objects.get(imageName="logo bri")
-        obj = cln_latest_history.objects.get(id=1)
+        obj = cln_latest_history.objects.get(id=1, isDelete=False)
+        history_date = pytz.timezone(settings.TIME_ZONE).localize(
+            datetime.combine(obj.history, datetime.min.time()))
+        days = cln_day.objects.filter(hariIni=obj.history, isDelete=False)
+        areas = cln_area.objects.filter(
+            createAt__lte=history_date, deleteAt__gt=history_date)
+        subareas = cln_subarea.objects.filter(
+            createAt__lte=history_date, deleteAt__gt=history_date)
+        dailies = cln_daily.objects.filter(hariIni=obj.history)
         data = {
-            'days': cln_day.objects.filter(hariIni=obj.history),
-            'areas': cln_area.objects.all(),
-            'subareas': cln_subarea.objects.all(),
-            'dailies': cln_daily.objects.filter(hariIni=obj.history),
+            'days': days,
+            'areas': areas,
+            'subareas': subareas,
+            'dailies': dailies,
             'tanggal': obj.history,
             'briImage': briImage,
             'title': 'Checklist Kebersihan'
@@ -404,11 +430,21 @@ class cln_progress_download_pdf(View):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         briImage = user_bri_image.objects.get(imageName="logo bri")
+
+        today_date = pytz.timezone(settings.TIME_ZONE).localize(
+            datetime.combine(date.today(), datetime.min.time()))
+        days = cln_day.objects.filter(hariIni=date.today(), isDelete=False),
+        areas = cln_area.objects.filter(
+            createAt__lte=today_date, isDelete=False)
+        subareas = cln_subarea.objects.filter(
+            createAt__lte=today_date, isDelete=False)
+        dailies = cln_daily.objects.filter(
+            hariIni=date.today(), isDelete=False)
         data = {
-            'days': cln_day.objects.filter(hariIni=date.today()),
-            'areas': cln_area.objects.all(),
-            'subareas': cln_subarea.objects.all(),
-            'dailies': cln_daily.objects.filter(hariIni=date.today()),
+            'days': days,
+            'areas': areas,
+            'subareas': subareas,
+            'dailies': dailies,
             'tanggal': date.today(),
             'briImage': briImage,
             'title': 'Checklist Kebersihan'
@@ -424,12 +460,19 @@ class cln_progress_download_pdf(View):
 @login_required(login_url='user_login')
 def cln_history_send_email(request, *args, **kwargs):
     briImage = user_bri_image.objects.get(imageName="logo bri")
-    obj = cln_latest_history.objects.get(id=1)
+    obj = cln_latest_history.objects.get(id=1, isDelete=False)
+    history_date = pytz.timezone(settings.TIME_ZONE).localize(
+        datetime.combine(obj.history, datetime.min.time()))
+    areas = cln_area.objects.filter(
+        createAt__lte=obj.history, deleteAt__gt=obj.history)
+    subareas = cln_subarea.objects.filter(
+        createAt__lte=obj.history, deleteAt__gt=obj.history)
+    dailies = cln_daily.objects.filter(hariIni=obj.history)
     context = {
-        'days': cln_day.objects.filter(hariIni=obj.history),
-        'areas': cln_area.objects.all(),
-        'subareas': cln_subarea.objects.all(),
-        'dailies': cln_daily.objects.filter(hariIni=obj.history),
+        'days': cln_day.objects.filter(hariIni=obj.history, isDelete=False),
+        'areas': areas,
+        'subareas': subareas,
+        'dailies': dailies,
         'tanggal': obj.history,
         'briImage': briImage,
         'title': 'Checklist Kebersihan'
@@ -450,13 +493,14 @@ def cln_history_send_email(request, *args, **kwargs):
 @login_required(login_url='user_login')
 @maker_only
 def cln_default_check_all(request, area_id):
-    areas = cln_area.objects.get(id=area_id)
-    subareas = cln_subarea.objects.filter(namaAreaSubarea=areas.id)
+    areas = cln_area.objects.get(id=area_id, isDelete=False)
+    subareas = cln_subarea.objects.filter(
+        namaAreaSubarea=areas.id, isDelete=False)
     defaultFormSet = modelformset_factory(
         cln_default, form=defaultForm, can_delete=False, extra=0)
     if request.method == "POST":
         formset = defaultFormSet(request.POST or None,
-                                 queryset=cln_default.objects.filter(defaultSubarea__namaAreaSubarea=areas.id), prefix='default')
+                                 queryset=cln_default.objects.filter(defaultSubarea__namaAreaSubarea=areas.id, isDelete=False), prefix='default')
         if formset.is_valid():
             for form in formset:
                 default = form.save(commit=False)
@@ -464,7 +508,7 @@ def cln_default_check_all(request, area_id):
             for subarea in subareas:
                 defaults = cln_default.objects.filter(defaultSubarea=subarea)
                 harians = cln_daily.objects.filter(
-                    dailySubarea=subarea, hariIni=date.today())
+                    dailySubarea=subarea, hariIni=date.today(), isDelete=False)
                 for harian in harians:
                     for default in defaults:
                         if harian.kondisi == '' or harian.kondisi == None:
@@ -477,7 +521,7 @@ def cln_default_check_all(request, area_id):
             return redirect('cln_settings')
     else:
         formset = defaultFormSet(queryset=cln_default.objects.filter(
-            defaultSubarea__namaAreaSubarea=areas.id), prefix='default')
+            defaultSubarea__namaAreaSubarea=areas.id, isDelete=False), prefix='default')
     formfull = dict()
     for (subarea, form) in zip(subareas, formset):
         formfull.update({subarea.namaSubarea: form})

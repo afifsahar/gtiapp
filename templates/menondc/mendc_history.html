@@ -105,7 +105,7 @@
                 <h6 class="text-white"><i class="fas fa-calendar-week"></i>History, {{tanggal | date:"l d F Y"}}</h6>
             </div>
             <div class="card header-card shape-rounded" data-card-height="70">
-                <div class="card-overlay bg-highlight opacity-95"></div>
+                <div class="card-overlay bg-info opacity-95"></div>
                 <div class="card-overlay dark-mode-tint"></div>
                 <div class="card-bg preload-img" data-src="{% static 'images/pictures/20s.jpg' %}"></div>
             </div>
@@ -120,7 +120,9 @@
                                 <!-- {% for field in h_form %}
                                 {{field}}
                                 {% endfor %} -->
-                                 <input type="text" id="history" name="history" value="{{tanggal | date:'d-m-Y'}}" placeholder="{{tanggal | date:'d-m-Y'}}" autocomplete="off" required data-date-end-date="0d" />
+                                <input type="text" id="history" name="history" value="{{tanggal | date:'d-m-Y'}}"
+                                    placeholder="{{tanggal | date:'d-m-Y'}}" autocomplete="off" required
+                                    data-date-end-date="0d" />
                             </div>
                             <div class="col-3 pl-0 text-center">
                                 <button type="submit" style="width: 90%;"
