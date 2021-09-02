@@ -204,3 +204,38 @@ def five_oclock():
     delta = timedelta(hours=5)  # plus 5 hours
     five = (datetime.combine(date(1, 1, 1), mid)+delta).time()
     return five
+
+# def cln_signer_sign():
+#     for day in cln_day.objects.all():
+#         day.clnSigner = user.objects.get(username="Hendrymaster")
+#         day.save()
+
+
+def cln_maker_sign():
+    rez = [date(2021, 1, 5), date(2021, 1, 7), date(2021, 1, 11), date(2021, 1, 13), date(2021, 1, 14), date(2021, 1, 15), date(2021, 1, 18), date(2021, 1, 20), date(2021, 1, 21), date(2021, 1, 26), date(2021, 1, 27),
+           date(2021, 2, 3), date(2021, 2, 4), date(2021, 2, 10), date(
+               2021, 2, 11), date(2021, 2, 23), date(2021, 2, 24),
+           date(2021, 3, 1), date(2021, 3, 2), date(2021, 3, 5), date(2021, 3, 8), date(2021, 3, 12), date(2021, 3, 15), date(
+               2021, 3, 18), date(2021, 3, 19), date(2021, 3, 22), date(2021, 3, 23), date(2021, 3, 26), date(2021, 3, 29),
+           date(2021, 4, 1), date(2021, 3, 7), date(2021, 3, 8), date(2021, 3, 13), date(2021, 3, 14), date(
+        2021, 3, 19), date(2021, 3, 20), date(2021, 3, 23), date(2021, 3, 26), date(2021, 3, 29), date(2021, 3, 30),
+        date(2021, 5, 5), date(2021, 5, 6), date(2021, 5, 10), date(2021, 5, 18), date(
+        2021, 5, 19), date(2021, 5, 21), date(2021, 5, 25), date(2021, 5, 27), date(2021, 5, 31),
+        date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(
+        2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4),
+        date(2021, 7, 1), date(2021, 7, 6), date(2021, 7, 9), date(2021, 7, 12), date(
+        2021, 7, 14), date(2021, 7, 19), date(2021, 7, 21), date(2021, 7, 26),
+    ]
+    for rez_date in rez:
+        for day in cln_day.objects.filter(hariIni=rez_date):
+            day.clnMaker = User.objects.get(username="Rezki")
+            day.clnSigner = User.objects.get(username="Hendrymaster")
+            day.clnChecker = User.objects.get(username="dhona")
+            day.save()
+
+    for day in cln_day.objects.all():
+        if day.clnMaker == "" or day.clnSigner == None:
+            day.clnMaker = User.objects.get(username="trisatria")
+            day.clnSigner = User.objects.get(username="Hendrymaster")
+            day.clnChecker = User.objects.get(username="dhona")
+            day.save()

@@ -6,39 +6,82 @@ from django.utils import timezone as tz
 from pytz import timezone
 
 
-def create_area():
-    mei = []
-    for i in range(1, 32, 1):
-        mei.append(date(2021, 5, i))
+def mendc_maker_sign():
+    # rez = [
+    #     date(2021, 2, 3), date(2021, 2, 4), date(2021, 2, 10), date(
+    #         2021, 2, 11), date(2021, 2, 23), date(2021, 2, 24)
+    #     # date(2021, 3, 1), date(2021, 3, 2), date(2021, 3, 5), date(2021, 3, 8), date(2021, 3, 12), date(2021, 3, 15), date(
+    #     #     2021, 3, 18), date(2021, 3, 19), date(2021, 3, 22), date(2021, 3, 23), date(2021, 3, 26), date(2021, 3, 29),
+    #     # date(2021, 4, 1), date(2021, 3, 7), date(2021, 3, 8), date(2021, 3, 13), date(2021, 3, 14), date(
+    #     #     2021, 3, 19), date(2021, 3, 20), date(2021, 3, 23), date(2021, 3, 26), date(2021, 3, 29), date(2021, 3, 30)
+    # ]
+    rez = [date(2021, 1, 5), date(2021, 1, 7), date(2021, 1, 11), date(2021, 1, 13), date(2021, 1, 14), date(2021, 1, 15), date(2021, 1, 18), date(2021, 1, 20), date(2021, 1, 21), date(2021, 1, 26), date(2021, 1, 27),
+           date(2021, 2, 3), date(2021, 2, 4), date(2021, 2, 10), date(
+               2021, 2, 11), date(2021, 2, 23), date(2021, 2, 24),
+           date(2021, 3, 1), date(2021, 3, 2), date(2021, 3, 5), date(2021, 3, 8), date(2021, 3, 12), date(2021, 3, 15), date(
+               2021, 3, 18), date(2021, 3, 19), date(2021, 3, 22), date(2021, 3, 23), date(2021, 3, 26), date(2021, 3, 29),
+           date(2021, 4, 1), date(2021, 3, 7), date(2021, 3, 8), date(2021, 3, 13), date(2021, 3, 14), date(
+        2021, 3, 19), date(2021, 3, 20), date(2021, 3, 23), date(2021, 3, 26), date(2021, 3, 29), date(2021, 3, 30),
+        date(2021, 5, 5), date(2021, 5, 6), date(2021, 5, 10), date(2021, 5, 18), date(
+        2021, 5, 19), date(2021, 5, 21), date(2021, 5, 25), date(2021, 5, 27), date(2021, 5, 31),
+        date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(
+        2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4), date(2021, 6, 4),
+        date(2021, 7, 1), date(2021, 7, 6), date(2021, 7, 9), date(2021, 7, 12), date(
+        2021, 7, 14), date(2021, 7, 19), date(2021, 7, 21), date(2021, 7, 26),
+    ]
+    for rez_date in rez:
+        for day in mendc_day.objects.filter(hariIni=rez_date):
+            day.mendcMaker = User.objects.get(username="Rezki")
+            day.mendcSigner = User.objects.get(username="Hendrymaster")
+            day.mendcChecker = User.objects.get(username="dhona")
+            day.save()
 
-    for emerg_date in mei:
+    for day in mendc_day.objects.all():
+        if day.mendcMaker == "" or day.mendcSigner == None:
+            day.mendcMaker = User.objects.get(username="trisatria")
+            day.mendcSigner = User.objects.get(username="Hendrymaster")
+            day.mendcChecker = User.objects.get(username="dhona")
+            day.save()
+
+
+def create_area():
+    feb = []
+    for i in range(1, 29, 1):
+        feb.append(date(2021, 2, i))
+
+    for emerg_date in feb:
         if not mendc_day.objects.filter(hariIni=emerg_date):
             mendc_day(hariIni=emerg_date).save()
 
-        for subareas in mendc_subarea.objects.all():
-            defaults = mendc_default.objects.filter(defaultSubarea=subareas)
-            harians = mendc_daily.objects.filter(
-                dailySubarea=subareas, hariIni=emerg_date)
-            if not defaults:
-                defaults = mendc_default.objects.create(
+            for subareas in mendc_subarea.objects.all():
+                defaults = mendc_default.objects.filter(
                     defaultSubarea=subareas)
-            if not harians:
-                harians = mendc_daily.objects.create(
+                harians = mendc_daily.objects.filter(
                     dailySubarea=subareas, hariIni=emerg_date)
-
+                if not defaults:
+                    defaults = mendc_default.objects.create(
+                        defaultSubarea=subareas)
+                if not harians:
+                    harians = mendc_daily.objects.create(
+                        dailySubarea=subareas, hariIni=emerg_date)
         for subareas in mendc_subarea.objects.all():
             defaults = mendc_default.objects.filter(defaultSubarea=subareas)
             harians = mendc_daily.objects.filter(
                 dailySubarea=subareas, hariIni=emerg_date)
             for harian in harians:
                 for default in defaults:
-                    if harian.kondisi == '' or harian.kondisi == None:
-                        harian.kondisi = default.defaultKondisi
+                    harian.kondisi = "Ok"
+                    # if harian.kondisi == '' or harian.kondisi == None:
+                    # harian.kondisi = default.defaultKondisi
+                    # harian.kondisi = "Ok"
                     if harian.keterangan == '' or harian.keterangan == None:
                         harian.keterangan = default.defaultKeterangan
                     if harian.hasilTemuan == '' or harian.keterangan == None:
-                        harian.hasilTemuan = default.defaultHasilTemuan
+                        harian.hasilTemuan = default.defaultKeterangan
+                    else:
+                        harian.kondisi = "Not Ok"
                 harian.save()
+        # mendc_maker_sign()
 
 
 def mendc_alterfield():

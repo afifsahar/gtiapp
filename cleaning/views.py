@@ -364,9 +364,13 @@ def cln_history_check_all(request, area_id, history_date):
         namaAreaSubarea=areas.id)
     dailyFormSet = modelformset_factory(
         cln_daily, form=dailyForm, can_delete=False, extra=0)
+    try:
+        tanggal = datetime.strptime(history_date, '%Y-%m-%d %H:%M:%S')
+    except:
+        tanggal = datetime.strptime(history_date, '%Y-%m-%d')
     if request.method == "POST":
         formset = dailyFormSet(request.POST or None,
-                               queryset=cln_daily.objects.filter(hariIni=history_date, dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
+                               queryset=cln_daily.objects.filter(hariIni=tanggal.strftime("%Y-%m-%d"), dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
         if formset.is_valid():
             for form in formset:
                 harian = form.save(commit=False)
@@ -380,7 +384,7 @@ def cln_history_check_all(request, area_id, history_date):
             return redirect('cln_history')
     else:
         formset = dailyFormSet(queryset=cln_daily.objects.filter(
-            hariIni=history_date, dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
+            hariIni=tanggal.strftime("%Y-%m-%d"), dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
     formfull = dict()
     for (subarea, form) in zip(subareas, formset):
         formfull.update({subarea.namaSubarea: form})
@@ -389,7 +393,7 @@ def cln_history_check_all(request, area_id, history_date):
         'areas': areas,
         'subareas': subareas,
         'formfull': formfull,
-        'tanggal': cln_latest_history.objects.get(history=history_date),
+        'tanggal': cln_latest_history.objects.get(history=tanggal.strftime("%Y-%m-%d")),
         'title': 'Checklist Kebersihan'
     }
     return render(request, 'cleaning/cln_history_check_all.html', context)

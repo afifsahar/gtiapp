@@ -24,7 +24,7 @@ from django.db.models import Q
 @login_required(login_url='user_login')
 def mendc_home(request):
     context = {
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_home.html', context)
 
@@ -38,7 +38,7 @@ def mendc_settings(request):
         "areas": areas,
         "subareas": subareas,
         "areaCount": areaCount,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_settings.html', context)
 
@@ -72,7 +72,7 @@ def mendc_area_add(request):
     context = {
         'form': form,
         'formset': formset,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_area_add.html', context)
 
@@ -102,7 +102,7 @@ def mendc_area_edit(request, area_id):
     context = {
         'form': form,
         'formset': formset,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_area_edit.html', context)
 
@@ -116,7 +116,7 @@ def mendc_area_delete(request, area_id):
     context = {
         'areas': areas,
         'subareas': subareas,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_area_delete.html', context)
 
@@ -167,7 +167,7 @@ def mendc_progress(request):
         'harians': harians,
         'tanggal': date.today(),
         'areaCount': areas.count(),
-        'title': 'Checklist Kebersihan',
+        'title': 'Checklist Gedung',
         'days': days,
         'harianCount': harians.count(),
     }
@@ -222,7 +222,7 @@ def mendc_history(request):
         'tanggalstr': obj.history.strftime('%Y-%m-%d'),
         'tanggal': obj.history,
         'harianCount': dailies.count(),
-        'title': 'Checklist Kebersihan',
+        'title': 'Checklist Gedung',
         'days': days,
     }
     return render(request, 'menondc/mendc_history.html', context)
@@ -284,7 +284,7 @@ def mendc_progress_check_single(request, harian_id):
         'form': form,
         'harian': harian,
         'tanggal': date.today(),
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_progress_check_single.html', context)
 
@@ -310,7 +310,7 @@ def mendc_history_check_single(request, harian_id, history_date):
         'form': form,
         'harian': harian,
         'tanggal': mendc_latest_history.objects.get(history=history_date),
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_history_check_single.html', context)
 
@@ -349,7 +349,7 @@ def mendc_progress_check_all(request, area_id):
         'subareas': subareas,
         'tanggal': date.today(),
         'formfull': formfull,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_progress_check_all.html', context)
 
@@ -362,9 +362,13 @@ def mendc_history_check_all(request, area_id, history_date):
         namaAreaSubarea=areas.id)
     dailyFormSet = modelformset_factory(
         mendc_daily, form=dailyForm, can_delete=False, extra=0)
+    try:
+        tanggal = datetime.strptime(history_date, '%Y-%m-%d %H:%M:%S')
+    except:
+        tanggal = datetime.strptime(history_date, '%Y-%m-%d')
     if request.method == "POST":
         formset = dailyFormSet(request.POST or None,
-                               queryset=mendc_daily.objects.filter(hariIni=history_date, dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
+                               queryset=mendc_daily.objects.filter(hariIni=tanggal.strftime("%Y-%m-%d"), dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
         if formset.is_valid():
             for form in formset:
                 harian = form.save(commit=False)
@@ -378,7 +382,7 @@ def mendc_history_check_all(request, area_id, history_date):
             return redirect('mendc_history')
     else:
         formset = dailyFormSet(queryset=mendc_daily.objects.filter(
-            hariIni=history_date, dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
+            hariIni=tanggal.strftime("%Y-%m-%d"), dailySubarea__namaAreaSubarea=areas.id), prefix='daily')
     formfull = dict()
     for (subarea, form) in zip(subareas, formset):
         formfull.update({subarea.namaSubarea: form})
@@ -387,8 +391,8 @@ def mendc_history_check_all(request, area_id, history_date):
         'areas': areas,
         'subareas': subareas,
         'formfull': formfull,
-        'tanggal': mendc_latest_history.objects.get(history=history_date),
-        'title': 'Checklist Kebersihan'
+        'tanggal': mendc_latest_history.objects.get(history=tanggal.strftime("%Y-%m-%d")),
+        'title': 'Checklist Gedung',
     }
     return render(request, 'menondc/mendc_history_check_all.html', context)
 
@@ -414,11 +418,11 @@ class mendc_history_download_pdf(View):
             'dailies': dailies,
             'tanggal': obj.history,
             'briImage': briImage,
-            'title': 'Checklist Kebersihan'
+            'title': 'Checklist Gedung'
         }
         pdf = render_to_pdf('menondc/mendc_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
-        filename = "Checklist_Kebersihan_%s.pdf" % (obj.history)
+        filename = "Checklist_Gedung_%s.pdf" % (obj.history)
         content = "attachment; filename=%s" % (filename)
         response['Content-Disposition'] = content
         return response
@@ -444,11 +448,11 @@ class mendc_progress_download_pdf(View):
             'dailies': dailies,
             'tanggal': date.today(),
             'briImage': briImage,
-            'title': 'Checklist Kebersihan'
+            'title': 'Checklist Gedung'
         }
         pdf = render_to_pdf('menondc/mendc_pdf.html', data)
         response = HttpResponse(pdf, content_type='application/pdf')
-        filename = "Checklist_Kebersihan_%s.pdf" % (date.today())
+        filename = "Checklist_Gedung_%s.pdf" % (date.today())
         content = "attachment; filename=%s" % (filename)
         response['Content-Disposition'] = content
         return response
@@ -473,11 +477,11 @@ def mendc_history_send_email(request, *args, **kwargs):
         'dailies': dailies,
         'tanggal': obj.history,
         'briImage': briImage,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     html_content = render_to_string('menondc/mendc_pdf_email.html', context)
     text_content = strip_tags(html_content)
-    subject = "Checklist_Kebersihan_%s" % (obj.history)
+    subject = "Checklist_Gedung_%s" % (obj.history)
     mail_receiver = settings.EMAIL_HOST_USER  # diganti email sendiri juga bisa
     mail_sender = settings.EMAIL_HOST_USER
     email = EmailMultiAlternatives(
@@ -529,6 +533,6 @@ def mendc_default_check_all(request, area_id):
         'subareas': subareas,
         'tanggal': date.today(),
         'formfull': formfull,
-        'title': 'Checklist Kebersihan'
+        'title': 'Checklist Gedung'
     }
     return render(request, 'menondc/mendc_default_check_all.html', context)
